@@ -10,10 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_11_29_104027) do
+ActiveRecord::Schema.define(version: 2022_12_01_023945) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "comments", force: :cascade do |t|
+    t.bigint "staff_id"
+    t.string "commentable_type"
+    t.bigint "commentable_id"
+    t.string "content"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["commentable_type", "commentable_id"], name: "index_comments_on_commentable"
+    t.index ["staff_id"], name: "index_comments_on_staff_id"
+  end
 
   create_table "departments", force: :cascade do |t|
     t.string "name"
@@ -22,8 +33,9 @@ ActiveRecord::Schema.define(version: 2022_11_29_104027) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "group_assets", force: :cascade do |t|
+  create_table "group_properties", force: :cascade do |t|
     t.string "name"
+    t.string "description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
@@ -35,6 +47,41 @@ ActiveRecord::Schema.define(version: 2022_11_29_104027) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["department_id"], name: "index_positions_on_department_id"
+  end
+
+  create_table "properties", force: :cascade do |t|
+    t.string "code_seri"
+    t.string "name"
+    t.string "brand"
+    t.bigint "group_property_id"
+    t.float "price"
+    t.datetime "date_buy"
+    t.integer "number_of_repairs"
+    t.integer "status"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["group_property_id"], name: "index_properties_on_group_property_id"
+  end
+
+  create_table "property_providing_histories", force: :cascade do |t|
+    t.integer "provider_id"
+    t.integer "receiver_id"
+    t.bigint "property_id"
+    t.integer "status"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["property_id"], name: "index_property_providing_histories_on_property_id"
+  end
+
+  create_table "request_properties", force: :cascade do |t|
+    t.integer "request_type"
+    t.string "description"
+    t.string "reason"
+    t.integer "status"
+    t.integer "requester_id"
+    t.integer "approver_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "roles", force: :cascade do |t|
@@ -60,25 +107,19 @@ ActiveRecord::Schema.define(version: 2022_11_29_104027) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.bigint "staff_id"
+    t.string "email"
+    t.string "password_digest"
     t.index ["department_id"], name: "index_staffs_on_department_id"
     t.index ["position_id"], name: "index_staffs_on_position_id"
     t.index ["staff_id"], name: "index_staffs_on_staff_id"
   end
 
-  create_table "users", force: :cascade do |t|
-    t.string "full_name"
-    t.string "email"
-    t.string "password_digest"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "users_roles", id: false, force: :cascade do |t|
-    t.bigint "user_id"
+  create_table "staffs_roles", id: false, force: :cascade do |t|
+    t.bigint "staff_id"
     t.bigint "role_id"
-    t.index ["role_id"], name: "index_users_roles_on_role_id"
-    t.index ["user_id", "role_id"], name: "index_users_roles_on_user_id_and_role_id"
-    t.index ["user_id"], name: "index_users_roles_on_user_id"
+    t.index ["role_id"], name: "index_staffs_roles_on_role_id"
+    t.index ["staff_id", "role_id"], name: "index_staffs_roles_on_staff_id_and_role_id"
+    t.index ["staff_id"], name: "index_staffs_roles_on_staff_id"
   end
 
   add_foreign_key "staffs", "staffs"
