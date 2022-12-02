@@ -1,19 +1,13 @@
 class PositionPolicy < ApplicationPolicy
-	def index?; end
+	def index?
+		true
+	end
 
 	def show?
 		authenticate
 	end
 
-	def new?
-		authenticate
-	end
-
 	def create?
-		authenticate
-	end
-
-	def edit?
 		authenticate
 	end
 
@@ -28,6 +22,6 @@ class PositionPolicy < ApplicationPolicy
 	private
 
 	def authenticate
-		user.has_role?(:CEO) || user.has_role?(:MANAGER) || user.has_role?(:HR)
+		user.has_role?(:Manager)
 	end
 end
