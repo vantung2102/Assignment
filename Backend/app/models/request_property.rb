@@ -13,7 +13,7 @@
 #  updated_at   :datetime         not null
 #
 class RequestProperty < ApplicationRecord
-  enum status: { pending:  0, approval: 1, cancelled: 2 }
+  enum status: { pending:  0, approved: 1, cancelled: 2 }
   enum request_type: { device:  0, account: 1 }
 
   belongs_to :requester, class_name: 'Staff'

@@ -31,6 +31,11 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
     render json: chart
   end
 
+  def  lower_levels_staff_chart
+    chart = staff.lower_levels
+    render json: chart
+  end
+
   private
 
   def staff

@@ -43,18 +43,18 @@
 #   )
 # end
 
-20.times do
-  Property.create(
-    code_seri: Faker::Code.nric,
-    name: Faker::Name.name,
-    brand: Faker::Commerce.brand,
-    group_property_id: rand(1..10),
-    price: rand(10000..100000000),
-    date_buy: Faker::Date.in_date_period(month: 2),
-    number_of_repairs: rand(0..5),
-    status: 0
-  )
-end
+# 20.times do
+#   Property.create(
+#     code_seri: Faker::Code.nric,
+#     name: Faker::Name.name,
+#     brand: Faker::Commerce.brand,
+#     group_property_id: rand(1..10),
+#     price: rand(10000..100000000),
+#     date_buy: Faker::Date.in_date_period(month: 2),
+#     number_of_repairs: rand(0..5),
+#     status: 0
+#   )
+# end
 
 # i = 0
 # 20.times do
@@ -67,4 +67,44 @@ end
 #     date_recall: nil,
 #     type_provide: 'ca nhan',
 #   )
+# end
+
+# 20.times do
+#   ProvideAsset.create(
+#     provider_id: 16,
+#     receiver_id: rand(17..25),
+#     asset_id: i,
+#     date_provide: Faker::Date.in_date_period(month: 10),
+#     date_recall: nil,
+#     type_provide: 'ca nhan',
+#   )
+# end
+
+# Staff.first.each do |user|
+  # Leave.create(
+  #   staff_id: 16,
+  #   casual_leave: 0,
+  #   marriage_leave: 0,
+  #   compassionate_leave: 0,
+  #   paternity_leave: 0,
+  #   maternity_leave: 0,
+  #   unpaid_leave: 0,
+  #   allowed_number_of_days_off: 12,
+  #   description: Faker::Lorem.paragraph
+  # )
+# end
+
+# Staff.all.each do |user|
+#   5.times do 
+    LeaveApplication.create(
+      staff_id: 16,
+      leave_type: 2,
+      number_of_days_off: 1,
+      start_day: Faker::Date.between(from: '2022-12-01', to: '2022-12-05'),
+      end_day: Faker::Date.between(from: '2022-12-06', to: '2022-12-10'),
+      status: LeaveApplication.statuses[:pending],
+      approver_id: nil,
+      description: Faker::Lorem.paragraph
+    )
+#   end
 # end

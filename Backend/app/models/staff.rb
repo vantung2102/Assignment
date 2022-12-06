@@ -33,6 +33,10 @@ class Staff < ApplicationRecord
   has_many :requested, class_name: 'RequestProperty', :foreign_key => 'requester_id'
   has_many :be_requested, class_name: 'RequestProperty', :foreign_key => 'approver_id'
 
+  has_many :person_leave_application, class_name: 'LeaveApplication', :foreign_key => 'staff_id'
+  has_many :approved_person_leave_application, class_name: 'LeaveApplication', :foreign_key => 'approver_id'
+
+  has_one :leave, dependent: :destroy
   belongs_to :position
   belongs_to :department
 
