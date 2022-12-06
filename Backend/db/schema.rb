@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_01_023945) do
+ActiveRecord::Schema.define(version: 2022_12_02_082017) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,34 @@ ActiveRecord::Schema.define(version: 2022_12_01_023945) do
     t.string "description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "leave_applications", force: :cascade do |t|
+    t.integer "leave_type"
+    t.float "number_of_days_off"
+    t.date "start_day"
+    t.date "end_day"
+    t.integer "status"
+    t.integer "staff_id"
+    t.integer "approver_id"
+    t.string "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "leaves", force: :cascade do |t|
+    t.bigint "staff_id"
+    t.float "casual_leave"
+    t.float "marriage_leave"
+    t.float "compassionate_leave"
+    t.float "paternity_leave"
+    t.float "maternity_leave"
+    t.float "unpaid_leave"
+    t.float "allowed_number_of_days_off"
+    t.string "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["staff_id"], name: "index_leaves_on_staff_id"
   end
 
   create_table "positions", force: :cascade do |t|
