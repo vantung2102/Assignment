@@ -11,7 +11,7 @@ class Api::V1::LeaveManagement::LeaveApplicationsController < Api::V1::BaseContr
 
   def create
     create, leave_application = Leaves::CreateLeaveApplicationService.call(current_user, leave_application_params)
-    create ? render_resource(leave_application, status: :created) : render_resource_errors(title: leave_application, status: 500)
+    create ? render_resource(leave_application, status: :created) : render_resource_errors(detail: leave_application)
   end
 
   def update
@@ -30,7 +30,7 @@ class Api::V1::LeaveManagement::LeaveApplicationsController < Api::V1::BaseContr
       pagy, leave_applications = paginate(LeaveApplication.where(staff_id: params[:staff_id]).order(created_at: :desc))
       render_resource_collection(leave_applications, pagy: pagy)
     else
-      render_resource_errors(title: "you can't see this person's info", status: 500)
+      render_resource_errors(detail: "you can't see this person's info")
     end
   end
 
@@ -44,7 +44,7 @@ class Api::V1::LeaveManagement::LeaveApplicationsController < Api::V1::BaseContr
     authorize LeaveApplication
     leave_application
     reponse, leave_application = Leaves::RespondToLeaveApplicationService.call(current_user, @leave_application, leave_application_params[:status])
-    reponse ? render_resource(leave_application) : render_resource_errors(title: leave_application, status: 500)
+    reponse ? render_resource(leave_application) : render_resource_errors(detail: leave_application)
   end
 
   private

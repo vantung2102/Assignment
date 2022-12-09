@@ -9,5 +9,9 @@
 #  updated_at  :datetime         not null
 #
 class DepartmentSerializer < BaseSerializer
-  attributes :id, :name, :description, :created_at, :updated_at
+  attributes  :id,
+              :name,
+              :description,
+              :created_at,
+              :updated_at
 end

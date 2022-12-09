@@ -96,15 +96,38 @@
 
 # Staff.all.each do |user|
 #   5.times do 
-    LeaveApplication.create(
-      staff_id: 16,
-      leave_type: 2,
-      number_of_days_off: 1,
-      start_day: Faker::Date.between(from: '2022-12-01', to: '2022-12-05'),
-      end_day: Faker::Date.between(from: '2022-12-06', to: '2022-12-10'),
-      status: LeaveApplication.statuses[:pending],
-      approver_id: nil,
-      description: Faker::Lorem.paragraph
-    )
+    # LeaveApplication.create(
+    #   staff_id: 16,
+    #   leave_type: 2,
+    #   number_of_days_off: 1,
+    #   start_day: Faker::Date.between(from: '2022-12-01', to: '2022-12-05'),
+    #   end_day: Faker::Date.between(from: '2022-12-06', to: '2022-12-10'),
+    #   status: LeaveApplication.statuses[:pending],
+    #   approver_id: nil,
+    #   description: Faker::Lorem.paragraph
+    # )
 #   end
 # end
+# 1.times do
+#   StaffOnboarding.create!(
+#     staff_id: 16,
+#     active: true,
+#     description: Faker::Lorem.paragraph,
+#     position_id: 3
+#   )
+# end
+
+# 30.times do
+#   OnboardingSampleStep.create!(
+#     task: Faker::Lorem.sentence,
+#     position_id: rand(2..6),
+#     description: Faker::Lorem.paragraph
+#   )
+# end
+
+OnboardingSampleStep.where(position_id: 3).each do |item|
+  item.onboarding_steps.create!(
+    staff_onboarding_id: 1,
+    status: 0,
+  )
+end
