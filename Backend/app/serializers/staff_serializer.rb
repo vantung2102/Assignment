@@ -6,10 +6,7 @@
 #  fullname        :string
 #  date_of_birth   :date
 #  gender          :string
-#  contract_name   :string
 #  status          :integer
-#  start_contract  :date
-#  contract_term   :date
 #  position_id     :bigint
 #  department_id   :bigint
 #  created_at      :datetime         not null
@@ -17,18 +14,18 @@
 #  staff_id        :bigint
 #  email           :string
 #  password_digest :string
+#  deleted_at      :datetime
+#  job_title_id    :bigint
 #
 class StaffSerializer < BaseSerializer
   attributes  :id,
               :fullname,
               :email,
-              :contract_name,
               :date_of_birth,
-              :start_contract,
               :gender,
-              :contract_term,
               :status,
               :position,
               :department,
+              :job_title,
               :staff_id
 end

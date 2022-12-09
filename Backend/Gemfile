@@ -49,6 +49,7 @@ gem 'jsonapi.rb'
 gem 'ransack'
 
 gem 'pagy'
+gem 'pg_search'
 
 gem 'jwt'
 
@@ -58,3 +59,5 @@ gem "rolify"
 gem 'pundit'
 
 gem 'faker', :git => 'https://github.com/faker-ruby/faker.git', :branch => 'main'
+
+gem 'acts_as_paranoid'

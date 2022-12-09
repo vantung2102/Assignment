@@ -1,6 +1,6 @@
 class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
   def index
-    pagy, staffs = paginate(Staff.order(created_at: :desc))
+    pagy, staffs = paginate(Staff.filter(params.slice(:status, :fullname, :position, :department, :job_title)))
     render_resource_collection(staffs, pagy: pagy)
   end
 
@@ -11,19 +11,50 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
 
   def create
     authorize Staff
-    staff = Staff.new(staff_params)
-    staff.save ? render_resource(staff, status: :created) : render_resource_errors(staff.errors)
+    begin
+      ActiveRecord::Base.transaction do
+        staff = Staff.create!(staff_params)
+        render_resource(staff, status: :created)
+      end
+    rescue StandardError => e
+      render_resource_errors(detail: e)
+    end
   end
 
   def update
     authorize staff
-    staff.update(staff_params) ? render_resource(staff) : render_resource_errors(staff.errors)
+    update = staff.update(staff_params) ? render_resource(staff) : render_resource_errors(staff.errors)
+  end
+
+  def update_staff_activation_status
+    update, staff = Staffs::UpdateStaffActivationStatusService.call(staff, params[:status])
+    update ? render_resource(staff) : render_resource_errors(detail: staff)
   end
 
   def destroy
     authorize Staff
-    staff.destroy!
-    head :no_content
+    staff_lower_levels = staff.staff_lower_levels
+
+    if staff_lower_levels.present?
+      render_resource_collection(staff_lower_levels)
+    else
+      staff.destroy!
+      head :no_content
+    end
+  end
+
+  def destroy_and_update_staff_boss
+    authorize Staff
+
+    begin
+      ActiveRecord::Base.transaction do
+        Staff.where(id: params[:staffs]['id']).update(staff_id: params[:staffs]['boss_id'])
+        staff.destroy!
+      end
+      render json: { status: 'ok', title: 'destroy and update successfully' }
+    rescue StandardError => e
+      render json: { status: 'error', detail: e }
+    end
   end
                                                                         
   def staff_chart
@@ -31,9 +62,9 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
     render json: chart
   end
 
-  def  lower_levels_staff_chart
-    chart = staff.lower_levels
-    render json: chart
+  def staff_chart_by_node
+    staffs = staff.lower_levels
+    render_resource_collection(staffs)
   end
 
   private
@@ -43,6 +74,6 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
   end
 
   def staff_params
-    params.require(:staff).permit(:fullname, :email, :password, :contract_name, :contract_term, :status, :position_id, :department_id)
+    params.require(:staff).permit(:fullname, :email, :password, :contract_name, :contract_term, :position_id, :department_id, :job_title_id)
   end
 end

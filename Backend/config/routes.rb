@@ -9,7 +9,9 @@ Rails.application.routes.draw do
       namespace :staff_management do
         resources :staffs do
           member do
-            post 'lower_levels_staff_chart', to: "staffs#lower_levels_staff_chart"
+            post 'staff_chart_by_node', to: "staffs#staff_chart_by_node"
+            post 'update_staff_activation_status', to: "staffs#update_staff_activation_status"
+            post 'destroy_and_update_staff_boss', to: "staffs#destroy_and_update_staff_boss"
           end
           collection do
             post 'chart', to: "staffs#staff_chart"
@@ -17,6 +19,8 @@ Rails.application.routes.draw do
         end
         resources :positions
         resources :departments
+        resources :job_titles
+        resources :staff_contracts
       end
 
       namespace :property_management do
@@ -49,6 +53,26 @@ Rails.application.routes.draw do
           end
           member do
             post 'respond_to_leave_application', to: "leave_applications#respond_to_leave_application"
+          end
+        end
+      end
+
+      namespace :onboarding_management do
+        resources :staff_onboardings do
+          resources :onboarding_steps do
+            collection do
+              post 'onboarding_steps_by_staff_onboarding', to: 'onboarding_steps#onboarding_steps_by_staff_onboarding'
+            end
+          end
+
+          collection do
+            post 'staff_onboarding_by_user', to: 'staff_onboardings#staff_onboarding_by_user'
+          end
+        end
+
+        resources :onboarding_sample_steps do
+          collection do
+            post 'onboarding_sample_steps_by_position', to: 'onboarding_sample_steps#onboarding_sample_steps_by_position'
           end
         end
       end

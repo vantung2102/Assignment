@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_02_082017) do
+ActiveRecord::Schema.define(version: 2022_12_08_080911) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,13 @@ ActiveRecord::Schema.define(version: 2022_12_02_082017) do
 
   create_table "group_properties", force: :cascade do |t|
     t.string "name"
+    t.string "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "job_titles", force: :cascade do |t|
+    t.string "title"
     t.string "description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -66,6 +73,28 @@ ActiveRecord::Schema.define(version: 2022_12_02_082017) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["staff_id"], name: "index_leaves_on_staff_id"
+  end
+
+  create_table "onboarding_sample_steps", force: :cascade do |t|
+    t.string "task"
+    t.bigint "position_id"
+    t.string "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["position_id"], name: "index_onboarding_sample_steps_on_position_id"
+  end
+
+  create_table "onboarding_steps", force: :cascade do |t|
+    t.bigint "onboarding_sample_step_id"
+    t.bigint "staff_onboarding_id"
+    t.integer "assigned_person_id"
+    t.integer "status"
+    t.date "start_date"
+    t.date "due_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["onboarding_sample_step_id"], name: "index_onboarding_steps_on_onboarding_sample_step_id"
+    t.index ["staff_onboarding_id"], name: "index_onboarding_steps_on_staff_onboarding_id"
   end
 
   create_table "positions", force: :cascade do |t|
@@ -122,14 +151,33 @@ ActiveRecord::Schema.define(version: 2022_12_02_082017) do
     t.index ["resource_type", "resource_id"], name: "index_roles_on_resource"
   end
 
+  create_table "staff_contracts", force: :cascade do |t|
+    t.string "title"
+    t.bigint "staff_id"
+    t.date "start_date"
+    t.date "end_date"
+    t.integer "status"
+    t.string "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["staff_id"], name: "index_staff_contracts_on_staff_id"
+  end
+
+  create_table "staff_onboardings", force: :cascade do |t|
+    t.bigint "staff_id"
+    t.boolean "active"
+    t.integer "position_id"
+    t.string "description"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["staff_id"], name: "index_staff_onboardings_on_staff_id"
+  end
+
   create_table "staffs", force: :cascade do |t|
     t.string "fullname"
     t.date "date_of_birth"
     t.string "gender"
-    t.string "contract_name"
     t.integer "status"
-    t.date "start_contract"
-    t.date "contract_term"
     t.bigint "position_id"
     t.bigint "department_id"
     t.datetime "created_at", precision: 6, null: false
@@ -137,7 +185,11 @@ ActiveRecord::Schema.define(version: 2022_12_02_082017) do
     t.bigint "staff_id"
     t.string "email"
     t.string "password_digest"
+    t.datetime "deleted_at"
+    t.bigint "job_title_id"
+    t.index ["deleted_at"], name: "index_staffs_on_deleted_at"
     t.index ["department_id"], name: "index_staffs_on_department_id"
+    t.index ["job_title_id"], name: "index_staffs_on_job_title_id"
     t.index ["position_id"], name: "index_staffs_on_position_id"
     t.index ["staff_id"], name: "index_staffs_on_staff_id"
   end
@@ -150,5 +202,6 @@ ActiveRecord::Schema.define(version: 2022_12_02_082017) do
     t.index ["staff_id"], name: "index_staffs_roles_on_staff_id"
   end
 
+  add_foreign_key "staffs", "job_titles"
   add_foreign_key "staffs", "staffs"
 end
