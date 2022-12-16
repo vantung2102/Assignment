@@ -8,7 +8,7 @@ class Staffs::UpdateStaffActivationStatusService < ApplicationService
     begin
       ActiveRecord::Base.transaction do
         staff.update!(status: status) 
-        create, onboarding = Onboarding::CreateOnboardingService.call(staff) if staff.status == 'inactive' && status == Staff.statuses[:active]
+        create, onboarding = Onboarding::CreateOnboardingService.call(staff) if staff.status == 'inactive' && status == :active
         return [false, onboarding] if create == false
         [true, staff]
       end

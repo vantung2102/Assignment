@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_08_080911) do
+ActiveRecord::Schema.define(version: 2022_12_09_080318) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,6 +95,39 @@ ActiveRecord::Schema.define(version: 2022_12_08_080911) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["onboarding_sample_step_id"], name: "index_onboarding_steps_on_onboarding_sample_step_id"
     t.index ["staff_onboarding_id"], name: "index_onboarding_steps_on_staff_onboarding_id"
+  end
+
+  create_table "performance_appraisal_forms", force: :cascade do |t|
+    t.integer "status"
+    t.integer "staff_id"
+    t.integer "boss_id"
+    t.boolean "active", default: false
+    t.text "goals_set_staff"
+    t.text "goals_set_boss"
+    t.text "achievement_staff"
+    t.text "achievement_boss"
+    t.text "goals_with_company_staff"
+    t.text "goals_with_company_boss"
+    t.text "challenging_staff"
+    t.text "challenging_boss"
+    t.text "least_enjoy_staff"
+    t.text "least_enjoy_boss"
+    t.text "contribute_staff"
+    t.text "contribute_boss"
+    t.text "current_job_staff"
+    t.text "current_job_boss"
+    t.text "improvement_staff"
+    t.text "improvement_boss"
+    t.text "obstructing_staff"
+    t.text "obstructing_boss"
+    t.text "feedback_staff"
+    t.text "feedback_boss"
+    t.text "description_staff"
+    t.text "description_boss"
+    t.date "start_date"
+    t.date "end_date"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "positions", force: :cascade do |t|

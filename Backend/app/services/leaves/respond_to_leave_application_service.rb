@@ -9,7 +9,7 @@ class Leaves::RespondToLeaveApplicationService < ApplicationService
     return [false, "Leave application has been approved"] if leave_application.status == "approved"
     begin         
       ActiveRecord::Base.transaction do
-        if status_params == LeaveApplication.statuses[:approved]
+        if status_params.approved_status?
           leave_type = leave_application.leave_type
           leave = Leave.find_by(staff_id: leave_application.staff_id)
           number_of_days_off = leave_application.number_of_days_off

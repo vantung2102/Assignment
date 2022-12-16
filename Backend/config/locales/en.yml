@@ -30,4 +30,11 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  error_codes:
+    E201: "Invalid"
+    E202: "Performance Appraisal Form Inactive"
+    E203: "Performance Appraisal Form Submitted"
+    E204: "Unconfirmed staff"
+    E205: "You can't see this person's info"
+    E206: "Invalid"
+    E207: "Invalid"

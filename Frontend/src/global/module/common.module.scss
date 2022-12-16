@@ -1,0 +1,34 @@
+.AddBtn {
+  background-color: #00c5fb !important;
+  border: 1px solid #00c5fb !important;
+  border-radius: 50px !important;
+  color: #fff !important;
+  float: right !important;
+  font-weight: 500 !important;
+  min-width: 140px !important;
+}
+
+.FormGroup {
+  margin-bottom: 1rem;
+}
+
+.PageHeader {
+  margin-bottom: 1.875rem;
+
+  .breadcrumb {
+    background-color: transparent;
+    color: #6c757d;
+    font-size: 1rem;
+    font-weight: 500;
+    margin-bottom: 0;
+    padding: 0;
+
+    a {
+      color: #333;
+    }
+
+    &.active {
+      color: #6c757d;
+    }
+  }
+}

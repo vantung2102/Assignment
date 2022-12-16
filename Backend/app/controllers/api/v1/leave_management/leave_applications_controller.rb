@@ -30,7 +30,7 @@ class Api::V1::LeaveManagement::LeaveApplicationsController < Api::V1::BaseContr
       pagy, leave_applications = paginate(LeaveApplication.where(staff_id: params[:staff_id]).order(created_at: :desc))
       render_resource_collection(leave_applications, pagy: pagy)
     else
-      render_resource_errors(detail: "you can't see this person's info")
+      render_resource_errors(status: "error", detail: I18n.t('error_codes.E205'))
     end
   end
 

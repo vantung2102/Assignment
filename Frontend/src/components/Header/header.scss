@@ -1,0 +1,19 @@
+.top-nav-dropdown-header,
+.top-nav-dropdown-footer {
+  font-size: 12px;
+  height: 32px;
+  line-height: 32px;
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
+.media:last-child {
+  border-bottom: none;
+}
+
+.open {
+  position: absolute;
+  margin: 0px;
+  top: 50px;
+  right: 0;
+}

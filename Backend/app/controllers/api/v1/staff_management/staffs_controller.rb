@@ -51,7 +51,7 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
         Staff.where(id: params[:staffs]['id']).update(staff_id: params[:staffs]['boss_id'])
         staff.destroy!
       end
-      render json: { status: 'ok', title: 'destroy and update successfully' }
+      head :ok
     rescue StandardError => e
       render json: { status: 'error', detail: e }
     end

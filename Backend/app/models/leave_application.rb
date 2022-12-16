@@ -23,7 +23,7 @@ class LeaveApplication < ApplicationRecord
                       compassionate_leave: 3, # 3 days (gia dinh nguoi than mat),
                       paternity_leave:  4, # 1 day (vo hoac con sinh)
                       maternity_leave: 5, # 6 month ( truoc va sau khi sinh)
-                    }
+                    }, _suffix: true
   enum status: { pending: 0, approved: 1, cancelled: 2 }
 
   belongs_to :staff, class_name: 'Staff'
