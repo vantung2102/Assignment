@@ -1,0 +1,22 @@
+.paginationLink:first-child {
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+
+.page-item.disabled .page-link {
+  color: #6c757d;
+  pointer-events: none;
+  background-color: #fff;
+  border-color: #dee2e6;
+}
+
+.pagination > li > a,
+.pagination > li > span {
+  color: #00c5fb;
+}
+
+.page-item.active .page-link {
+  color: #fff;
+  background-color: #00c5fb;
+  border-color: #00c5fb;
+}

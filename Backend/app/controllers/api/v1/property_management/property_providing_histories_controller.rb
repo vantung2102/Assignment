@@ -11,11 +11,6 @@ class Api::V1::PropertyManagement::PropertyProvidingHistoriesController < Api::V
     create ? render_resource(property_providing_history) : render_resource_errors(property_providing_history)
   end
 
-  # def update
-  #   authorize PropertyProvidingHistory
-  #   property.update(property_params) ? render_resource(property) : render_resource_errors(property.errors)
-  # end
-
   def destroy
     authorize PropertyProvidingHistory
     property_providing_history_params.destroy!

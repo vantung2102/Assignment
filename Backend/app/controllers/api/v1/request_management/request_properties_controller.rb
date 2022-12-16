@@ -28,7 +28,7 @@ class Api::V1::RequestManagement::RequestPropertiesController < Api::V1::BaseCon
 
   def response_request
     authorize RequestProperty
-    status = params[:response_type] == "cancelled" ? RequestProperty.statuses[:cancelled] : RequestProperty.statuses[:approved]
+    status = params[:response_type] == "cancelled" ? :cancelled : :approved
     request_property.update(status: status, approver_id: current_user.id) ? render_resource(request_property) : render_resource_errors(request_property.errors)
   end
 

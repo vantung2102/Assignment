@@ -23,7 +23,6 @@ class Staff < ApplicationRecord
 
   rolify
   has_secure_password
-  acts_as_xlsx
   acts_as_paranoid
 
   after_create :create_onboarding

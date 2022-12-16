@@ -9,7 +9,7 @@ class Properties::PropertyProvidingHistoriesService < ApplicationService
       ActiveRecord::Base.transaction do
         property_providing_history.save!
         property = Property.find(params[:property_id])
-        status = params[:status] == PropertyProvidingHistory.statuses[:provided] ? Property.statuses[:used] : Property.statuses[:available]
+        status = params[:status] == PropertyProvidingHistory.statuses[:provided] ? :used : :available
         property.update!(status: status)
         [true, property_providing_history]
       end
