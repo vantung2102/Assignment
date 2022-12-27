@@ -4,15 +4,11 @@ class Staffs::StaffChartService < ApplicationService
       "WITH RECURSIVE generation AS (
         SELECT  id,
                 fullname,
-                contract_name,
-                date_of_birth,
-                start_contract,
-                gender,
-                contract_term,
                 status,
                 position_id,
                 department_id,
                 staff_id,
+                deleted_at,
                 0 as level
         FROM staffs
         WHERE staff_id IS NULL
@@ -21,15 +17,11 @@ class Staffs::StaffChartService < ApplicationService
       
         SELECT  staffs.id,
                 staffs.fullname,
-                staffs.contract_name,
-                staffs.date_of_birth,
-                staffs.start_contract,
-                staffs.gender,
-                staffs.contract_term,
                 staffs.status,
                 staffs.position_id,
                 staffs.department_id,
                 staffs.staff_id,
+                staffs.deleted_at,
                 level + 1 as level
         FROM staffs
         JOIN generation g
@@ -43,7 +35,7 @@ class Staffs::StaffChartService < ApplicationService
               staff_id,
               level
       FROM generation
-      WHERE level <= 2
+      WHERE deleted_at IS NULL
       ;"
     )
   end

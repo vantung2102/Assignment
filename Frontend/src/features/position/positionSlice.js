@@ -3,21 +3,13 @@ import apiClient from "../../apiClient/apiClient";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import { useDispatch } from "react-redux";
+import { useDestroy } from "../../common/hooks/hooks";
 
 const initialState = {
   status: null,
   meta: {},
   positions: [],
-  position: {
-    attributes: {
-      id: "",
-      name: "",
-      department_id: null,
-      description: "",
-      created_at: "",
-      updated_at: "",
-    },
-  },
+  position: null,
 };
 
 export const fetchPosition = createAsyncThunk("fetchPosition", async () => {
@@ -57,9 +49,16 @@ export const showPosition = createAsyncThunk("showPosition", async (id) => {
   return response.data;
 });
 
-export const editPosition = createAsyncThunk("editPosition", async (id) => {
+export const editPosition = createAsyncThunk("editPosition", async (data) => {
   const response = await apiClient.get(
-    `/api/v1/staff_management/positions/${id}`,
+    `/api/v1/staff_management/positions/${data.id}`,
+    {
+      position: {
+        name: data.name,
+        description: data.description,
+        department_id: data.department,
+      },
+    },
     {
       headers: {
         Authorization: Cookies.get("authorization"),
@@ -82,7 +81,7 @@ export const destroyPosition = createAsyncThunk(
       }
     );
 
-    return response.data;
+    return id;
   }
 );
 
@@ -108,15 +107,14 @@ export const positionSlice = createSlice({
       .addCase(newPosition.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(newPosition.fulfilled, (state) => {
+      .addCase(newPosition.fulfilled, (state, action) => {
         state.status = "succeeded";
+        state.positions.unshift(action.payload.data);
         toast.success("Create Position Success");
       })
-      .addCase(newPosition.rejected, (state, action) => {
+      .addCase(newPosition.rejected, (state) => {
         state.status = "error";
-        console.log(action.payload);
         toast.error("Create Position failed");
-        console.log(action);
       });
     // ================== show position =================
     builder
@@ -148,8 +146,9 @@ export const positionSlice = createSlice({
       .addCase(destroyPosition.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(destroyPosition.fulfilled, (state) => {
+      .addCase(destroyPosition.fulfilled, (state, action) => {
         state.status = "succeeded";
+        state.positions = useDestroy(state.positions, action);
         toast.success("destroy Position Success");
       })
       .addCase(destroyPosition.rejected, (state) => {

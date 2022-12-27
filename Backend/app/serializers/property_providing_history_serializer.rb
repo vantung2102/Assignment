@@ -12,8 +12,8 @@
 #
 class PropertyProvidingHistorySerializer < BaseSerializer
   attributes  :id,
-              :provider_id,
-              :receiver_id,
+              :provider,
+              :receiver,
               :property,
               :status,
               :created_at,

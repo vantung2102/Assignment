@@ -5,6 +5,7 @@ import { TbEdit } from "react-icons/tb";
 import { TiArrowUnsorted } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
 import {
+  destroyJobTitle,
   fetchJobTitle,
   jobTitlesSelector,
   showJobTitle,
@@ -27,6 +28,10 @@ const JobTitle = () => {
   useEffect(() => {
     dispatch(fetchJobTitle());
   }, []);
+
+  const handleDelete = (id) => {
+    dispatch(destroyJobTitle(id));
+  };
 
   return (
     <Row>
@@ -74,6 +79,7 @@ const JobTitle = () => {
                               style={{
                                 fontSize: "20px",
                               }}
+                              onClick={() => handleDelete(item.attributes.id)}
                             />
                           </div>
                         </td>

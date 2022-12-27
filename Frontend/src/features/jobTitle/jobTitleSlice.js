@@ -2,21 +2,14 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiClient from "../../apiClient/apiClient";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
+import { useDestroy, useEdit } from "../../common/hooks/hooks";
 
 const initialState = {
   status: null,
   isNew: false,
   meta: {},
   jobTitles: [],
-  jobTitle: {
-    attributes: {
-      id: "",
-      title: "",
-      description: "",
-      created_at: "",
-      updated_at: "",
-    },
-  },
+  jobTitle: null,
 };
 
 export const fetchJobTitle = createAsyncThunk("fetchJobTitle", async () => {
@@ -44,7 +37,7 @@ export const newJobTitle = createAsyncThunk("newJobTitle", async (data) => {
 });
 
 export const showJobTitle = createAsyncThunk("showJobTitle", async (id) => {
-  const response = await apiClient.post(
+  const response = await apiClient.get(
     `api/v1/staff_management/job_titles/${id}`,
     {
       headers: {
@@ -58,9 +51,11 @@ export const showJobTitle = createAsyncThunk("showJobTitle", async (id) => {
 
 export const editJobTitle = createAsyncThunk(
   "staff/editJobTitle",
-  async (id) => {
+  async (data) => {
     const response = await apiClient.put(
-      `/api/v1/staff_management/job_titles/${id}`,
+      `/api/v1/staff_management/job_titles/${data.id}`,
+      { job_title: { title: data.title, description: data.description } },
+
       {
         headers: {
           Authorization: Cookies.get("authorization"),
@@ -68,7 +63,7 @@ export const editJobTitle = createAsyncThunk(
       }
     );
 
-    return response;
+    return response.data;
   }
 );
 
@@ -84,7 +79,7 @@ export const destroyJobTitle = createAsyncThunk(
       }
     );
 
-    return response;
+    return id;
   }
 );
 
@@ -104,13 +99,25 @@ export const jobTitleSlice = createSlice({
       .addCase(fetchJobTitle.rejected, (state) => {
         state.status = "error";
       });
+    // ================== show jobTitle =================
+    builder
+      .addCase(showJobTitle.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(showJobTitle.fulfilled, (state, action) => {
+        state.jobTitle = action.payload.data;
+      })
+      .addCase(showJobTitle.rejected, (state) => {
+        state.status = "error";
+        toast.success("Create job title failed");
+      });
     // ================== new jobTitle =================
     builder
       .addCase(newJobTitle.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(newJobTitle.fulfilled, (state) => {
-        state.isNew = true;
+      .addCase(newJobTitle.fulfilled, (state, action) => {
+        state.jobTitles.unshift(action.payload.data);
         toast.success("Create job title successfully");
       })
       .addCase(newJobTitle.rejected, (state) => {
@@ -122,7 +129,8 @@ export const jobTitleSlice = createSlice({
       .addCase(editJobTitle.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(editJobTitle.fulfilled, (state) => {
+      .addCase(editJobTitle.fulfilled, (state, action) => {
+        state.jobTitles = useEdit(state.jobTitles, action);
         toast.success("edit job title successfully");
       })
       .addCase(editJobTitle.rejected, (state) => {
@@ -134,7 +142,8 @@ export const jobTitleSlice = createSlice({
       .addCase(destroyJobTitle.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(destroyJobTitle.fulfilled, (state) => {
+      .addCase(destroyJobTitle.fulfilled, (state, action) => {
+        state.jobTitles = useDestroy(state.jobTitles, action);
         toast.success("destroy job title successfully");
       })
       .addCase(destroyJobTitle.rejected, (state) => {
@@ -146,6 +155,5 @@ export const jobTitleSlice = createSlice({
 
 export const jobTitlesSelector = (state) => state.jobTitle.jobTitles;
 export const jobTitleSelector = (state) => state.jobTitle.jobTitle;
-export const newJobTitleSelector = (state) => state.jobTitle.isNew;
 
 export default jobTitleSlice.reducer;

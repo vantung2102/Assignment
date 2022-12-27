@@ -15,6 +15,8 @@ import { ToastContainer } from "react-toastify";
 import PropertyPage from "./pages/PropertyPage/PropertyPage";
 import RequestPropertyPage from "./pages/RequestPropertyPage/RequestPropertyPage";
 import DetailRequestPropertyPage from "./pages/DetailRequestPropertyPage/DetailRequestPropertyPage";
+import PropertyProvidingHistoriesPage from "./pages/PropertyProvidingHistories/PropertyProvidingHistoriesPage";
+import DetailPropertyProvidingHistoriesPage from "./pages/PropertyProvidingHistoriesPage/DetailPropertyProvidingHistoriesPage";
 
 function App() {
   return (
@@ -94,6 +96,24 @@ function App() {
             element={
               <RequireAuth>
                 <PropertyPage />
+              </RequireAuth>
+            }
+          />
+
+          <Route
+            path="property_providing_histories"
+            element={
+              <RequireAuth>
+                <PropertyProvidingHistoriesPage />
+              </RequireAuth>
+            }
+          />
+
+          <Route
+            path="property_providing_histories/:id"
+            element={
+              <RequireAuth>
+                <DetailPropertyProvidingHistoriesPage />
               </RequireAuth>
             }
           />

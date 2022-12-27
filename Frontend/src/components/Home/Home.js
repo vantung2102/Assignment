@@ -18,15 +18,15 @@ const Home = () => {
 
   const dataOrg = (arr) => {
     return arr?.map((staff) => {
+      const { id, fullname, position, department, job_title, upper_level } =
+        staff.attributes;
       return {
-        id: staff.id,
-        name: staff.attributes.fullname,
-        title: staff.attributes.position.name,
-        department: staff.attributes.department.name,
-        jobTitle: staff.attributes.job_title.title,
-        parent_id: staff.attributes.upper_level
-          ? staff.attributes.upper_level.id
-          : null,
+        id: id,
+        name: fullname,
+        title: position ? position.name : null,
+        department: department ? department.name : null,
+        jobTitle: job_title ? job_title.title : null,
+        parent_id: upper_level ? upper_level.id : null,
       };
     });
   };

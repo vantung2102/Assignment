@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiClient from "../../apiClient/apiClient";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
+import { useEdit, useDestroy } from "../../common/hooks/hooks";
 
 const initialState = {
   loading: true,
@@ -85,7 +86,7 @@ export const destroyPropertiesGroup = createAsyncThunk(
         },
       }
     );
-    return response.data;
+    return id;
   }
 );
 
@@ -118,7 +119,7 @@ export const propertyGroupSlice = createSlice({
     builder
       .addCase(newPropertiesGroup.pending, (state) => {})
       .addCase(newPropertiesGroup.fulfilled, (state, action) => {
-        state.propertiesGroup.push(action.payload.data);
+        state.propertiesGroup.unshift(action.payload.data);
         toast.success("Create propertiesGroup Successfully!");
       })
       .addCase(newPropertiesGroup.rejected, (state) => {
@@ -128,6 +129,7 @@ export const propertyGroupSlice = createSlice({
     builder
       .addCase(editPropertiesGroup.pending, (state) => {})
       .addCase(editPropertiesGroup.fulfilled, (state, action) => {
+        state.propertiesGroup = useEdit(state.propertiesGroup, action);
         toast.success("Update propertiesGroup Successfully!");
       })
       .addCase(editPropertiesGroup.rejected, (state) => {});
@@ -135,6 +137,7 @@ export const propertyGroupSlice = createSlice({
     builder
       .addCase(destroyPropertiesGroup.pending, (state) => {})
       .addCase(destroyPropertiesGroup.fulfilled, (state, action) => {
+        state.propertiesGroup = useDestroy(state.propertiesGroup, action);
         toast.success("Destroy Successfully!");
       })
       .addCase(destroyPropertiesGroup.rejected, (state) => {

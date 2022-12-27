@@ -1,0 +1,9 @@
+.chat {
+  border-radius: 5px;
+
+  &.left .message {
+    background: #5a8dee !important;
+    color: #fff;
+    float: left !important;
+  }
+}

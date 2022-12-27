@@ -51,8 +51,6 @@ const FormProperties = ({ isNew, show, close }) => {
     }
   }, [property]);
 
-  console.log(propertiesGroup);
-
   const {
     register,
     control,

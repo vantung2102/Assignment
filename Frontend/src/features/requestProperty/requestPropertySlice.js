@@ -8,6 +8,7 @@ const initialState = {
   meta: {},
   requestProperties: null,
   requestProperty: null,
+  response: null,
 };
 
 export const fetchRequestProperties = createAsyncThunk(
@@ -45,7 +46,7 @@ export const newRequestProperty = createAsyncThunk(
   async (data) => {
     const response = await apiClient.post(
       "api/v1/request_management/request_properties",
-      { group_property: data },
+      { request_property: data },
       {
         headers: {
           Authorization: Cookies.get("authorization"),
@@ -69,7 +70,6 @@ export const responseProperty = createAsyncThunk(
         },
       }
     );
-    console.log(response);
     return response.data;
   }
 );
@@ -79,7 +79,7 @@ export const editRequestProperty = createAsyncThunk(
   async (data) => {
     const response = await apiClient.put(
       `/api/v1/request_management/request_properties/${data.id}`,
-      { group_property: { name: data.name, description: data.description } },
+      { request_property: { name: data.name, description: data.description } },
       {
         headers: {
           Authorization: Cookies.get("authorization"),
@@ -94,7 +94,7 @@ export const editRequestProperty = createAsyncThunk(
 export const destroyRequestProperty = createAsyncThunk(
   "destroyRequestProperty",
   async (id) => {
-    const response = await apiClient.delete(
+    await apiClient.delete(
       `/api/v1/request_management/request_properties/${id}`,
       {
         headers: {
@@ -102,6 +102,40 @@ export const destroyRequestProperty = createAsyncThunk(
         },
       }
     );
+    return id;
+  }
+);
+
+export const commentRequestProperty = createAsyncThunk(
+  "chatRequestProperty",
+  async (data) => {
+    const response = await apiClient.post(
+      "api/v1/comments",
+      { comment: data },
+      {
+        headers: {
+          Authorization: Cookies.get("authorization"),
+        },
+      }
+    );
+
+    return response.data;
+  }
+);
+
+export const searchRequestProperty = createAsyncThunk(
+  "searchRequestProperty",
+  async (id) => {
+    const response = await apiClient.post(
+      "/api/v1/request_management/request_properties/requests_by_user",
+      { staff_id: id },
+      {
+        headers: {
+          Authorization: Cookies.get("authorization"),
+        },
+      }
+    );
+
     return response.data;
   }
 );
@@ -111,7 +145,7 @@ export const requestPropertySlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    // ================== All propertiesGroup =================
+    // ================== All =================
     builder
       .addCase(fetchRequestProperties.pending, (state) => {
         state.loading = true;
@@ -121,43 +155,71 @@ export const requestPropertySlice = createSlice({
         state.requestProperties = action.payload.data;
       })
       .addCase(fetchRequestProperties.rejected, (state, action) => {});
-    // ================== show propertiesGroup =================
+    // ================== show =================
     builder
       .addCase(showRequestProperty.pending, (state) => {
         state.loading = true;
       })
       .addCase(showRequestProperty.fulfilled, (state, action) => {
         state.loading = false;
-        console.log(action.payload.data);
         state.requestProperty = action.payload.data;
       })
       .addCase(showRequestProperty.rejected, (state) => {});
-    // ================== New propertiesGroup =================
+    // ================== response =================
+    builder
+      .addCase(responseProperty.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(responseProperty.fulfilled, (state, action) => {
+        state.loading = false;
+        state.requestProperty = action.payload.data;
+      })
+      .addCase(responseProperty.rejected, (state) => {});
+    // ================== New =================
     builder
       .addCase(newRequestProperty.pending, (state) => {})
       .addCase(newRequestProperty.fulfilled, (state, action) => {
-        state.requestProperty.push(action.payload.data);
-        toast.success("Create propertiesGroup Successfully!");
+        state.requestProperties.unshift(action.payload.data);
+        toast.success("Create Successfully!");
       })
       .addCase(newRequestProperty.rejected, (state) => {
-        toast.error("Create propertiesGroup failed!");
+        toast.error("Create failed!");
       });
-    // ================== edit propertiesGroup =================
+    // ================== edit =================
     builder
       .addCase(editRequestProperty.pending, (state) => {})
       .addCase(editRequestProperty.fulfilled, (state, action) => {
-        toast.success("Update propertiesGroup Successfully!");
+        toast.success("Update Successfully!");
       })
       .addCase(editRequestProperty.rejected, (state) => {});
-    // ================== Destroy propertiesGroup =================
+    // ================== Destroy =================
     builder
       .addCase(destroyRequestProperty.pending, (state) => {})
       .addCase(destroyRequestProperty.fulfilled, (state, action) => {
+        state.requestProperties = state.requestProperties.filter(
+          (item) => item.attributes.id !== action.payload
+        );
         toast.success("Destroy Successfully!");
       })
       .addCase(destroyRequestProperty.rejected, (state) => {
         toast.error("Destroy Failed!");
       });
+    // ================== comment =================
+    builder
+      .addCase(commentRequestProperty.pending, (state) => {})
+      .addCase(commentRequestProperty.fulfilled, (state, action) => {
+        state.requestProperty.attributes.comments.push(
+          action.payload.data.attributes
+        );
+      })
+      .addCase(commentRequestProperty.rejected, (state) => {});
+    // ================== search =================
+    builder
+      .addCase(searchRequestProperty.pending, (state) => {})
+      .addCase(searchRequestProperty.fulfilled, (state, action) => {
+        state.requestProperties = action.payload.data;
+      })
+      .addCase(searchRequestProperty.rejected, (state) => {});
   },
 });
 

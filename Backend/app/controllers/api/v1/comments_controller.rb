@@ -2,9 +2,6 @@ class Api::V1::CommentsController < Api::V1::BaseController
   def create
     comment = Comment.new(comment_params)
     comment.staff_id = current_user.id
-    
-    # binding.pry
-    
     comment.save ? render_resource(comment, status: :created) : render_resource_errors(comment.errors)
   end
 

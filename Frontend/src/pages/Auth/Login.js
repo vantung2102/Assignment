@@ -26,7 +26,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      navigate("/staff_management/departments", { replace: true });
+      navigate("/", { replace: true });
     }
   }, [isAuthenticated]);
 

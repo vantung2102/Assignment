@@ -173,7 +173,7 @@ const Sidebar = (prop) => {
                     style={prop.active == "properties_group" ? active : null}
                   >
                     <FaLayerGroup className={styles.iconSidebar} />
-                    <span> Group Properties</span>
+                    <span>Properties Group</span>
                   </NavLink>
                 </li>
 

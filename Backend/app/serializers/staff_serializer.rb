@@ -27,5 +27,5 @@ class StaffSerializer < BaseSerializer
               :position,
               :department,
               :job_title,
-              :staff_id
+              :upper_level
 end

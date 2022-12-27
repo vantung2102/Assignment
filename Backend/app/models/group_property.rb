@@ -10,6 +10,7 @@
 #
 class GroupProperty < ApplicationRecord
   has_many :properties, dependent: :destroy
+  has_many :request_properties, dependent: :destroy
   
   validates :name, presence: true
   validates :description, presence: true

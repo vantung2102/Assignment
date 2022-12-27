@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_09_080318) do
+ActiveRecord::Schema.define(version: 2022_12_27_051607) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -172,6 +172,8 @@ ActiveRecord::Schema.define(version: 2022_12_09_080318) do
     t.integer "approver_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "group_property_id"
+    t.index ["group_property_id"], name: "index_request_properties_on_group_property_id"
   end
 
   create_table "roles", force: :cascade do |t|
@@ -235,6 +237,7 @@ ActiveRecord::Schema.define(version: 2022_12_09_080318) do
     t.index ["staff_id"], name: "index_staffs_roles_on_staff_id"
   end
 
+  add_foreign_key "request_properties", "group_properties"
   add_foreign_key "staffs", "job_titles"
   add_foreign_key "staffs", "staffs"
 end

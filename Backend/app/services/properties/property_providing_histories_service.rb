@@ -1,5 +1,6 @@
 class Properties::PropertyProvidingHistoriesService < ApplicationService
-  def initialize(params)
+  def initialize(user, params)
+    @user = user
     @params = params
   end
 
@@ -7,10 +8,13 @@ class Properties::PropertyProvidingHistoriesService < ApplicationService
     property_providing_history = PropertyProvidingHistory.new(params)
     begin
       ActiveRecord::Base.transaction do
-        property_providing_history.save!
         property = Property.find(params[:property_id])
-        status = params[:status] == PropertyProvidingHistory.statuses[:provided] ? :used : :available
-        property.update!(status: status)
+        [false] if property.used_status?
+
+        property_providing_history.provider_id = user.id
+        property_providing_history.status = :provided
+        property_providing_history.save!
+        property.update!(status: :used)
         [true, property_providing_history]
       end
     rescue StandardError => e
@@ -20,5 +24,5 @@ class Properties::PropertyProvidingHistoriesService < ApplicationService
 
   private
 
-  attr_accessor :params
+  attr_accessor :user, :params
 end

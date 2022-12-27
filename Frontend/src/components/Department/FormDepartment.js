@@ -1,54 +1,55 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { Button, FloatingLabel, Form, Modal } from "react-bootstrap";
+import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import {
   departmentSelector,
   editDepartment,
-  fetchDepartment,
   newDepartment,
 } from "../../features/department/departmentSlice";
 import { SubmitSection } from "./department";
 
 const FormDepartment = ({ isNew, show, close }) => {
   const dispatch = useDispatch();
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const {
+    register,
+    handleSubmit,
+    watch,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useForm();
+
   const department = useSelector(departmentSelector);
 
   useEffect(() => {
     if (!isNew) {
-      setName(department.attributes.name);
-      setDescription(department.attributes.description);
+      setValue("name", department?.attributes.name);
+      setValue("description", department?.attributes.description);
     }
   }, [department]);
 
-  const handleNewDepartment = (e) => {
-    e.preventDefault();
-    const data = {
-      name: name,
-      description: description,
-    };
-
-    dispatch(newDepartment(data));
+  const handleNewDepartment = () => {
+    dispatch(
+      newDepartment({
+        name: watch("name"),
+        description: watch("description"),
+      })
+    );
     close(true);
-    setName("");
-    setDescription("");
-    // dispatch(fetchDepartment());
+    setValue("name", "");
+    setValue("description", "");
   };
 
-  const handleEditDepartment = (e) => {
-    e.preventDefault();
-    const data = {
-      id: department.attributes.id,
-      name: name,
-      description: description,
-    };
-
-    dispatch(editDepartment(data));
+  const handleEditDepartment = () => {
+    dispatch(
+      editDepartment({
+        id: department?.attributes.id,
+        name: watch("name"),
+        description: watch("description"),
+      })
+    );
     close(true);
-    setName("");
-    setDescription("");
-    dispatch(fetchDepartment());
   };
 
   return (
@@ -59,29 +60,39 @@ const FormDepartment = ({ isNew, show, close }) => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={isNew ? handleNewDepartment : handleEditDepartment}>
+        <Form
+          onSubmit={handleSubmit(
+            isNew ? handleNewDepartment : handleEditDepartment
+          )}
+        >
           <Form.Group>
-            <Form.Label>
-              Department Name <span className="text-danger">*</span>
-            </Form.Label>
+            <Form.Label>Department Name</Form.Label>
             <Form.Control
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              defaultValue={getValues("name")}
+              {...register("name", { required: "Name is required" })}
             ></Form.Control>
 
-            <Form.Label>
-              Description <span className="text-danger">*</span>
-            </Form.Label>
+            <Form.Control.Feedback type="invalid" className="d-block">
+              {errors.name?.message}
+            </Form.Control.Feedback>
           </Form.Group>
+
+          <Form.Label>Description</Form.Label>
+
           <FloatingLabel controlId="floatingTextarea2">
             <Form.Control
+              defaultValue={getValues("description")}
               as="textarea"
               placeholder="Enter here..."
               style={{ height: "100px" }}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
+              {...register("description", {
+                required: "Description is required",
+              })}
+            ></Form.Control>
+
+            <Form.Control.Feedback type="invalid" className="d-block">
+              {errors.description?.message}
+            </Form.Control.Feedback>
           </FloatingLabel>
           <SubmitSection>
             <Button className="submit-btn" type="submit">
