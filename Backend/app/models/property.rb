@@ -15,7 +15,7 @@
 #  updated_at        :datetime         not null
 #
 class Property < ApplicationRecord
-  enum status: {  available: 0, used: 1 }
+  enum status: {  available: 0, used: 1 }, _suffix: true
   has_one :provide_property
   belongs_to :group_property
 

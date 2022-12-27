@@ -1,6 +1,4 @@
 class Api::Auth::AuthenticationController < Api::V1::BaseController
-  include ActionController::Cookies
-
   skip_before_action :authenticate_user, only: %i[log_in]
   REMEMBER_ME = { on: 1, off: 0 }.freeze
 
@@ -16,9 +14,7 @@ class Api::Auth::AuthenticationController < Api::V1::BaseController
     end
   end
 
-  def log_out
-    cookies.delete(:staff_id)
-    @current_user = nil
-    head :no_content
+  def get_current_user
+    render json: { user: current_user }, status: :ok
   end
 end

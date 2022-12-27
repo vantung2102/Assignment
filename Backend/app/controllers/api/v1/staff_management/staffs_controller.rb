@@ -58,8 +58,10 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
   end
                                                                         
   def staff_chart
-    chart = Staffs::StaffChartService.call
-    render json: chart
+    # chart = Staffs::StaffChartService.call
+    # render json: chart
+    staffs = Staff.all
+    render_resource_collection(staffs)
   end
 
   def staff_chart_by_node
@@ -74,6 +76,17 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
   end
 
   def staff_params
-    params.require(:staff).permit(:fullname, :email, :password, :contract_name, :contract_term, :position_id, :department_id, :job_title_id)
+    params.require(:staff).permit(
+      :fullname,
+      :date_of_birth,
+      :gender,
+      :email,
+      :password,
+      :position_id,
+      :department_id,
+      :job_title_id,
+      :status,
+      :staff_id
+    )
   end
 end
