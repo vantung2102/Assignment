@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { isAuthenticatedSelector, logout } from "../../features/auth/authSlice";
 import { HiBars3CenterLeft } from "react-icons/hi2";
 import { AiOutlineSearch, AiOutlineBell } from "react-icons/ai";
 import { FaRegComment } from "react-icons/fa";
@@ -17,16 +18,40 @@ import "./header.scss";
 
 import logo from "../../assets/images/logo/logo1.png";
 import avatar from "../../assets/images/home/user.jpg";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 const Header = () => {
   const [isOpenNotification, setIsOpenNotification] = useState(false);
-  const [isOpenMessage, setIsOpenMessage] = useState(null);
+  const [isOpenMessage, setIsOpenMessage] = useState(false);
+  const [isOpenSetting, setIsOpenSetting] = useState(false);
+
+  const isAuthenticated = useSelector(isAuthenticatedSelector);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      // navigate("/login", { replace: true });
+    }
+  }, [isAuthenticated]);
+
+  const handleLogout = () => {
+    dispatch(logout());
+  };
 
   useEffect(() => {
     window.addEventListener("click", () => {
       setIsOpenNotification(false);
+      setIsOpenMessage(false);
+      setIsOpenSetting(false);
     });
   });
+
+  // if (!isAuthenticated) {
+  //   return redirect("/login");
+  // }
 
   const handleShowNotification = (e) => {
     e.stopPropagation();
@@ -40,20 +65,25 @@ const Header = () => {
     setIsOpenMessage(!isOpenNotification);
   };
 
+  const handleShowSetting = (e) => {
+    e.stopPropagation();
+    setIsOpenSetting(!isOpenSetting);
+  };
+
   return (
     <HeaderContainer>
       <div className="header-left">
-        <a className="logo" href="">
+        <Link className="logo">
           <img src={logo} width="40" height="40" alt="" />
-        </a>
+        </Link>
       </div>
 
-      <a className="toggle_btn" href="#">
+      <Link className="toggle_btn">
         <HiBars3CenterLeft />
-      </a>
+      </Link>
 
       <div className="page-title-box">
-        <h3>Dreamguy's Technologies</h3>
+        <h3>Zane Office</h3>
       </div>
 
       <UserMenu className="nav">
@@ -73,11 +103,7 @@ const Header = () => {
         </li>
 
         <li className="nav-item dropdown" onClick={handleShowNotification}>
-          <a
-            href="#"
-            className="dropdown-toggle nav-link"
-            data-bs-toggle="dropdown"
-          >
+          <div className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
             <AiOutlineBell style={{ fontSize: "25px" }} />
             <span className="badge badge-pill">3</span>
 
@@ -91,15 +117,13 @@ const Header = () => {
             >
               <TopNavDropdownHeader className="top-nav-dropdown-header">
                 <span className="notification-title">Notifications</span>
-                <a href="" className="clear-notification">
-                  Clear All
-                </a>
+                <Link className="clear-notification">Clear All</Link>
               </TopNavDropdownHeader>
 
               <NotificationContent>
                 <ul className="notification-list">
                   <li className="notification-message">
-                    <a href="">
+                    <Link>
                       <Media className="media">
                         <span className="avatar">
                           <img
@@ -120,10 +144,10 @@ const Header = () => {
                           </p>
                         </div>
                       </Media>
-                    </a>
+                    </Link>
                   </li>
                   <li className="notification-message">
-                    <a href="">
+                    <Link>
                       <Media className="media">
                         <span className="avatar">
                           <img
@@ -144,144 +168,20 @@ const Header = () => {
                           </p>
                         </div>
                       </Media>
-                    </a>
-                  </li>
-                  <li className="notification-message">
-                    <a href="">
-                      <Media className="media">
-                        <span className="avatar">
-                          <img
-                            src={avatar}
-                            style={{ width: "40px", height: "40px" }}
-                          />
-                        </span>
-                        <div className="media-body">
-                          <p className="notification-details">
-                            <span className="notification-title">John Doe</span>{" "}
-                            added new task
-                            <span className="notification-title">
-                              Patient appointment booking
-                            </span>
-                          </p>
-                          <p className="notification-time">
-                            <span>4 mins ago</span>
-                          </p>
-                        </div>
-                      </Media>
-                    </a>
-                  </li>
-                  <li className="notification-message">
-                    <a href="">
-                      <Media className="media">
-                        <span className="avatar">
-                          <img
-                            src={avatar}
-                            style={{ width: "40px", height: "40px" }}
-                          />
-                        </span>
-                        <div className="media-body">
-                          <p className="notification-details">
-                            <span className="notification-title">John Doe</span>{" "}
-                            added new task
-                            <span className="notification-title">
-                              Patient appointment booking
-                            </span>
-                          </p>
-                          <p className="notification-time">
-                            <span>4 mins ago</span>
-                          </p>
-                        </div>
-                      </Media>
-                    </a>
-                  </li>
-                  <li className="notification-message">
-                    <a href="">
-                      <Media className="media">
-                        <span className="avatar">
-                          <img
-                            src={avatar}
-                            style={{ width: "40px", height: "40px" }}
-                          />
-                        </span>
-                        <div className="media-body">
-                          <p className="notification-details">
-                            <span className="notification-title">John Doe</span>{" "}
-                            added new task
-                            <span className="notification-title">
-                              Patient appointment booking
-                            </span>
-                          </p>
-                          <p className="notification-time">
-                            <span>4 mins ago</span>
-                          </p>
-                        </div>
-                      </Media>
-                    </a>
-                  </li>
-                  <li className="notification-message">
-                    <a href="">
-                      <Media className="media">
-                        <span className="avatar">
-                          <img
-                            src={avatar}
-                            style={{ width: "40px", height: "40px" }}
-                          />
-                        </span>
-                        <div className="media-body">
-                          <p className="notification-details">
-                            <span className="notification-title">John Doe</span>{" "}
-                            added new task
-                            <span className="notification-title">
-                              Patient appointment booking
-                            </span>
-                          </p>
-                          <p className="notification-time">
-                            <span>4 mins ago</span>
-                          </p>
-                        </div>
-                      </Media>
-                    </a>
-                  </li>
-                  <li className="notification-message">
-                    <a href="">
-                      <Media className="media">
-                        <span className="avatar">
-                          <img
-                            src={avatar}
-                            style={{ width: "40px", height: "40px" }}
-                          />
-                        </span>
-                        <div className="media-body">
-                          <p className="notification-details">
-                            <span className="notification-title">John Doe</span>{" "}
-                            added new task
-                            <span className="notification-title">
-                              Patient appointment booking
-                            </span>
-                          </p>
-                          <p className="notification-time">
-                            <span>4 mins ago</span>
-                          </p>
-                        </div>
-                      </Media>
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </NotificationContent>
 
               <TopNavDropdownFooter className="top-nav-dropdown-footer">
-                <a href="">View all Notifications</a>
+                <Link>View all Notifications</Link>
               </TopNavDropdownFooter>
             </div>
-          </a>
+          </div>
         </li>
 
         <li className="nav-item dropdown" onClick={handleShowMessage}>
-          <a
-            href="#"
-            className="dropdown-toggle nav-link"
-            data-bs-toggle="dropdown"
-          >
+          <div className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
             <FaRegComment style={{ fontSize: "22px" }} />
             <span className="badge badge-pill">3</span>
 
@@ -294,15 +194,15 @@ const Header = () => {
             >
               <TopNavDropdownHeader className="top-nav-dropdown-header">
                 <span className="notification-title">Message</span>
-                <a href="" className="clear-notification">
+                <Link href="" className="clear-notification">
                   Clear All
-                </a>
+                </Link>
               </TopNavDropdownHeader>
 
               <NotificationContent>
                 <ul className="notification-list">
                   <li className="notification-message">
-                    <a href="">
+                    <Link>
                       <Media className="media">
                         <span className="avatar">
                           <img
@@ -323,10 +223,10 @@ const Header = () => {
                           </p>
                         </div>
                       </Media>
-                    </a>
+                    </Link>
                   </li>
                   <li className="notification-message">
-                    <a href="">
+                    <Link>
                       <Media className="media">
                         <span className="avatar">
                           <img
@@ -347,164 +247,39 @@ const Header = () => {
                           </p>
                         </div>
                       </Media>
-                    </a>
-                  </li>
-                  <li className="notification-message">
-                    <a href="">
-                      <Media className="media">
-                        <span className="avatar">
-                          <img
-                            src={avatar}
-                            style={{ width: "40px", height: "40px" }}
-                          />
-                        </span>
-                        <div className="media-body">
-                          <p className="notification-details">
-                            <span className="notification-title">John Doe</span>{" "}
-                            added new task
-                            <span className="notification-title">
-                              Patient appointment booking
-                            </span>
-                          </p>
-                          <p className="notification-time">
-                            <span>4 mins ago</span>
-                          </p>
-                        </div>
-                      </Media>
-                    </a>
-                  </li>
-                  <li className="notification-message">
-                    <a href="">
-                      <Media className="media">
-                        <span className="avatar">
-                          <img
-                            src={avatar}
-                            style={{ width: "40px", height: "40px" }}
-                          />
-                        </span>
-                        <div className="media-body">
-                          <p className="notification-details">
-                            <span className="notification-title">John Doe</span>{" "}
-                            added new task
-                            <span className="notification-title">
-                              Patient appointment booking
-                            </span>
-                          </p>
-                          <p className="notification-time">
-                            <span>4 mins ago</span>
-                          </p>
-                        </div>
-                      </Media>
-                    </a>
-                  </li>
-                  <li className="notification-message">
-                    <a href="">
-                      <Media className="media">
-                        <span className="avatar">
-                          <img
-                            src={avatar}
-                            style={{ width: "40px", height: "40px" }}
-                          />
-                        </span>
-                        <div className="media-body">
-                          <p className="notification-details">
-                            <span className="notification-title">John Doe</span>{" "}
-                            added new task
-                            <span className="notification-title">
-                              Patient appointment booking
-                            </span>
-                          </p>
-                          <p className="notification-time">
-                            <span>4 mins ago</span>
-                          </p>
-                        </div>
-                      </Media>
-                    </a>
-                  </li>
-                  <li className="notification-message">
-                    <a href="">
-                      <Media className="media">
-                        <span className="avatar">
-                          <img
-                            src={avatar}
-                            style={{ width: "40px", height: "40px" }}
-                          />
-                        </span>
-                        <div className="media-body">
-                          <p className="notification-details">
-                            <span className="notification-title">John Doe</span>{" "}
-                            added new task
-                            <span className="notification-title">
-                              Patient appointment booking
-                            </span>
-                          </p>
-                          <p className="notification-time">
-                            <span>4 mins ago</span>
-                          </p>
-                        </div>
-                      </Media>
-                    </a>
-                  </li>
-                  <li className="notification-message">
-                    <a href="">
-                      <Media className="media">
-                        <span className="avatar">
-                          <img
-                            src={avatar}
-                            style={{ width: "40px", height: "40px" }}
-                          />
-                        </span>
-                        <div className="media-body">
-                          <p className="notification-details">
-                            <span className="notification-title">John Doe</span>{" "}
-                            added new task
-                            <span className="notification-title">
-                              Patient appointment booking
-                            </span>
-                          </p>
-                          <p className="notification-time">
-                            <span>4 mins ago</span>
-                          </p>
-                        </div>
-                      </Media>
-                    </a>
+                    </Link>
                   </li>
                 </ul>
               </NotificationContent>
 
               <TopNavDropdownFooter className="top-nav-dropdown-footer">
-                <a href="">View all Notifications</a>
+                <Link>View all Notifications</Link>
               </TopNavDropdownFooter>
             </div>
-          </a>
+          </div>
         </li>
 
-        <li className="nav-item dropdown has-arrow main-drop">
-          <a
-            href="#"
-            className="dropdown-toggle nav-link"
-            data-bs-toggle="dropdown"
-          >
+        <li
+          className="nav-item dropdown has-arrow main-drop"
+          onClick={handleShowSetting}
+        >
+          <Link className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
             <UserImg className="me-1">
               <img src={avatar} alt="" />
               <span className="status online"></span>
             </UserImg>
             <span>Admin</span>
             <IoIosArrowDown className="ms-1" />
-          </a>
-          <div className="dropdown-menu">
-            <a
-              className="dropdown-item"
-              href="/blue/app/profile/employee-profile"
-            >
-              My Profile
-            </a>
-            <a className="dropdown-item" href="/blue/settings/companysetting">
-              Settings
-            </a>
-            <a className="dropdown-item" href="/blue/login">
+          </Link>
+          <div
+            className={isOpenSetting ? `show dropdown-menu` : "dropdown-menu"}
+            style={{ position: "absolute", right: "20px" }}
+          >
+            <Link className="dropdown-item">My Profile</Link>
+            <Link className="dropdown-item">Settings</Link>
+            <Link className="dropdown-item" onClick={handleLogout}>
               Logout
-            </a>
+            </Link>
           </div>
         </li>
       </UserMenu>

@@ -3,9 +3,7 @@ import React from "react";
 import styles from "./sidebar.module.scss";
 import { SidebarContainer, SidebarInner, SidebarMenu } from "./sidebar";
 // =========== Icon =========
-import { RxDashboard } from "react-icons/rx";
-import { IoIosArrowForward } from "react-icons/io";
-import { BiCube } from "react-icons/bi";
+
 import {
   AiOutlineFileProtect,
   AiOutlineFundProjectionScreen,
@@ -29,8 +27,14 @@ import {
   MdOutlineAccountCircle,
   MdReportGmailerrorred,
 } from "react-icons/md";
+import { Link, NavLink } from "react-router-dom";
+import { RiNodeTree } from "react-icons/ri";
 
-const Sidebar = () => {
+const Sidebar = (prop) => {
+  const active = {
+    color: "#00c5fb",
+  };
+
   return (
     <SidebarContainer style={{ overflowY: "auto" }}>
       <div>
@@ -39,83 +43,63 @@ const Sidebar = () => {
             <SidebarMenu>
               <ul>
                 <li className={styles.menuTitle}>
-                  <span>Main</span>
-                </li>
-
-                <li className="submenu">
-                  <a href="#" className="">
-                    <RxDashboard className={styles.iconSidebar} />
-                    <span> Dashboard</span>
-                    <span className="menu-arrow">
-                      <IoIosArrowForward />
-                    </span>
-                  </a>
-                </li>
-
-                <li className="submenu">
-                  <a href="#" className="">
-                    <BiCube className={styles.iconSidebar} />
-                    <span> Apps</span>
-                    <span className="menu-arrow">
-                      <IoIosArrowForward />
-                    </span>
-                  </a>
-                </li>
-
-                <li className={styles.menuTitle}>
                   <span> Staff Management</span>
                 </li>
 
                 <li className="submenu">
-                  <a href="#" className="">
+                  <NavLink to="/" style={prop.active == "home" ? active : null}>
+                    <RiNodeTree className={styles.iconSidebar} />
+                    <span> Staff Chart</span>
+                  </NavLink>
+                </li>
+
+                <li className="submenu">
+                  <NavLink
+                    to="/staff_management/departments"
+                    style={prop.active == "department" ? active : null}
+                  >
                     <MdOutlineHomeRepairService
                       className={styles.iconSidebar}
                     />
                     <span> Departments</span>
-                    <span className="menu-arrow">
-                      <IoIosArrowForward />
-                    </span>
-                  </a>
+                  </NavLink>
                 </li>
 
                 <li className="submenu">
-                  <a href="#" className="">
+                  <NavLink
+                    to="/staff_management/job_titles"
+                    style={prop.active == "job_title" ? active : null}
+                  >
                     <MdOutlineTitle className={styles.iconSidebar} />
                     <span> Job Title</span>
-                    <span className="menu-arrow">
-                      <IoIosArrowForward />
-                    </span>
-                  </a>
+                  </NavLink>
                 </li>
 
                 <li className="submenu">
-                  <a href="#" className="">
+                  <NavLink
+                    to="/staff_management/positions"
+                    style={prop.active == "position" ? active : null}
+                  >
                     <GiStairsGoal className={styles.iconSidebar} />
                     <span> Positions</span>
-                    <span className="menu-arrow">
-                      <IoIosArrowForward />
-                    </span>
-                  </a>
+                  </NavLink>
                 </li>
 
                 <li className="submenu">
-                  <a href="#" className="">
+                  <NavLink>
                     <MdContacts className={styles.iconSidebar} />
-                    <span> Contacts</span>
-                    <span className="menu-arrow">
-                      <IoIosArrowForward />
-                    </span>
-                  </a>
+                    <span> Contracts</span>
+                  </NavLink>
                 </li>
 
                 <li className="submenu">
-                  <a href="#" className="">
+                  <NavLink
+                    to="/staff_management/staff"
+                    style={prop.active == "staff" ? active : null}
+                  >
                     <AiOutlineUser className={styles.iconSidebar} />
                     <span> Staff</span>
-                    <span className="menu-arrow">
-                      <IoIosArrowForward />
-                    </span>
-                  </a>
+                  </NavLink>
                 </li>
 
                 <li className={styles.menuTitle}>
@@ -123,17 +107,17 @@ const Sidebar = () => {
                 </li>
 
                 <li className="submenu">
-                  <a href="#" className="">
+                  <NavLink>
                     <MdContacts className={styles.iconSidebar} />
                     <span> Leave</span>
-                  </a>
+                  </NavLink>
                 </li>
 
                 <li className="submenu">
-                  <a href="#" className="">
+                  <NavLink>
                     <FaWpforms className={styles.iconSidebar} />
                     <span> Leave Applications</span>
-                  </a>
+                  </NavLink>
                 </li>
 
                 <li className={styles.menuTitle}>
@@ -141,17 +125,17 @@ const Sidebar = () => {
                 </li>
 
                 <li className="submenu">
-                  <a href="#" className="">
+                  <NavLink>
                     <BsFiles className={styles.iconSidebar} />
                     <span> Onboarding sample</span>
-                  </a>
+                  </NavLink>
                 </li>
 
                 <li className="submenu">
-                  <a href="#" className="">
+                  <NavLink>
                     <AiOutlineUsergroupAdd className={styles.iconSidebar} />
                     <span> Staff onboarding</span>
-                  </a>
+                  </NavLink>
                 </li>
 
                 <li className={styles.menuTitle}>
@@ -159,10 +143,10 @@ const Sidebar = () => {
                 </li>
 
                 <li className="submenu">
-                  <a href="#" className="">
+                  <NavLink>
                     <FcSalesPerformance className={styles.iconSidebar} />
                     <span> Forms</span>
-                  </a>
+                  </NavLink>
                 </li>
 
                 <li className={styles.menuTitle}>
@@ -170,10 +154,13 @@ const Sidebar = () => {
                 </li>
 
                 <li className="submenu">
-                  <a href="#" className="">
+                  <NavLink
+                    to="/request_management/request_properties"
+                    style={prop.active == "request_properties" ? active : null}
+                  >
                     <AiOutlineUser className={styles.iconSidebar} />
                     <span> Request Properties</span>
-                  </a>
+                  </NavLink>
                 </li>
 
                 <li className={styles.menuTitle}>
@@ -181,24 +168,37 @@ const Sidebar = () => {
                 </li>
 
                 <li className="submenu">
-                  <a href="#" className="">
+                  <NavLink
+                    to="/property_management/properties_group"
+                    style={prop.active == "properties_group" ? active : null}
+                  >
                     <FaLayerGroup className={styles.iconSidebar} />
                     <span> Group Properties</span>
-                  </a>
+                  </NavLink>
                 </li>
 
                 <li className="submenu">
-                  <a href="#" className="">
+                  <NavLink
+                    to="/property_management/properties"
+                    style={prop.active == "properties" ? active : null}
+                  >
                     <GrPersonalComputer className={styles.iconSidebar} />
                     <span> Properties</span>
-                  </a>
+                  </NavLink>
                 </li>
 
                 <li className="submenu">
-                  <a href="#" className="">
+                  <NavLink
+                    to="/property_management/property_providing_histories"
+                    style={
+                      prop.active == "property_providing_histories"
+                        ? active
+                        : null
+                    }
+                  >
                     <FaHistory className={styles.iconSidebar} />
                     <span> Providing Histories</span>
-                  </a>
+                  </NavLink>
                 </li>
 
                 <li className={styles.menuTitle}>
@@ -206,31 +206,31 @@ const Sidebar = () => {
                 </li>
 
                 <li className="submenu">
-                  <a href="#" className="">
+                  <NavLink>
                     <MdOutlineAccountCircle className={styles.iconSidebar} />
                     <span> Accounting</span>
-                  </a>
+                  </NavLink>
                 </li>
 
                 <li className="submenu">
-                  <a href="#" className="">
+                  <NavLink>
                     <FaMoneyBillAlt className={styles.iconSidebar} />
                     <span> Payroll</span>
-                  </a>
+                  </NavLink>
                 </li>
 
                 <li className="submenu">
-                  <a href="#" className="">
+                  <NavLink>
                     <AiOutlineFileProtect className={styles.iconSidebar} />
                     <span> Policy</span>
-                  </a>
+                  </NavLink>
                 </li>
 
                 <li className="submenu">
-                  <a href="#" className="">
+                  <NavLink>
                     <MdReportGmailerrorred className={styles.iconSidebar} />
                     <span> Report</span>
-                  </a>
+                  </NavLink>
                 </li>
 
                 <li className={styles.menuTitle}>
@@ -238,19 +238,19 @@ const Sidebar = () => {
                 </li>
 
                 <li className="submenu">
-                  <a href="#" className="">
+                  <NavLink>
                     <GrTask className={styles.iconSidebar} />
                     <span> Tasks</span>
-                  </a>
+                  </NavLink>
                 </li>
 
                 <li className="submenu">
-                  <a href="#" className="">
+                  <NavLink>
                     <AiOutlineFundProjectionScreen
                       className={styles.iconSidebar}
                     />
                     <span> Projection</span>
-                  </a>
+                  </NavLink>
                 </li>
               </ul>
             </SidebarMenu>

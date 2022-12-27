@@ -168,38 +168,6 @@ input:focus {
 
 /* Dropdowns */
 
-.dropdown {
-  .dropdown-toggle {
-    &:after {
-      border-top: 0;
-      border-right: 0;
-      border-left: 0;
-      border-bottom: 0;
-      font: normal normal normal 24px/1 "themify";
-      content: "\e64b";
-      width: auto;
-      height: auto;
-      vertical-align: middle;
-      line-height: 0.625rem;
-      font-size: 0.5rem;
-      margin-left: 0.3rem;
-      font-weight: bold;
-    }
-  }
-  .dropdown-menu {
-    margin-top: 2px;
-    font-size: 2rem;
-    box-shadow: 0px 1px 15px 1px rgba(230, 234, 236, 0.35);
-    .dropdown-item {
-      font-size: 0.875rem;
-      padding: 0.25rem 1.5rem;
-      &:active {
-        background: initial;
-      }
-    }
-  }
-}
-
 .cursor-pointer {
   cursor: pointer;
 }

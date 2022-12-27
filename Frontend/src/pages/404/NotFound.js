@@ -1,5 +1,6 @@
 import React from "react";
 import { AiFillWarning } from "react-icons/ai";
+import { Link } from "react-router-dom";
 
 import { ErrorBox, Title } from "./notFound";
 
@@ -11,7 +12,7 @@ const NotFound = () => {
         <AiFillWarning /> Oops! Page not found!
       </h3>
       <p>The page you requested was not found.</p>
-      <a className="btn btn-custom">Back to Home</a>
+      <Link className="btn btn-custom">Back to Home</Link>
     </ErrorBox>
   );
 };

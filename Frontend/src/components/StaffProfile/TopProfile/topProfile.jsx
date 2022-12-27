@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 export const ProfileView = styled.div`
   position: relative;
+  margin-bottom: 15px;
 
   .ProfileImgWrap {
     height: 120px;
@@ -22,10 +23,6 @@ export const ProfileView = styled.div`
   .profile-basic {
     margin-left: 140px;
     padding-right: 50px;
-  }
-
-  .profile-info-left {
-    border-right: 2px dashed #ccc;
   }
 
   .user-name {
@@ -58,6 +55,7 @@ export const ProfileView = styled.div`
 
     li {
       margin-bottom: 10px;
+      margin-right: 10px;
 
       .title {
         color: #4f4f4f;
@@ -78,49 +76,4 @@ export const ProfileView = styled.div`
       }
     }
   }
-`;
-
-export const TabBox = styled.div`
-  border-bottom: 0;
-  margin-bottom: 10px;
-  padding: 5px;
-
-  .nav-tabs {
-    border-bottom: 1px solid #dee2e6;
-
-    .nav-link {
-      margin-bottom: -1px;
-      background: 0 0;
-      color: #888;
-      border: 1px solid transparent;
-      border-top-left-radius: 0.25rem;
-      border-top-right-radius: 0.25rem;
-    }
-
-    .nav-item.show .nav-link,
-    .nav-link.active {
-      color: #495057;
-      background-color: #fff;
-      border-color: #dee2e6 #dee2e6 #fff;
-    }
-
-    &.nav-tabs-bottom > li {
-      margin-bottom: -1px;
-
-      & > a.active,
-      & > a.active:hover,
-      & > a.active:focus {
-        border-bottom-width: 2px;
-        border-color: transparent;
-        border-bottom-color: #00c5fb;
-        color: #00c5fb;
-        background-color: transparent;
-        transition: none 0s ease 0s;
-      }
-    }
-  }
-`;
-
-export const TabContent = styled.div`
-  padding-top: 20px;
 `;
