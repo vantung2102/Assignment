@@ -3,18 +3,19 @@ Rails.application.routes.draw do
     namespace :auth do
       post 'login', to: 'authentication#log_in'
       post 'logout', to: 'authentication#log_out'
+      get 'get_current_user', to: 'authentication#get_current_user'
     end
 
     namespace :v1 do
       namespace :staff_management do
         resources :staffs do
           member do
-            post 'staff_chart_by_node', to: "staffs#staff_chart_by_node"
+            get 'staff_chart_by_node', to: "staffs#staff_chart_by_node"
             post 'update_staff_activation_status', to: "staffs#update_staff_activation_status"
             post 'destroy_and_update_staff_boss', to: "staffs#destroy_and_update_staff_boss"
           end
           collection do
-            post 'chart', to: "staffs#staff_chart"
+            get 'chart', to: "staffs#staff_chart"
           end
         end
         resources :positions
