@@ -3,7 +3,6 @@ import Pagination from "react-bootstrap/Pagination";
 import "./paginate.scss";
 
 const Paginate = (props) => {
-  console.log(props);
   return (
     <Pagination className="d-flex justify-content-end">
       <Pagination.First />

@@ -9,6 +9,7 @@ import {
 } from "./login";
 
 import logo from "../../assets/images/logo/logo.png";
+import { Link } from "react-router-dom";
 
 const ForgotPassword = () => {
   return (
@@ -43,7 +44,7 @@ const ForgotPassword = () => {
 
                 <AccountFooter>
                   <p>
-                    Remember your password? <a href="">Login</a>
+                    Remember your password? <Link>Login</Link>
                   </p>
                 </AccountFooter>
               </form>

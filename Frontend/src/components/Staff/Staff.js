@@ -18,51 +18,51 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import avatar from "../../assets/images/home/user.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  fetchStaffAsync,
-  fetchPositionAsync,
-  fetchDepartmentAsync,
-  fetchJobTitleAsync,
+  fetchStaff,
   staffSelector,
   metaSelector,
-  positionSelector,
-  departmentSelector,
-  jobTitleSelector,
+  staffsSelector,
 } from "../../features/staff/staffSlice";
 import Paginate from "../Paginate/Paginate";
+import {
+  fetchPosition,
+  positionsSelector,
+} from "../../features/position/positionSlice";
+import {
+  departmentsSelector,
+  fetchDepartment,
+} from "../../features/department/departmentSlice";
+import {
+  fetchJobTitle,
+  jobTitleSelector,
+} from "../../features/jobTitle/jobTitleSlice";
 
 const StaffTable = () => {
-  const staffs = useSelector(staffSelector);
-  const positions = useSelector(positionSelector);
-  const departments = useSelector(departmentSelector);
+  const staffs = useSelector(staffsSelector);
   const meta = useSelector(metaSelector);
-
+  const positions = useSelector(positionsSelector);
+  const departments = useSelector(departmentsSelector);
   const jobTitles = useSelector(jobTitleSelector);
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchStaffAsync());
-    dispatch(fetchPositionAsync());
-    dispatch(fetchDepartmentAsync());
-    dispatch(fetchJobTitleAsync());
+    dispatch(fetchStaff());
+    dispatch(fetchPosition());
+    dispatch(fetchDepartment());
+    dispatch(fetchJobTitle());
   }, []);
-
-  console.log(staffs);
 
   const ActiveOptions = [
     { value: true, label: "Active" },
     { value: false, label: "Inactive" },
   ];
 
-  const positionOptions = [];
-  const departmentOptions = [];
-
-  positions.map((item) => {
-    positionOptions.push({ value: item.id, label: item.attributes.name });
-  });
-  departments.map((item) => {
-    departmentOptions.push({ value: item.id, label: item.attributes.name });
-  });
+  const getOption = (arr, attr) => {
+    return arr.map((item) => {
+      return { value: item.id, label: item.attributes[attr] };
+    });
+  };
 
   return (
     <>
@@ -81,7 +81,7 @@ const StaffTable = () => {
               <Select
                 name="form-field-departments"
                 value="one"
-                options={departmentOptions}
+                options={getOption(departments, "name")}
                 placeholder="Select Departments"
               />
             </Form.Group>
@@ -92,7 +92,7 @@ const StaffTable = () => {
               <Select
                 name="form-field-positions"
                 value="one"
-                options={positionOptions}
+                options={getOption(positions, "name")}
                 placeholder="Select Positions"
               />
             </Form.Group>
@@ -110,9 +110,7 @@ const StaffTable = () => {
           </Col>
 
           <Col md={1} sm={6}>
-            <a href="#" className="btn btn-success btn-block w-100">
-              Search
-            </a>
+            <Link className="btn btn-success btn-block w-100">Search</Link>
           </Col>
         </Row>
       </Form>
@@ -171,46 +169,47 @@ const StaffTable = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {staffs.map((item) => (
-                      <tr key={item.id}>
-                        <td className="ant-table-cell">
-                          <h2 className="table-avatar">
-                            <a className={staff.avatar} href="">
-                              <img alt="" src={avatar} />
-                            </a>
-                            <Link to={item.id}>
-                              {item.attributes.fullname}
-                              <span>Web Designer</span>
-                            </Link>
-                          </h2>
-                        </td>
-                        <td className="ant-table-cell">{item.id}</td>
-                        <td className="ant-table-cell">
-                          {item.attributes.email}
-                        </td>
-                        <td className="ant-table-cell">0999999999</td>
-                        <td className="ant-table-cell">
-                          {item.attributes.date_of_birth}
-                        </td>
-                        <td className="ant-table-cell">
-                          {item.attributes.position.name}
-                        </td>
-                        <td className="ant-table-cell">
-                          <div className="d-flex justify-content-evenly">
-                            <TbEdit
-                              style={{
-                                fontSize: "20px",
-                              }}
-                            />
-                            <RiDeleteBinLine
-                              style={{
-                                fontSize: "20px",
-                              }}
-                            />
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
+                    {staffs &&
+                      staffs.map((item) => (
+                        <tr key={item.id}>
+                          <td className="ant-table-cell">
+                            <h2 className="table-avatar">
+                              <Link className={staff.avatar}>
+                                <img alt="" src={avatar} />
+                              </Link>
+                              <Link to={item.id}>
+                                {item.attributes.fullname}
+                                <span>Web Designer</span>
+                              </Link>
+                            </h2>
+                          </td>
+                          <td className="ant-table-cell">{item.id}</td>
+                          <td className="ant-table-cell">
+                            {item.attributes.email}
+                          </td>
+                          <td className="ant-table-cell">0999999999</td>
+                          <td className="ant-table-cell">
+                            {item.attributes.date_of_birth}
+                          </td>
+                          <td className="ant-table-cell">
+                            {item.attributes.position.name}
+                          </td>
+                          <td className="ant-table-cell">
+                            <div className="d-flex justify-content-evenly">
+                              <TbEdit
+                                style={{
+                                  fontSize: "20px",
+                                }}
+                              />
+                              <RiDeleteBinLine
+                                style={{
+                                  fontSize: "20px",
+                                }}
+                              />
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
                   </tbody>
                 </Table>
               </div>

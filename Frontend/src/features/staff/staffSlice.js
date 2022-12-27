@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axios from "axios";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 import apiClient from "../../apiClient/apiClient";
 
 const initialState = {
@@ -7,93 +8,67 @@ const initialState = {
   meta: {},
   profile: null,
   staffs: [],
-  positions: [],
-  departments: [],
-  jobTitles: [],
+  staffChart: null,
+  staffChartByNode: [],
 };
 
-const token =
-  "eyJhbGciOiJIUzI1NiJ9.eyJzdGFmZl9pZCI6MTYsImV4cCI6MTY3MTY4NjU1OH0.8exnddQEzMACU4XtXKcOV_XUNVWBCZHRj46KP6UUG3c";
+export const fetchStaff = createAsyncThunk("fetchStaff", async () => {
+  const response = await apiClient.get("/api/v1/staff_management/staffs", {
+    headers: {
+      Authorization: Cookies.get("authorization"),
+    },
+  });
+  return response.data;
+});
 
-export const fetchStaffAsync = createAsyncThunk(
-  "staff/fetchStaffAsync",
-  async () => {
-    const response = axios.get(
-      "http://localhost:3000/api/v1/staff_management/staffs",
-      {
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+export const fetchProfile = createAsyncThunk("fetchProfile", async (id) => {
+  const response = await apiClient.get(`api/v1/staff_management/staffs/${id}`, {
+    headers: {
+      Authorization: Cookies.get("authorization"),
+    },
+  });
 
-    return response;
-  }
-);
+  return response.data;
+});
 
-export const fetchPositionAsync = createAsyncThunk(
-  "staff/fetchPositionAsync",
-  async () => {
-    const response = axios.get(
-      "http://localhost:3000/api/v1/staff_management/positions",
-      {
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    return response;
-  }
-);
-
-export const fetchDepartmentAsync = createAsyncThunk(
-  "staff/fetchDepartmentAsync",
-  async () => {
-    const response = axios.get(
-      "http://localhost:3000/api/v1/staff_management/departments",
-      {
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    return response;
-  }
-);
-
-export const fetchJobTitleAsync = createAsyncThunk(
-  "staff/fetchJobTitleAsync",
-  async () => {
-    const response = axios.get(
-      "http://localhost:3000/api/v1/staff_management/job_titles",
-      {
-        headers: {
-          Authorization: token,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    return response;
-  }
-);
-
-export const fetchProfileAsync = createAsyncThunk(
-  "staff/fetchProfileAsync",
-  async (id) => {
-    const response = apiClient.get(`api/v1/staff_management/staffs/${id}`, {
+export const newStaff = createAsyncThunk("newStaff", async (data) => {
+  const response = apiClient.post(
+    "api/v1/staff_management/staffs/",
+    { staff: data },
+    {
       headers: {
-        Authorization: token,
-        "Content-Type": "application/json",
+        Authorization: Cookies.get("authorization"),
       },
-    });
+    }
+  );
+  console.log(response);
+  return response.data;
+});
 
-    return response;
+export const fetchStaffChart = createAsyncThunk("fetchStaffChart", async () => {
+  const response = await apiClient.get(
+    "/api/v1/staff_management/staffs/chart",
+    {
+      headers: {
+        Authorization: Cookies.get("authorization"),
+      },
+    }
+  );
+  return response.data;
+});
+
+export const staffChartByNode = createAsyncThunk(
+  "staffChartByNode",
+  async (id) => {
+    const response = await apiClient.get(
+      `/api/v1/staff_management/staffs/${id}/staff_chart_by_node`,
+      {
+        headers: {
+          Authorization: Cookies.get("authorization"),
+        },
+      }
+    );
+    return response.data;
   }
 );
 
@@ -104,74 +79,75 @@ export const staffSlice = createSlice({
   extraReducers: (builder) => {
     // ================== Staff =================
     builder
-      .addCase(fetchStaffAsync.pending, (state) => {
+      .addCase(fetchStaff.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchStaffAsync.fulfilled, (state, action) => {
+      .addCase(fetchStaff.fulfilled, (state, action) => {
         state.status = "succeeded";
 
         state.meta = action.payload.data.meta;
-        state.staffs = action.payload.data.data;
+        state.staffs = action.payload.data;
       })
-      .addCase(fetchStaffAsync.rejected, (state) => {
+      .addCase(fetchStaff.rejected, (state) => {
         state.status = "errors";
-      });
-    // ================== Position =================
-    builder
-      .addCase(fetchPositionAsync.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(fetchPositionAsync.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.positions = action.payload.data.data;
-      })
-      .addCase(fetchPositionAsync.rejected, (state) => {
-        state.status = "error";
-      });
-    // ================== Department =================
-    builder
-      .addCase(fetchDepartmentAsync.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(fetchDepartmentAsync.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.departments = action.payload.data.data;
-      })
-      .addCase(fetchDepartmentAsync.rejected, (state) => {
-        state.status = "error";
-      });
-    // ================== Job Title =================
-    builder
-      .addCase(fetchJobTitleAsync.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(fetchJobTitleAsync.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.jobTitles = action.payload.data.data;
-      })
-      .addCase(fetchJobTitleAsync.rejected, (state) => {
-        state.status = "error";
       });
     // ================== Profile =================
     builder
-      .addCase(fetchProfileAsync.pending, (state) => {
+      .addCase(newStaff.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchProfileAsync.fulfilled, (state, action) => {
+      .addCase(newStaff.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.profile = action.payload.data.data.attributes;
+        state.staffs.push(action.meta.arg);
+        toast.success("Create employee Success");
       })
-      .addCase(fetchProfileAsync.rejected, (state) => {
+      .addCase(newStaff.rejected, (state) => {
+        state.status = "error";
+        toast.error("Create employee failed");
+      });
+    // ================== Profile =================
+    builder
+      .addCase(fetchProfile.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchProfile.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.profile = action.payload.data;
+      })
+      .addCase(fetchProfile.rejected, (state) => {
+        state.status = "error";
+      });
+    // ================== Chart =================
+    builder
+      .addCase(fetchStaffChart.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchStaffChart.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.staffChart = action.payload.data;
+      })
+      .addCase(fetchStaffChart.rejected, (state) => {
+        state.status = "error";
+      });
+    // ================== Chart =================
+    builder
+      .addCase(staffChartByNode.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(staffChartByNode.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.staffChartByNode = action.payload.data;
+      })
+      .addCase(staffChartByNode.rejected, (state) => {
         state.status = "error";
       });
   },
 });
 
-export const staffSelector = (state) => state.staff.staffs;
-export const positionSelector = (state) => state.staff.positions;
-export const departmentSelector = (state) => state.staff.departments;
-export const jobTitleSelector = (state) => state.staff.jobTitles;
+export const staffsSelector = (state) => state.staff.staffs;
 export const ProfileSelector = (state) => state.staff.profile;
+export const staffChartSelector = (state) => state.staff.staffChart;
+export const staffChartByNodeSelector = (state) => state.staff.staffChartByNode;
 
 export const metaSelector = (state) => state.staff.meta;
 

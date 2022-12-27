@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Title } from "../404/notFound";
 
 const Error = () => {
@@ -9,7 +10,7 @@ const Error = () => {
         <AiFillWarning /> Oops! Something went wrong!
       </h3>
       <p>The page you requested was not found.</p>
-      <a className="btn btn-custom">Back to Home</a>
+      <Link className="btn btn-custom">Back to Home</Link>
     </ErrorBox>
   );
 };

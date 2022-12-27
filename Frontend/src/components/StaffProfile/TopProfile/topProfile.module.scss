@@ -1,18 +1,13 @@
-.ProfileInfoLeft {
-  border-right: 2px dashed #ccc;
-}
-
 .ProfileImgWrap {
   height: 120px;
   position: absolute;
   width: 120px;
-  background: #fff;
   overflow: hidden;
 
   img {
     border-radius: 50%;
-    height: 120px;
-    width: 120px;
+    height: 90px;
+    width: 90px;
   }
 }
 
@@ -22,4 +17,10 @@
   margin: 0 auto;
   position: relative;
   width: 80px;
+}
+
+#DropdownBasic {
+  background-color: #fff;
+  border-color: #00c5fb;
+  color: #00c5fb;
 }

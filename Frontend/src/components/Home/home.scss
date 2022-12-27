@@ -1,0 +1,70 @@
+.orgchart {
+  background-image: none !important;
+
+  .icon_user {
+    float: left;
+    margin-right: 2px;
+  }
+
+  .icon_info {
+    transition: opacity 0.5s;
+    opacity: 0;
+    right: -5px;
+    top: -5px;
+    z-index: 2;
+    position: absolute;
+    color: rgba(68, 157, 68, 0.5);
+  }
+
+  .container_info {
+    opacity: 0;
+  }
+
+  .oc-node {
+    &:hover {
+      .icon_info {
+        opacity: 1;
+      }
+
+      .container_info {
+        opacity: 1;
+      }
+    }
+
+    .img_user {
+      position: absolute;
+      top: 0;
+      right: -80px;
+      border-radius: 35px;
+      box-shadow: 0 0 10px 1px #999;
+      background-color: #fff;
+      z-index: 1;
+
+      .avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 30px;
+        float: left;
+        margin: 5px;
+      }
+    }
+
+    .content_user {
+      padding: 10px 0 0 20px;
+      width: 300px;
+      position: absolute;
+      top: 80px;
+      right: -90px;
+      text-align: left;
+      border-radius: 5px;
+      box-shadow: 0 0 10px 1px #999;
+      background-color: #fff;
+      z-index: 1;
+
+      .info_user {
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+}
