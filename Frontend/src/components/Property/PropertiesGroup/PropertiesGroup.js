@@ -18,6 +18,7 @@ const PropertiesGroup = () => {
   const dispatch = useDispatch();
   const propertiesGroup = useSelector(propertiesGroupSelector);
   const [show, setShow] = useState(false);
+  const [toggle, setToggle] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = (id) => {
@@ -33,6 +34,16 @@ const PropertiesGroup = () => {
     dispatch(destroyPropertiesGroup(id));
   };
 
+  const handleSortAsc = () => {
+    // setToggle(!toggle);
+    // dispatch(sortAsc());
+  };
+
+  const handleSortDesc = () => {
+    // setToggle(!toggle);
+    // dispatch(sortDesc());
+  };
+
   return (
     <Row>
       <Col md={12}>
@@ -45,13 +56,14 @@ const PropertiesGroup = () => {
                     <th className="ant-table-cell">
                       <div className={staff.TableColumnSorters}>
                         <span className="table-column-title">STT</span>
-                        <TiArrowUnsorted />
                       </div>
                     </th>
                     <th className="ant-table-cell">
                       <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">Department</span>
-                        <TiArrowUnsorted />
+                        <span className="table-column-title">Title</span>
+                        <TiArrowUnsorted
+                          onClick={toggle ? handleSortAsc : handleSortDesc}
+                        />
                       </div>
                     </th>
 

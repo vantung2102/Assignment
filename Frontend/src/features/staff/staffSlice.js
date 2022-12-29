@@ -41,7 +41,6 @@ export const newStaff = createAsyncThunk("newStaff", async (data) => {
       },
     }
   );
-  console.log(response);
   return response.data;
 });
 
@@ -56,21 +55,6 @@ export const fetchStaffChart = createAsyncThunk("fetchStaffChart", async () => {
   );
   return response.data;
 });
-
-export const staffChartByNode = createAsyncThunk(
-  "staffChartByNode",
-  async (id) => {
-    const response = await apiClient.get(
-      `/api/v1/staff_management/staffs/${id}/staff_chart_by_node`,
-      {
-        headers: {
-          Authorization: Cookies.get("authorization"),
-        },
-      }
-    );
-    return response.data;
-  }
-);
 
 export const staffSlice = createSlice({
   name: "staff",
@@ -127,18 +111,6 @@ export const staffSlice = createSlice({
         state.staffChart = action.payload.data;
       })
       .addCase(fetchStaffChart.rejected, (state) => {
-        state.status = "error";
-      });
-    // ================== Chart =================
-    builder
-      .addCase(staffChartByNode.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(staffChartByNode.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.staffChartByNode = action.payload.data;
-      })
-      .addCase(staffChartByNode.rejected, (state) => {
         state.status = "error";
       });
   },

@@ -19,6 +19,10 @@ class PropertyProvidingHistoryPolicy < ApplicationPolicy
 		authenticate
 	end
 
+	def property_recall?
+		user.has_role?(:Manager)
+	end
+
 	private
 
 	def authenticate

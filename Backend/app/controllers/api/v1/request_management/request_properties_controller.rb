@@ -33,8 +33,8 @@ class Api::V1::RequestManagement::RequestPropertiesController < Api::V1::BaseCon
   end
 
   def requests_by_user
-    pagy, request_properties = paginate(RequestProperty.find_by(requester_id: params[:staff_id]).order(created_at: :desc))
-    render_resource_collection(request_properties, pagy: pagy)
+    request_properties = RequestProperty.where(requester_id: params[:staff_id]).order(created_at: :desc)
+    render_resource_collection(request_properties)
   end
 
   private
@@ -44,6 +44,6 @@ class Api::V1::RequestManagement::RequestPropertiesController < Api::V1::BaseCon
   end
 
   def request_property_params
-    params.require(:request_property).permit(:request_type, :status, :description, :reason)
+    params.require(:request_property).permit(:request_type, :status, :description, :reason, :group_property_id)
   end
 end

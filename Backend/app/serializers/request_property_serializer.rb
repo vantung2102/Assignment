@@ -20,6 +20,7 @@ class RequestPropertySerializer < BaseSerializer
               :description,
               :requester,
               :approver,
+              :group_property,
               :created_at,
               :updated_at
 

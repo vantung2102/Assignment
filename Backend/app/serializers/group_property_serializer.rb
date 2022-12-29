@@ -9,5 +9,9 @@
 #  updated_at  :datetime         not null
 #
 class GroupPropertySerializer < BaseSerializer
-  attributes  :id, :name
+  attributes  :id,
+              :name,
+              :description,
+              :created_at,
+              :updated_at
 end

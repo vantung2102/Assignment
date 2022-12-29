@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col, Dropdown, Row } from "react-bootstrap";
+import { Button, Col, Dropdown, Row } from "react-bootstrap";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { TbEdit } from "react-icons/tb";
 import { TiArrowUnsorted } from "react-icons/ti";
@@ -65,16 +65,15 @@ const Properties = () => {
                       <td className="ant-table-cell">{index}</td>
                       <td className="ant-table-cell">{item.attributes.name}</td>
                       <td className="ant-table-cell d-flex justify-content-center">
-                        <Dropdown>
-                          <Dropdown.Toggle variant="success">
-                            available
-                          </Dropdown.Toggle>
-
-                          <Dropdown.Menu>
-                            <Dropdown.Item>available</Dropdown.Item>
-                            <Dropdown.Item>used</Dropdown.Item>
-                          </Dropdown.Menu>
-                        </Dropdown>
+                        <Button
+                          variant={
+                            item.attributes.status == "available"
+                              ? "success"
+                              : "danger"
+                          }
+                        >
+                          {item.attributes.status}
+                        </Button>
                       </td>
 
                       <td className="ant-table-cell">

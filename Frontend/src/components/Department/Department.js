@@ -9,6 +9,8 @@ import {
   destroyDepartment,
   fetchDepartment,
   showDepartment,
+  sortDepartment,
+  sortDepartmentDesc,
 } from "../../features/department/departmentSlice";
 import { Table } from "../Staff/staff";
 import staff from "../Staff/staff.module.scss";
@@ -19,6 +21,7 @@ const Department = () => {
 
   const departments = useSelector(departmentsSelector);
   const [show, setShow] = useState(false);
+  const [toggle, setToggle] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = (id) => {
@@ -33,7 +36,16 @@ const Department = () => {
   const handleDelete = (id) => {
     dispatch(destroyDepartment(id));
   };
-  console.log(departments);
+
+  const handleSort = () => {
+    dispatch(sortDepartment());
+    setToggle(!toggle);
+  };
+
+  const handleSortDesc = () => {
+    dispatch(sortDepartmentDesc());
+    setToggle(!toggle);
+  };
 
   return (
     <Row>
@@ -47,13 +59,14 @@ const Department = () => {
                     <th className="ant-table-cell">
                       <div className={staff.TableColumnSorters}>
                         <span className="table-column-title">STT</span>
-                        <TiArrowUnsorted />
                       </div>
                     </th>
                     <th className="ant-table-cell">
                       <div className={staff.TableColumnSorters}>
                         <span className="table-column-title">Department</span>
-                        <TiArrowUnsorted />
+                        <TiArrowUnsorted
+                          onClick={toggle ? handleSortDesc : handleSort}
+                        />
                       </div>
                     </th>
 
@@ -62,9 +75,11 @@ const Department = () => {
                 </thead>
                 <tbody>
                   {departments.map((item, index) => (
-                    <tr key={item.attributes.id}>
+                    <tr key={item.attributes?.id}>
                       <td className="ant-table-cell">{index}</td>
-                      <td className="ant-table-cell">{item.attributes.name}</td>
+                      <td className="ant-table-cell">
+                        {item.attributes?.name}
+                      </td>
 
                       <td className="ant-table-cell">
                         <div className="d-flex justify-content-evenly">

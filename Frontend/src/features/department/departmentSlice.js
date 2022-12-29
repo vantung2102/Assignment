@@ -2,22 +2,14 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiClient from "../../apiClient/apiClient";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
+import { useDestroy, useEdit } from "../../common/hooks/hooks";
 
 const initialState = {
   status: null,
   loading: true,
-  isAuthenticated: true,
   meta: {},
   departments: [],
-  department: {
-    attributes: {
-      id: "",
-      name: "",
-      description: "",
-      created_at: "",
-      updated_at: "",
-    },
-  },
+  department: null,
 };
 
 export const fetchDepartment = createAsyncThunk("fetchDepartment", async () => {
@@ -83,6 +75,7 @@ export const destroyDepartment = createAsyncThunk(
         },
       }
     );
+
     return id;
   }
 );
@@ -90,7 +83,26 @@ export const destroyDepartment = createAsyncThunk(
 export const departmentSlice = createSlice({
   name: "department",
   initialState,
-  reducers: {},
+  reducers: {
+    sortDepartment: (state) => {
+      state.departments.sort((a, b) =>
+        a.attributes.name > b.attributes.name
+          ? 1
+          : b.attributes.name > a.attributes.name
+          ? -1
+          : 0
+      );
+    },
+    sortDepartmentDesc: (state) => {
+      state.departments.reverse((a, b) =>
+        a.attributes.name > b.attributes.name
+          ? 1
+          : b.attributes.name > a.attributes.name
+          ? -1
+          : 0
+      );
+    },
+  },
   extraReducers: (builder) => {
     // ================== All Department =================
     builder
@@ -99,11 +111,10 @@ export const departmentSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchDepartment.fulfilled, (state, action) => {
-        state.status = "succeeded";
         state.loading = false;
         state.departments = action.payload.data;
       })
-      .addCase(fetchDepartment.rejected, (state, action) => {
+      .addCase(fetchDepartment.rejected, (state) => {
         state.status = "error";
         state.isAuthenticated = false;
       });
@@ -114,7 +125,6 @@ export const departmentSlice = createSlice({
         state.loading = true;
       })
       .addCase(showDepartment.fulfilled, (state, action) => {
-        state.status = "succeeded";
         state.loading = false;
         state.department = action.payload.data;
       })
@@ -127,7 +137,6 @@ export const departmentSlice = createSlice({
         state.status = "loading";
       })
       .addCase(newDepartment.fulfilled, (state, action) => {
-        state.status = "succeeded";
         state.departments.unshift(action.payload.data);
         toast.success("Create Department Successfully!");
       })
@@ -141,7 +150,7 @@ export const departmentSlice = createSlice({
         state.status = "loading";
       })
       .addCase(editDepartment.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.departments = useEdit(state.departments, action);
         toast.success("Update Department Successfully!");
       })
       .addCase(editDepartment.rejected, (state) => {
@@ -153,11 +162,7 @@ export const departmentSlice = createSlice({
         state.status = "loading";
       })
       .addCase(destroyDepartment.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.departments = state.departments.filter(
-          (item) => item.attributes.id !== action.payload
-        );
-
+        state.departments = useDestroy(state.departments, action);
         toast.success("Destroy Successfully !");
       })
       .addCase(destroyDepartment.rejected, (state) => {
@@ -166,6 +171,8 @@ export const departmentSlice = createSlice({
       });
   },
 });
+
+export const { sortDepartment, sortDepartmentDesc } = departmentSlice.actions;
 
 export const departmentsSelector = (state) => state.department.departments;
 export const departmentSelector = (state) => state.department.department;

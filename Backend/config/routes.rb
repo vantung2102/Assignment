@@ -27,7 +27,11 @@ Rails.application.routes.draw do
       namespace :property_management do
         resources :properties
         resources :group_properties
-        resources :property_providing_histories
+        resources :property_providing_histories do
+          member do
+            get 'property_recall', to: "property_providing_histories#property_recall"
+          end
+        end
       end
       
       namespace :request_management do

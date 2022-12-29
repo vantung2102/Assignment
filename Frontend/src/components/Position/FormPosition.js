@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { Button, FloatingLabel, Form, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -6,15 +7,24 @@ import {
   fetchDepartment,
 } from "../../features/department/departmentSlice";
 import {
-  fetchPosition,
   newPosition,
   positionSelector,
 } from "../../features/position/positionSlice";
 import { SubmitSection } from "../Department/department";
 import Select from "react-select";
+import { optionSelect2 } from "../../common/hooks/hooks";
 
 const FormPosition = ({ isNew, show, close }) => {
   const dispatch = useDispatch();
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    setValue,
+    getValues,
+    formState: { errors },
+  } = useForm();
 
   const departments = useSelector(departmentsSelector);
   const position = useSelector(positionSelector);
@@ -23,40 +33,47 @@ const FormPosition = ({ isNew, show, close }) => {
   const [description, setDescription] = useState("");
   const [departmentId, setDepartmentId] = useState(null);
 
-  const departmentOptions = [];
-
-  if (departments) {
-    departments.map((item) => {
-      departmentOptions.push({ value: item.id, label: item.attributes.name });
-    });
-  }
-
   useEffect(() => {
     dispatch(fetchDepartment());
   }, []);
 
   useEffect(() => {
     if (!isNew) {
-      setName(position.attributes.name);
-      setDescription(position.attributes.description);
-      setDepartmentId(position.attributes.department_id);
+      setValue("name", position?.attributes.name);
+      setValue("description", position?.attributes.name);
+      setValue(
+        "department",
+        optionSelect2(departments, "name").filter(
+          (item) => item.value == position?.attributes.department.id
+        )[0]
+      );
     }
   }, [position]);
 
-  const handleNewPosition = (e) => {
-    e.preventDefault();
-    const data = {
-      name: name,
-      description: description,
-      department_id: departmentId,
-    };
-    dispatch(newPosition(data));
+  const handleNewPosition = () => {
+    dispatch(
+      newPosition({
+        name: watch("name"),
+        description: watch("description"),
+        department_id: watch("department").value,
+      })
+    );
     close(false);
-    setName("");
-    setDescription("");
-    setDepartmentId(null);
+    setValue("name", "");
+    setValue("description", "");
+    setValue("department", "");
+  };
 
-    dispatch(fetchPosition());
+  const handleEditPosition = () => {
+    dispatch(
+      newPosition({
+        id: position.attributes.id,
+        name: watch("name"),
+        description: watch("description"),
+        department_id: watch("department").value,
+      })
+    );
+    close(true);
   };
 
   return (
@@ -65,46 +82,69 @@ const FormPosition = ({ isNew, show, close }) => {
         <Modal.Title>{isNew ? "Add position" : "Update position"}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form>
+        <Form
+          onSubmit={handleSubmit(
+            isNew ? handleNewPosition : handleEditPosition
+          )}
+        >
           <Form.Group>
-            <Form.Label>
-              Department Name <span className="text-danger">*</span>
-            </Form.Label>
-            <Select
-              name="form-field-departments"
-              options={departmentOptions}
-              value={departmentId}
-              placeholder="Select Departments"
-              onChange={(e) => setDepartmentId(e.value)}
+            <Form.Label>Department Name</Form.Label>
+
+            <Controller
+              control={control}
+              name="department"
+              rules={{ required: "Select Departments" }}
+              render={({ field: { onChange, onBlur, value, name, ref } }) => (
+                <Select
+                  options={optionSelect2(departments, "name")}
+                  onChange={onChange}
+                  onBlur={onBlur}
+                  value={getValues("department")}
+                  name={name}
+                  ref={ref}
+                  placeholder="Select Departments"
+                />
+              )}
             />
+
+            <Form.Control.Feedback type="invalid" className="d-block">
+              {errors.department?.message}
+            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group>
-            <Form.Label>
-              Position Name <span className="text-danger">*</span>
-            </Form.Label>
+            <Form.Label>Position Name</Form.Label>
             <Form.Control
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              defaultValue={getValues("name")}
+              {...register("name", { required: "Name is required" })}
             ></Form.Control>
+
+            <Form.Control.Feedback type="invalid" className="d-block">
+              {errors.name?.message}
+            </Form.Control.Feedback>
           </Form.Group>
 
-          <Form.Label>
-            Description <span className="text-danger">*</span>
-          </Form.Label>
+          <Form.Group>
+            <Form.Label>Description</Form.Label>
 
-          <FloatingLabel controlId="floatingTextarea2">
-            <Form.Control
-              as="textarea"
-              placeholder="Enter here..."
-              style={{ height: "100px" }}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-          </FloatingLabel>
+            <FloatingLabel controlId="floatingTextarea2">
+              <Form.Control
+                defaultValue={getValues("description")}
+                as="textarea"
+                placeholder="Enter here..."
+                style={{ height: "100px" }}
+                {...register("description", {
+                  required: "Description is required",
+                })}
+              ></Form.Control>
+
+              <Form.Control.Feedback type="invalid" className="d-block">
+                {errors.description?.message}
+              </Form.Control.Feedback>
+            </FloatingLabel>
+          </Form.Group>
           <SubmitSection>
-            <Button className="submit-btn" onClick={handleNewPosition}>
+            <Button className="submit-btn" type="submit">
               {isNew ? "Submit" : "Update"}
             </Button>
           </SubmitSection>

@@ -11,32 +11,34 @@ import { SubmitSection } from "../../Department/department";
 
 const FormPropertiesGroup = ({ isNew, show, close }) => {
   const dispatch = useDispatch();
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const propertyGroup = useSelector(propertyGroupSelector);
-
-  useEffect(() => {
-    if (!isNew) {
-      setName(propertyGroup?.attributes.name);
-      setDescription(propertyGroup?.attributes.description);
-    }
-  }, [propertyGroup, name]);
-
   const {
     register,
     handleSubmit,
     watch,
+    setValue,
+    getValues,
     formState: { errors },
   } = useForm();
 
-  const handleNewProperty = () => {
-    const data = {
-      name: watch("name"),
-      description: watch("description"),
-    };
+  const propertyGroup = useSelector(propertyGroupSelector);
 
-    dispatch(newPropertiesGroup(data));
+  useEffect(() => {
+    if (!isNew) {
+      setValue("name", propertyGroup?.attributes.name);
+      setValue("description", propertyGroup?.attributes.description);
+    }
+  }, [propertyGroup]);
+
+  const handleNewProperty = () => {
+    dispatch(
+      newPropertiesGroup({
+        name: watch("name"),
+        description: watch("description"),
+      })
+    );
     close(true);
+    setValue("name", "");
+    setValue("description", "");
   };
 
   const handleEditProperty = () => {
@@ -49,8 +51,6 @@ const FormPropertiesGroup = ({ isNew, show, close }) => {
     dispatch(editPropertiesGroup(data));
     close(true);
   };
-
-  console.log(name);
 
   return (
     <Modal show={show} onHide={close}>
@@ -70,8 +70,7 @@ const FormPropertiesGroup = ({ isNew, show, close }) => {
               Property Group Name <span className="text-danger">*</span>
             </Form.Label>
             <Form.Control
-              value={name}
-              onChange={(e) => setName(e.target.value)}
+              defaultValue={getValues("name")}
               {...register("name", { required: "Name is required" })}
             ></Form.Control>
 
@@ -89,8 +88,7 @@ const FormPropertiesGroup = ({ isNew, show, close }) => {
                 as="textarea"
                 placeholder="Enter here..."
                 style={{ height: "100px" }}
-                onChange={(e) => setDescription(e.target.value)}
-                defaultValue={description}
+                defaultValue={getValues("description")}
                 {...register("description", {
                   required: "Description is required",
                 })}

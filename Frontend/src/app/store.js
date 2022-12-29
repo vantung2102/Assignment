@@ -7,6 +7,7 @@ import authReducer from "../features/auth/authSlice";
 import propertyGroupReducer from "../features/propertyGroup/propertyGroupSlice";
 import propertyReducer from "../features/property/propertySlice";
 import requestPropertyReducer from "../features/requestProperty/requestPropertySlice";
+import propertyProvidingHistoriesReducer from "../features/propertyProvidingHistories/propertyProvidingHistoriesSlice";
 
 export const store = configureStore({
   reducer: {
@@ -18,5 +19,6 @@ export const store = configureStore({
     propertyGroup: propertyGroupReducer,
     property: propertyReducer,
     requestProperty: requestPropertyReducer,
+    propertyProvidingHistories: propertyProvidingHistoriesReducer,
   },
 });
