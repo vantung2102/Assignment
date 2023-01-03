@@ -82,7 +82,7 @@ export const staffSlice = createSlice({
       })
       .addCase(newStaff.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.staffs.push(action.meta.arg);
+        state.staffs.unshift(action);
         toast.success("Create employee Success");
       })
       .addCase(newStaff.rejected, (state) => {

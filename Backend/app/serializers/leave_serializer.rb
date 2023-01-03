@@ -17,7 +17,7 @@
 #
 class LeaveSerializer < BaseSerializer
   attributes  :id,
-              :staff_id,
+              :staff,
               :casual_leave,
               :marriage_leave,
               :compassionate_leave,

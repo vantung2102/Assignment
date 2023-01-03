@@ -10,11 +10,11 @@ import {
 const RequireAuth = ({ children }) => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(isAuthenticatedSelector);
-  const isAuthenticatedLocal =
-    localStorage.getItem("isAuthenticated") == "true";
+  let isAuthenticatedLocal = localStorage.getItem("isAuthenticated") == "true";
 
   useEffect(() => {
     dispatch(getUser());
+    isAuthenticatedLocal = localStorage.getItem("isAuthenticated");
   }, [isAuthenticated]);
 
   return isAuthenticatedLocal ? <>{children}</> : <Navigate to="/login" />;

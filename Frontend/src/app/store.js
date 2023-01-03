@@ -8,6 +8,9 @@ import propertyGroupReducer from "../features/propertyGroup/propertyGroupSlice";
 import propertyReducer from "../features/property/propertySlice";
 import requestPropertyReducer from "../features/requestProperty/requestPropertySlice";
 import propertyProvidingHistoriesReducer from "../features/propertyProvidingHistories/propertyProvidingHistoriesSlice";
+import leaveReducer from "../features/leave/leaveSlice";
+import leaveApplicationReducer from "../features/leaveApplication/leaveApplicationSlice";
+import onboardingReducer from "../features/onboarding/onboardingSlice";
 
 export const store = configureStore({
   reducer: {
@@ -20,5 +23,8 @@ export const store = configureStore({
     property: propertyReducer,
     requestProperty: requestPropertyReducer,
     propertyProvidingHistories: propertyProvidingHistoriesReducer,
+    leave: leaveReducer,
+    leaveApplication: leaveApplicationReducer,
+    onboarding: onboardingReducer,
   },
 });

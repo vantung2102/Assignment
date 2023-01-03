@@ -27,7 +27,7 @@ class Api::V1::LeaveManagement::LeavesController < Api::V1::BaseController
   end
 
   def leave_by_user
-    leave = paginate(Leave.find_by(staff_id: params[:staff_id]).order(created_at: :desc))
+    leave = Leave.find_by(staff_id: params[:staff_id])
     authorize leave
     render_resource(leave)
   end
@@ -39,6 +39,16 @@ class Api::V1::LeaveManagement::LeavesController < Api::V1::BaseController
   end
 
   def leave_params
-    params.require(:leave).permit(:number_of_days_off, :number_of_repairs, :description)
+    params.require(:leave).permit(
+      :staff_id,
+      :casual_leave,
+      :unpaid_leave,
+      :marriage_leave,
+      :compassionate_leave,
+      :paternity_leave,
+      :maternity_leave,
+      :allowed_number_of_days_off,
+      :description
+    )
   end
 end

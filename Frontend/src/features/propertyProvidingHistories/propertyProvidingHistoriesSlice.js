@@ -9,6 +9,7 @@ const initialState = {
   propertyProvidingHistories: null,
   propertyProvidingHistory: null,
   response: null,
+  historiesByProperty: null,
 };
 
 export const fetchPropertyProvidingHistories = createAsyncThunk(
@@ -85,6 +86,22 @@ export const destroyPropertyProvidingHistory = createAsyncThunk(
   }
 );
 
+export const historiesByProperty = createAsyncThunk(
+  "historiesByProperty",
+  async (id) => {
+    const response = await apiClient.post(
+      `/api/v1/property_management/property_providing_histories/histories_by_property`,
+      { property_id: id },
+      {
+        headers: {
+          Authorization: Cookies.get("authorization"),
+        },
+      }
+    );
+    return response.data;
+  }
+);
+
 export const propertyProvidingHistoriesSlice = createSlice({
   name: "RequestProperties",
   initialState,
@@ -117,7 +134,6 @@ export const propertyProvidingHistoriesSlice = createSlice({
       })
       .addCase(propertyRecall.fulfilled, (state, action) => {
         state.loading = false;
-        console.log(action.payload.data);
         state.propertyProvidingHistory = action.payload.data;
       })
       .addCase(propertyRecall.rejected, (state) => {
@@ -146,6 +162,16 @@ export const propertyProvidingHistoriesSlice = createSlice({
       .addCase(destroyPropertyProvidingHistory.rejected, (state) => {
         toast.error("Destroy Failed!");
       });
+
+    // ================== Destroy =================
+    builder
+      .addCase(historiesByProperty.pending, (state) => {})
+      .addCase(historiesByProperty.fulfilled, (state, action) => {
+        state.historiesByProperty = action.payload.data;
+      })
+      .addCase(historiesByProperty.rejected, (state) => {
+        toast.error("Failed!");
+      });
   },
 });
 
@@ -153,5 +179,7 @@ export const propertyProvidingHistoriesSelector = (state) =>
   state.propertyProvidingHistories.propertyProvidingHistories;
 export const PropertyProvidingHistorySelector = (state) =>
   state.propertyProvidingHistories.propertyProvidingHistory;
+export const historiesByPropertySelector = (state) =>
+  state.propertyProvidingHistories.historiesByProperty;
 
 export default propertyProvidingHistoriesSlice.reducer;

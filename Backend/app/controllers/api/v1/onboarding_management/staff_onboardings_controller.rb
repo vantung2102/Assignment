@@ -13,8 +13,8 @@ class Api::V1::OnboardingManagement::StaffOnboardingsController < Api::V1::BaseC
   end
 
   def staff_onboarding_by_user
-    pagy, staff_onboardings = paginate(StaffOnboarding.where(staff_id: params[:staff_id]))
-    render_resource_collection(staff_onboardings, pagy: pagy)
+    staff_onboardings = StaffOnboarding.where(staff_id: params[:staff_id])
+    render_resource_collection(staff_onboardings)
   end
 
   private

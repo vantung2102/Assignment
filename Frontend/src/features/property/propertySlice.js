@@ -77,6 +77,23 @@ export const destroyProperty = createAsyncThunk(
   }
 );
 
+export const acceptProperty = createAsyncThunk(
+  "acceptProperty",
+  async (data) => {
+    const response = await apiClient.put(
+      `/api/v1/property_management/properties/${data.id}/response_property_request`,
+      { receiver_id: data.receiver_id },
+      {
+        headers: {
+          Authorization: Cookies.get("authorization"),
+        },
+      }
+    );
+
+    return response.data;
+  }
+);
+
 export const propertySlice = createSlice({
   name: "property",
   initialState,
@@ -99,7 +116,7 @@ export const propertySlice = createSlice({
       })
       .addCase(showProperty.fulfilled, (state, action) => {
         state.loading = false;
-        state.property = action.payload.data;
+        state.property = action.payload.data.attributes;
       })
       .addCase(showProperty.rejected, (state) => {});
     // ================== New properties =================
@@ -127,6 +144,17 @@ export const propertySlice = createSlice({
       })
       .addCase(destroyProperty.rejected, (state) => {
         toast.error("Destroy Failed!");
+      });
+    // ================== Destroy properties =================
+    builder
+      .addCase(acceptProperty.pending, (state) => {})
+      .addCase(acceptProperty.fulfilled, (state, action) => {
+        state.property = action.payload.data.attributes;
+
+        toast.success("Successfully!");
+      })
+      .addCase(acceptProperty.rejected, (state, action) => {
+        toast.error("Failed!");
       });
   },
 });

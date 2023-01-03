@@ -59,7 +59,7 @@ const StaffTable = () => {
   ];
 
   const getOption = (arr, attr) => {
-    return arr.map((item) => {
+    return arr?.map((item) => {
       return { value: item.id, label: item.attributes[attr] };
     });
   };
@@ -178,21 +178,21 @@ const StaffTable = () => {
                                 <img alt="" src={avatar} />
                               </Link>
                               <Link to={item.id}>
-                                {item.attributes.fullname}
+                                {item.attributes?.fullname}
                                 <span>Web Designer</span>
                               </Link>
                             </h2>
                           </td>
                           <td className="ant-table-cell">{item.id}</td>
                           <td className="ant-table-cell">
-                            {item.attributes.email}
+                            {item.attributes?.email}
                           </td>
                           <td className="ant-table-cell">0999999999</td>
                           <td className="ant-table-cell">
-                            {item.attributes.date_of_birth}
+                            {item.attributes?.date_of_birth}
                           </td>
                           <td className="ant-table-cell">
-                            {item.attributes.position.name}
+                            {item.attributes?.position?.name}
                           </td>
                           <td className="ant-table-cell">
                             <div className="d-flex justify-content-evenly">

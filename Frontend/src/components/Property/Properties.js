@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Dropdown, Row } from "react-bootstrap";
+import { Button, Col, Row } from "react-bootstrap";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { TbEdit } from "react-icons/tb";
 import { TiArrowUnsorted } from "react-icons/ti";
@@ -13,6 +13,7 @@ import {
 import { Table } from "../Staff/staff";
 import FormProperties from "./FormProperties";
 import staff from "../Staff/staff.module.scss";
+import { Link } from "react-router-dom";
 
 const Properties = () => {
   const dispatch = useDispatch();
@@ -55,15 +56,17 @@ const Properties = () => {
                       </div>
                     </th>
                     <th className="ant-table-cell text-center">Status</th>
-
-                    <th className="ant-table-cell ">Action</th>
+                    <th className="ant-table-cell text-center">Action</th>
+                    <th className="ant-table-cell text-center">View history</th>
                   </tr>
                 </thead>
                 <tbody>
                   {properties?.map((item, index) => (
                     <tr key={item.attributes.id}>
                       <td className="ant-table-cell">{index}</td>
-                      <td className="ant-table-cell">{item.attributes.name}</td>
+                      <td className="ant-table-cell">
+                        <Link to={item.id}>{item.attributes.name}</Link>
+                      </td>
                       <td className="ant-table-cell d-flex justify-content-center">
                         <Button
                           variant={
@@ -91,6 +94,9 @@ const Properties = () => {
                             onClick={() => handleDelete(item.attributes.id)}
                           />
                         </div>
+                      </td>
+                      <td className="ant-table-cell text-center">
+                        <Link to={`${item.id}/history`}>View</Link>
                       </td>
                     </tr>
                   ))}

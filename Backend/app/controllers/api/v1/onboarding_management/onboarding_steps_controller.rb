@@ -19,8 +19,8 @@ class Api::V1::OnboardingManagement::OnboardingStepsController < Api::V1::BaseCo
 
   def onboarding_steps_by_staff_onboarding
     authorize OnboardingStep
-    pagy, onboarding_step = paginate(OnboardingStep.where(staff_onboarding_id: params[:staff_onboarding_id]))
-    render_resource_collection(onboarding_step, pagy: pagy)
+    onboarding_step = OnboardingStep.where(staff_onboarding_id: params[:staff_onboarding_id])
+    render_resource_collection(onboarding_step)
   end
   
   private

@@ -9,6 +9,7 @@ import { Link, useParams } from "react-router-dom";
 
 import { TabBox } from "./profilePage";
 import Profile from "../../components/StaffProfile/Profile/Profile";
+import TabStaff from "../../components/StaffProfile/TabStaff/TabStaff";
 
 const StaffProfile = () => {
   const { id } = useParams();
@@ -20,7 +21,7 @@ const StaffProfile = () => {
       <PageWrapper>
         <Container fluid className="content">
           <TopProfile idProfile={id} />
-
+          {/* 
           <TabBox className="card">
             <Row>
               <Col lg={12} md={12} sm={12}>
@@ -55,9 +56,10 @@ const StaffProfile = () => {
                 </ul>
               </Col>
             </Row>
-          </TabBox>
+          </TabBox> */}
+          <TabStaff />
 
-          <Profile />
+          {/* <Profile /> */}
         </Container>
       </PageWrapper>
     </div>

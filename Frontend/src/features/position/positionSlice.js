@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiClient from "../../apiClient/apiClient";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
-import { useDispatch } from "react-redux";
 import { useDestroy } from "../../common/hooks/hooks";
 
 const initialState = {

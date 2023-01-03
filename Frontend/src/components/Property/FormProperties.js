@@ -40,14 +40,14 @@ const FormProperties = ({ isNew, show, close }) => {
 
   useEffect(() => {
     if (!isNew) {
-      setCode(property?.attributes.code_seri);
-      setName(property?.attributes.name);
-      setBrand(property?.attributes.brand);
-      setGroupProperty(property?.attributes.group_property.id);
-      setPrice(property?.attributes.price);
-      setBuyDay(property?.attributes.date_buy);
-      setNumberOfRepairs(property?.attributes.number_of_repairs);
-      setStatus(property?.attributes.status);
+      setCode(property?.code_seri);
+      setName(property?.name);
+      setBrand(property?.brand);
+      setGroupProperty(property?.group_property.id);
+      setPrice(property?.price);
+      setBuyDay(property?.date_buy);
+      setNumberOfRepairs(property?.number_of_repairs);
+      setStatus(property?.status);
     }
   }, [property]);
 

@@ -107,14 +107,20 @@ const Sidebar = (prop) => {
                 </li>
 
                 <li className="submenu">
-                  <NavLink>
+                  <NavLink
+                    to="/leave_management/leave"
+                    style={prop.active == "leave" ? active : null}
+                  >
                     <MdContacts className={styles.iconSidebar} />
                     <span> Leave</span>
                   </NavLink>
                 </li>
 
                 <li className="submenu">
-                  <NavLink>
+                  <NavLink
+                    to="/leave_management/leave_application"
+                    style={prop.active == "leave_application" ? active : null}
+                  >
                     <FaWpforms className={styles.iconSidebar} />
                     <span> Leave Applications</span>
                   </NavLink>
@@ -125,7 +131,10 @@ const Sidebar = (prop) => {
                 </li>
 
                 <li className="submenu">
-                  <NavLink>
+                  <NavLink
+                    to="/onboarding_management/onboarding_sample"
+                    style={prop.active == "leave_application" ? active : null}
+                  >
                     <BsFiles className={styles.iconSidebar} />
                     <span> Onboarding sample</span>
                   </NavLink>

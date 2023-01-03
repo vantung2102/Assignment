@@ -1,4 +1,10 @@
 class Api::V1::OnboardingManagement::OnboardingSampleStepsController < Api::V1::BaseController
+  def index
+    authorize OnboardingSampleStep
+    pagy, onboarding_sample_step = paginate(OnboardingSampleStep.order(position_id: :desc))
+    render_resource_collection(onboarding_sample_step, pagy: pagy)
+  end
+
   def show
     authorize OnboardingSampleStep
     render_resource(onboarding_sample_step)
