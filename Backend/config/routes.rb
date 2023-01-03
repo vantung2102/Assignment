@@ -25,11 +25,15 @@ Rails.application.routes.draw do
       end
 
       namespace :property_management do
-        resources :properties
+        resources :properties do
+          member do
+            put 'response_property_request', to: 'properties#response_property_request'
+          end
+        end
         resources :group_properties
         resources :property_providing_histories do
-          member do
-            get 'property_recall', to: "property_providing_histories#property_recall"
+          collection do
+            post 'histories_by_property', to: "property_providing_histories#histories_by_property"
           end
         end
       end
@@ -48,7 +52,7 @@ Rails.application.routes.draw do
       namespace :leave_management do
         resources :leaves do
           collection do
-            post 'leave_by_user', to: "leave#leave_by_user"
+            post 'leave_by_user', to: "leaves#leave_by_user"
           end
         end
         resources :leave_applications do

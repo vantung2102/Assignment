@@ -24,7 +24,7 @@ class LeaveApplication < ApplicationRecord
                       paternity_leave:  4, # 1 day (vo hoac con sinh)
                       maternity_leave: 5, # 6 month ( truoc va sau khi sinh)
                     }, _suffix: true
-  enum status: { pending: 0, approved: 1, cancelled: 2 }
+  enum status: { pending: 0, approved: 1, cancelled: 2 }, _suffix: true
 
   belongs_to :staff, class_name: 'Staff'
   belongs_to :approver, class_name: 'Staff', optional: true

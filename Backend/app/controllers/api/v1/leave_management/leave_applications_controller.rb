@@ -54,6 +54,13 @@ class Api::V1::LeaveManagement::LeaveApplicationsController < Api::V1::BaseContr
   end
 
   def leave_application_params
-    params.require(:leave_application).permit(:leave_type, :number_of_days_off, :start_day, :end_day, :status, :description)
+    params.require(:leave_application).permit(
+      :leave_type,
+      :number_of_days_off,
+      :start_day,
+      :status,
+      :end_day,
+      :description
+    )
   end
 end

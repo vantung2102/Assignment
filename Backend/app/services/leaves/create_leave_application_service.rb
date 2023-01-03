@@ -34,6 +34,7 @@ class Leaves::CreateLeaveApplicationService < ApplicationService
 
         leave_application = LeaveApplication.new(leave_application_params)
         leave_application.staff_id = current_user.id
+        leave_application.status = :pending
         [true, leave_application] if leave_application.save!
       end
     rescue StandardError => e

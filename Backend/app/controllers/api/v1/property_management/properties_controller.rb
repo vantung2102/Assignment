@@ -27,6 +27,30 @@ class Api::V1::PropertyManagement::PropertiesController < Api::V1::BaseControlle
     head :no_content
   end
 
+  def response_property_request
+    begin
+      ActiveRecord::Base.transaction do
+        if property.available_status?
+          PropertyProvidingHistory.create!(
+            provider_id: current_user.id,
+            receiver_id: params[:receiver_id],
+            property_id:  params[:id],
+            status: :provided
+          )
+          property.update!(status: :used)
+        else
+          
+          providing_history = PropertyProvidingHistory.find_by(property_id: property.id, status: :provided)
+          providing_history.update!(status: :recall)
+          property.update!(status: :available)
+        end
+        render_resource(property, status: :ok)
+      end
+    rescue StandardError => e
+      render_resource_errors(status: "error", detail: e)
+    end
+  end
+
   private
 
   def property
@@ -34,7 +58,16 @@ class Api::V1::PropertyManagement::PropertiesController < Api::V1::BaseControlle
   end
 
   def property_params
-    params.require(:property).permit(:code_seri, :name, :brand, :group_property_id, :price, :date_buy, :number_of_repairs, :status)
+    params.require(:property).permit(
+      :code_seri,
+      :name,
+      :brand,
+      :group_property_id,
+      :price,
+      :date_buy,
+      :number_of_repairs,
+      :status,
+    )
   end
 end
 

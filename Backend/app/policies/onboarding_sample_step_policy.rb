@@ -1,4 +1,8 @@
 class OnboardingSampleStepPolicy < ApplicationPolicy
+	def index?
+		authenticate
+	end
+
 	def show?
 		authenticate
 	end

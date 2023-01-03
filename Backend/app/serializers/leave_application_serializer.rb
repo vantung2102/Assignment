@@ -19,9 +19,10 @@ class LeaveApplicationSerializer < BaseSerializer
               :leave_type,
               :start_day,
               :end_day,
+              :number_of_days_off,
               :status,
-              :staff_id,
-              :approver_id,
+              :staff,
+              :approver,
               :description,
               :created_at,
               :updated_at
