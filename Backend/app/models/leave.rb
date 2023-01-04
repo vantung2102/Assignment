@@ -25,5 +25,4 @@ class Leave < ApplicationRecord
   validates :paternity_leave, numericality: { greater_than_or_equal_to: 0 }
   validates :maternity_leave, numericality: { greater_than_or_equal_to: 0 }
   validates :allowed_number_of_days_off, numericality: { greater_than_or_equal_to: 0 }
-  validates :description, length: { minimum: 6, maximum: 5000 }
 end

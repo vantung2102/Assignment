@@ -25,9 +25,9 @@ class Staff < ApplicationRecord
   has_secure_password
   acts_as_paranoid
 
-  after_create :create_onboarding
+  after_create :create_onboarding, :create_leave
   
-  enum status: { active: 0, inactive: 2, probation: 3}
+  enum status: { active: 0, inactive: 1 }
 
   belongs_to :upper_level, class_name: 'Staff', optional: true, foreign_key: :staff_id
   has_many :lower_levels, class_name: 'Staff'
@@ -65,5 +65,10 @@ class Staff < ApplicationRecord
   def create_onboarding
     create, onboarding = Onboarding::CreateOnboardingService.call(self)
     raise onboarding if create == false
+  end
+
+  def create_leave
+    create, leave = Leaves::CreateLeaveService.call(self)
+    raise leave if create == false
   end
 end

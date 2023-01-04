@@ -32,9 +32,6 @@ const FormPropertyProvidingHistories = ({ isNew, show, close }) => {
   }, []);
 
   const handleNewPropertyProvidingHistory = () => {
-    const data = {
-      receiver_id: watch("receiver").value,
-    };
     dispatch(
       newPropertyProvidingHistory({
         receiver_id: watch("receiver").value,

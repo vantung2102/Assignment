@@ -65,8 +65,9 @@ const authSlice = createSlice({
         state.isAuthenticated = true;
         state.user = action.payload.user;
       })
-      .addCase(getUser.rejected, (state) => {
+      .addCase(getUser.rejected, (state, action) => {
         state.isAuthenticated = false;
+        localStorage.setItem("isAuthenticated", "false");
         state.status = "error";
       });
   },

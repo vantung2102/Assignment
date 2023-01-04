@@ -29,6 +29,7 @@ const FormStaff = ({ isNew, show, close }) => {
   const {
     register,
     control,
+    getValues,
     handleSubmit,
     watch,
     formState: { errors },
@@ -47,14 +48,14 @@ const FormStaff = ({ isNew, show, close }) => {
   const [manager, setManager] = useState(null);
 
   const getOption = (arr, attr) => {
-    return arr.map((item) => {
-      return { value: item.id, label: item.attributes[attr] };
+    return arr?.map((item) => {
+      return { value: item.id, label: item?.attributes[attr] };
     });
   };
 
   const ActiveOptions = [
-    { value: true, label: "Active" },
-    { value: false, label: "Inactive" },
+    { value: 0, label: "Active" },
+    { value: 1, label: "Inactive" },
   ];
 
   const handleNewPosition = (e) => {
@@ -70,6 +71,7 @@ const FormStaff = ({ isNew, show, close }) => {
       status: watch("active").value,
       staff_id: watch("manager").value,
     };
+
     dispatch(newStaff(data));
     dispatch(fetchStaff());
     close(false);
@@ -87,7 +89,7 @@ const FormStaff = ({ isNew, show, close }) => {
               <Form.Group>
                 <Form.Label className="col-form-label">Full Name</Form.Label>
                 <Form.Control
-                  defaultValue={name}
+                  defaultValue={getValues("name")}
                   onChange={(e) => setName(e.target.value)}
                   {...register("name", { required: "Name is required" })}
                 />

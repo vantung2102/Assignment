@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 import NotFound from "./pages/404/NotFound";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import Login from "./pages/Auth/Login";
@@ -11,12 +12,18 @@ import PositionPage from "./pages/PositionPage/PositionPage";
 import JobTitlePage from "./pages/JobTitlePage/JobTitlePage";
 import RequireAuth from "./common/router/RequireAuth";
 import PropertiesGroupPage from "./pages/PropertiesGroupPage/PropertiesGroupPage";
-import { ToastContainer } from "react-toastify";
 import PropertyPage from "./pages/PropertyPage/PropertyPage";
 import RequestPropertyPage from "./pages/RequestPropertyPage/RequestPropertyPage";
 import DetailRequestPropertyPage from "./pages/DetailRequestPropertyPage/DetailRequestPropertyPage";
 import PropertyProvidingHistoriesPage from "./pages/PropertyProvidingHistories/PropertyProvidingHistoriesPage";
 import DetailPropertyProvidingHistoriesPage from "./pages/PropertyProvidingHistoriesPage/DetailPropertyProvidingHistoriesPage";
+import LeavePage from "./pages/LeavePage/LeavePage";
+import DetailLeavePage from "./pages/DetailLeavePage/DetailLeavePage";
+import LeaveApplicationPage from "./pages/LeaveApplicationPage/LeaveApplicationPage";
+import DetailLeaveApplicationPage from "./pages/DetailLeaveApplicationPage/DetailLeaveApplicationPage";
+import DetailPropertyPage from "./pages/DetailPropertyPage/DetailPropertyPage";
+import HistoriesByPropertyPage from "./pages/HistoriesByPropertyPage/HistoriesByPropertyPage";
+import OnboardingSamplePage from "./pages/OnboardingSamplePage/OnboardingSamplePage";
 
 function App() {
   return (
@@ -101,6 +108,24 @@ function App() {
           />
 
           <Route
+            path="properties/:id"
+            element={
+              <RequireAuth>
+                <DetailPropertyPage />
+              </RequireAuth>
+            }
+          />
+
+          <Route
+            path="properties/:id/history"
+            element={
+              <RequireAuth>
+                <HistoriesByPropertyPage />
+              </RequireAuth>
+            }
+          />
+
+          <Route
             path="property_providing_histories"
             element={
               <RequireAuth>
@@ -135,6 +160,55 @@ function App() {
             element={
               <RequireAuth>
                 <DetailRequestPropertyPage />
+              </RequireAuth>
+            }
+          />
+        </Route>
+
+        {/* ================ Leave Management ================ */}
+        <Route path="leave_management">
+          <Route
+            path="leave"
+            element={
+              <RequireAuth>
+                <LeavePage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="leave/:id"
+            element={
+              <RequireAuth>
+                <DetailLeavePage />
+              </RequireAuth>
+            }
+          />
+
+          <Route
+            path="leave_application"
+            element={
+              <RequireAuth>
+                <LeaveApplicationPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="leave_application/:id"
+            element={
+              <RequireAuth>
+                <DetailLeaveApplicationPage />
+              </RequireAuth>
+            }
+          />
+        </Route>
+
+        {/* ================ Onboarding Management ================ */}
+        <Route path="onboarding_management">
+          <Route
+            path="onboarding_sample"
+            element={
+              <RequireAuth>
+                <OnboardingSamplePage />
               </RequireAuth>
             }
           />
