@@ -1,22 +1,22 @@
 import React, { useEffect } from "react";
-import { Button, Col, Row, Table } from "react-bootstrap";
-import { TiArrowUnsorted } from "react-icons/ti";
+import { Button, Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
-  fetchReviewForStaff,
+  fetchPerformanceByUser,
   reviewForStaffsSelector,
+  selfReviewsPerformanceSelector,
 } from "../../features/performance/performanceSlice";
+import { Table } from "../Staff/staff";
 import staff from "../Staff/staff.module.scss";
 
-const ReviewPerformance = () => {
+const PerformanceByUser = () => {
   const dispatch = useDispatch();
-  const reviewForStaff = useSelector(reviewForStaffsSelector);
-
+  const selfReview = useSelector(selfReviewsPerformanceSelector);
+  console.log(selfReview);
   useEffect(() => {
-    dispatch(fetchReviewForStaff());
+    dispatch(fetchPerformanceByUser());
   }, []);
-
   return (
     <Row>
       <Col md={12}>
@@ -60,7 +60,7 @@ const ReviewPerformance = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {reviewForStaff?.map((item, index) => (
+                  {selfReview?.map((item, index) => (
                     <tr key={item.attributes.id} disabled>
                       <td className="ant-table-cell">{index + 1}</td>
                       <td className="ant-table-cell">
@@ -113,4 +113,4 @@ const ReviewPerformance = () => {
   );
 };
 
-export default ReviewPerformance;
+export default PerformanceByUser;

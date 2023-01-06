@@ -1,30 +1,32 @@
 import React from "react";
 import { Container, Row } from "react-bootstrap";
+import { useParams } from "react-router-dom";
 import Header from "../../components/Header/Header";
+import PageHeader from "../../components/PageHeader/PageHeader";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { MainWrapper, PageWrapper } from "../../global/jsx/common";
 import pageHeader from "../../components/PageHeader/pageHeader.module.scss";
-import PageHeader from "../../components/PageHeader/PageHeader";
-import PerformanceByUser from "../../components/Performance/PerformanceByUser";
+import DetailReviewPerformance from "../../components/Performance/DetailReviewPerformance";
 
-const PerformanceSelfReviewPage = () => {
+const DetailPerformanceReviewPage = () => {
+  const { id } = useParams();
   return (
     <MainWrapper>
       <Header />
-      <Sidebar active="self_review" />
+      <Sidebar active="review" />
 
       <PageWrapper>
         <Container fluid className="content">
           <div className={pageHeader.PageHeader}>
             <Row className="align-items-center">
-              <PageHeader title="Self Review" />
+              <PageHeader title="Review for Staff" />
             </Row>
           </div>
-          <PerformanceByUser />
+          <DetailReviewPerformance idRequest={id} />
         </Container>
       </PageWrapper>
     </MainWrapper>
   );
 };
 
-export default PerformanceSelfReviewPage;
+export default DetailPerformanceReviewPage;

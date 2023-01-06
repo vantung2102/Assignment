@@ -23,6 +23,8 @@ class PerformanceAppraisalFormSerializer < BaseSerializer
               :active,
               :goals_set_staff,
               :goals_set_boss,
+              :achievement_staff,
+              :achievement_boss,
               :goals_with_company_staff,
               :goals_with_company_boss,
               :challenging_staff,

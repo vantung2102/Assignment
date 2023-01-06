@@ -33,7 +33,7 @@ en:
   error_codes:
     E201: "Invalid"
     E202: "Performance Appraisal Form Inactive"
-    E203: "Performance Appraisal Form Submitted"
+    E203: "Performance Appraisal Form Can't Submitted"
     E204: "Unconfirmed staff"
     E205: "You can't see this person's info"
     E206: "Recall Error when update property or property providing history"

@@ -27,6 +27,8 @@ import OnboardingSamplePage from "./pages/OnboardingSamplePage/OnboardingSampleP
 import PerformancePage from "./pages/Performance/PerformancePage";
 import PerformanceSelfReviewPage from "./pages/PerformanceSelfReviewPage/PerformanceSelfReviewPage";
 import PerformanceReviewPage from "./pages/PerformanceReviewPage/PerformanceReviewPage";
+import DetailPerformanceReviewPage from "./pages/DetailPerformanceReviewPage/DetailPerformanceReviewPage";
+import DetailPerformanceSelfReviewPage from "./pages/DetailPerformanceSelfReviewPage/DetailPerformanceSelfReviewPage";
 
 function App() {
   return (
@@ -238,10 +240,28 @@ function App() {
           />
 
           <Route
+            path="self_review/:id"
+            element={
+              <RequireAuth>
+                <DetailPerformanceSelfReviewPage />
+              </RequireAuth>
+            }
+          />
+
+          <Route
             path="review"
             element={
               <RequireAuth>
                 <PerformanceReviewPage />
+              </RequireAuth>
+            }
+          />
+
+          <Route
+            path="review/:id"
+            element={
+              <RequireAuth>
+                <DetailPerformanceReviewPage />
               </RequireAuth>
             }
           />

@@ -17,8 +17,7 @@ const PerformanceReviewPage = () => {
         <Container fluid className="content">
           <div className={pageHeader.PageHeader}>
             <Row className="align-items-center">
-              <PageHeader title="Onboarding Sample" />
-              {/* <AddOnboardingSampleStep /> */}
+              <PageHeader title="Review For Staff" />
             </Row>
           </div>
           <ReviewPerformance />
