@@ -51,6 +51,14 @@ class Api::V1::PropertyManagement::PropertiesController < Api::V1::BaseControlle
     end
   end
 
+  def property_by_user
+    user = PropertyProvidingHistory.find_by(
+      property_id: property_providing_history_params[:property_id],
+      status: :provided
+    )
+    render_resource(user, serializer: :staff)  
+  end
+
   private
 
   def property

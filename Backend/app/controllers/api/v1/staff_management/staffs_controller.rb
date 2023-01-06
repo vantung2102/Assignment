@@ -1,7 +1,7 @@
 class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
   def index
     pagy, staffs = paginate(Staff.filter(params.slice(:status, :fullname, :position, :department, :job_title)))
-    render_resource_collection(staffs, pagy: pagy)
+    render_resource_collection(staffs.order(created_at: :desc), pagy: pagy)
   end
 
   def show

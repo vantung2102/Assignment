@@ -10,11 +10,13 @@
 #  updated_at  :datetime         not null
 #
 class OnboardingSampleStep < ApplicationRecord
+  extend Filterable
+
   has_many :onboarding_steps
   belongs_to :position
 
   validates :task, presence: true
   validates :description, presence: true, length: { minimum: 5 }
 
-  scope :by_position, -> (position_id) { where position_id: position_id }
+  scope :filter_by_position, -> (position_id) { where position_id: position_id }
 end

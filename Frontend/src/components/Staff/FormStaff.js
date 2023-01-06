@@ -18,6 +18,7 @@ import {
   passwordConfirmValidator,
   passwordValidator,
 } from "../../validators/validators";
+import { optionSelect2 } from "../../common/hooks/hooks";
 
 const FormStaff = ({ isNew, show, close }) => {
   const dispatch = useDispatch();
@@ -35,30 +36,16 @@ const FormStaff = ({ isNew, show, close }) => {
     formState: { errors },
   } = useForm();
 
-  const [name, setName] = useState("");
-  const [gmail, setGmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
-  const [date, setDate] = useState("");
-  const [department, setDepartment] = useState("");
-  const [position, setJobTitle] = useState("");
-  const [jobTitle, setPosition] = useState("");
-  const [active, setActive] = useState("");
-  const [gender, setGender] = useState("");
-  const [manager, setManager] = useState(null);
-
-  const getOption = (arr, attr) => {
-    return arr?.map((item) => {
-      return { value: item.id, label: item?.attributes[attr] };
-    });
-  };
+  useEffect(() => {
+    dispatch(fetchStaff());
+  }, []);
 
   const ActiveOptions = [
     { value: 0, label: "Active" },
     { value: 1, label: "Inactive" },
   ];
 
-  const handleNewPosition = (e) => {
+  const handleNewStaff = () => {
     const data = {
       fullname: watch("name"),
       email: watch("gmail"),
@@ -73,7 +60,6 @@ const FormStaff = ({ isNew, show, close }) => {
     };
 
     dispatch(newStaff(data));
-    dispatch(fetchStaff());
     close(false);
   };
 
@@ -83,14 +69,13 @@ const FormStaff = ({ isNew, show, close }) => {
         <Modal.Title>New Employee</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={handleSubmit(handleNewPosition)}>
+        <Form onSubmit={handleSubmit(handleNewStaff)}>
           <Row>
             <Col sm={6}>
               <Form.Group>
                 <Form.Label className="col-form-label">Full Name</Form.Label>
                 <Form.Control
                   defaultValue={getValues("name")}
-                  onChange={(e) => setName(e.target.value)}
                   {...register("name", { required: "Name is required" })}
                 />
 
@@ -104,8 +89,7 @@ const FormStaff = ({ isNew, show, close }) => {
               <Form.Group>
                 <Form.Label className="col-form-label">Email</Form.Label>
                 <Form.Control
-                  defaultValue={gmail}
-                  onChange={(e) => setGmail(e.target.value)}
+                  defaultValue={getValues("gmail")}
                   {...register("gmail", {
                     required: "Email Address is required",
                     pattern: {
@@ -125,9 +109,8 @@ const FormStaff = ({ isNew, show, close }) => {
               <Form.Group>
                 <Form.Label className="col-form-label">Password</Form.Label>
                 <Form.Control
-                  defaultValue={password}
                   type="password"
-                  onChange={(e) => setPassword(e.target.value)}
+                  defaultValue={getValues("password")}
                   {...register("password", {
                     required: "Password is required",
                     pattern: {
@@ -147,9 +130,8 @@ const FormStaff = ({ isNew, show, close }) => {
               <Form.Group>
                 <Form.Label className="col-form-label">Password</Form.Label>
                 <Form.Control
-                  defaultValue={passwordConfirm}
+                  defaultValue={getValues("passwordConfirm")}
                   type="password"
-                  onChange={(e) => setPassword(e.target.value)}
                   {...register("passwordConfirm", {
                     required: "Password Confirm is required",
                     pattern: {
@@ -175,11 +157,7 @@ const FormStaff = ({ isNew, show, close }) => {
                 <Form.Label className="col-form-label">
                   Date of Birth
                 </Form.Label>
-                <Form.Control
-                  defaultValue={date}
-                  type="date"
-                  onChange={(e) => setDate(e.target.value)}
-                />
+                <Form.Control defaultValue={getValues("date")} type="date" />
 
                 <Form.Control.Feedback type="invalid" className="d-block">
                   {errors.date?.message}
@@ -191,8 +169,7 @@ const FormStaff = ({ isNew, show, close }) => {
               <Form.Group>
                 <Form.Label className="col-form-label">gender</Form.Label>
                 <Form.Control
-                  defaultValue={gender}
-                  onChange={(e) => setGender(e.target.value)}
+                  defaultValue={getValues("gender")}
                   {...register("gender", { required: "Gender is required" })}
                 />
 
@@ -218,7 +195,7 @@ const FormStaff = ({ isNew, show, close }) => {
                       value={value}
                       name={name}
                       ref={ref}
-                      options={getOption(departments, "name")}
+                      options={optionSelect2(departments, "name")}
                       placeholder="Select Department"
                     />
                   )}
@@ -241,7 +218,7 @@ const FormStaff = ({ isNew, show, close }) => {
                     field: { onChange, onBlur, value, name, ref },
                   }) => (
                     <Select
-                      options={getOption(positions, "name")}
+                      options={optionSelect2(positions, "name")}
                       placeholder="Select Position"
                       onChange={onChange}
                       onBlur={onBlur}
@@ -274,7 +251,7 @@ const FormStaff = ({ isNew, show, close }) => {
                       value={value}
                       name={name}
                       ref={ref}
-                      options={getOption(jobTitles, "title")}
+                      options={optionSelect2(jobTitles, "title")}
                       placeholder="Select Tob Title"
                     />
                   )}
@@ -297,7 +274,7 @@ const FormStaff = ({ isNew, show, close }) => {
                     field: { onChange, onBlur, value, name, ref },
                   }) => (
                     <Select
-                      options={getOption(managers, "fullname")}
+                      options={optionSelect2(managers, "fullname")}
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value}

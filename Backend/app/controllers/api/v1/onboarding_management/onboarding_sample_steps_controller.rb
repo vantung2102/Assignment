@@ -1,8 +1,8 @@
 class Api::V1::OnboardingManagement::OnboardingSampleStepsController < Api::V1::BaseController
   def index
     authorize OnboardingSampleStep
-    pagy, onboarding_sample_step = paginate(OnboardingSampleStep.order(position_id: :desc))
-    render_resource_collection(onboarding_sample_step, pagy: pagy)
+    onboarding_sample_step = OnboardingSampleStep.filter(params.slice(:position))
+    render_resource_collection(onboarding_sample_step.order(position_id: :desc))
   end
 
   def show
@@ -29,7 +29,7 @@ class Api::V1::OnboardingManagement::OnboardingSampleStepsController < Api::V1::
 
   def onboarding_sample_steps_by_position
     authorize OnboardingSampleStep
-    pagy, onboarding_sample_step = paginate(OnboardingSampleStep.by_position(onboarding_sample_step_params[:position_id]))
+    pagy, onboarding_sample_step = paginate(OnboardingSampleStep.filter_by_position(onboarding_sample_step_params[:position_id]))
     render_resource_collection(onboarding_sample_step, pagy: pagy)
   end
 

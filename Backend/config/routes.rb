@@ -67,12 +67,15 @@ Rails.application.routes.draw do
       end
 
       namespace :onboarding_management do
-        resources :staff_onboardings do
-          resources :onboarding_steps do
-            collection do
-              post 'onboarding_steps_by_staff_onboarding', to: 'onboarding_steps#onboarding_steps_by_staff_onboarding'
-            end
+        resources :onboarding_steps do
+          collection do
+            post 'onboarding_steps_by_staff_onboarding', to: 'onboarding_steps#onboarding_steps_by_staff_onboarding'
           end
+          member do
+            get 'complete_onboarding_step', to: 'onboarding_steps#complete_onboarding_step'
+          end
+        end
+        resources :staff_onboardings do
 
           collection do
             post 'staff_onboarding_by_user', to: 'staff_onboardings#staff_onboarding_by_user'

@@ -1,27 +1,45 @@
-import React, { useEffect } from "react";
-import { Col, Row } from "react-bootstrap";
-import { AiFillInfoCircle } from "react-icons/ai";
+import React, { useEffect, useState } from "react";
+import { Button, Col, Form, Row } from "react-bootstrap";
+import { AiFillCheckCircle, AiFillInfoCircle } from "react-icons/ai";
+import { RiDeleteBinLine } from "react-icons/ri";
 import { TbEdit } from "react-icons/tb";
 import { TiArrowUnsorted } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
 import {
-  staffOnboarding,
-  staffOnboardingSelector,
+  completeOnboardingStep,
+  editOnboardingStep,
+  fetchOnboardingStep,
+  onboardingStepSelector,
+  onboardingStepsSelector,
+  showOnboardingStep,
 } from "../../../features/onboarding/onboardingSlice";
 import { Table } from "../../Staff/staff";
 import staff from "../../Staff/staff.module.scss";
+import FormOnboarding from "./FormOnboarding";
 
 const Onboarding = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const onboarding = useSelector(staffOnboardingSelector);
+  const [show, setShow] = useState(false);
+
+  const onboarding = useSelector(onboardingStepsSelector);
+  const onboardingStep = useSelector(onboardingStepSelector);
 
   useEffect(() => {
-    dispatch(staffOnboarding(id));
+    dispatch(fetchOnboardingStep(id));
   }, []);
 
-  const handleShowOnboardingStep = () => {};
+  const handleClose = () => setShow(false);
+  const handleShow = (id) => {
+    dispatch(showOnboardingStep(id));
+    setShow(true);
+  };
+  const handleCompleted = (id) => {
+    dispatch(completeOnboardingStep(id));
+  };
+
+  const handleDelete = (id) => {};
 
   return (
     <Row>
@@ -32,47 +50,78 @@ const Onboarding = () => {
               <Table>
                 <thead>
                   <tr>
-                    <th className="ant-table-cell">
-                      <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">STT</span>
-                        <TiArrowUnsorted />
-                      </div>
-                    </th>
-                    <th className="ant-table-cell">
-                      <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">Position</span>
-                        <TiArrowUnsorted />
-                      </div>
-                    </th>
-                    <th className="ant-table-cell text-center">Create at</th>
+                    <th className="ant-table-cell">STT</th>
+                    <th className="ant-table-cell text-center">Task</th>
+                    <th className="ant-table-cell text-center">Assign To</th>
+                    <th className="ant-table-cell text-center">Start date</th>
+                    <th className="ant-table-cell text-center">Due date</th>
+                    <th className="ant-table-cell text-center">Status</th>
                     <th className="ant-table-cell text-center">Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {onboarding?.map((item, index) => (
-                    <tr key={item.attributes.id}>
-                      <td className="ant-table-cell">{index}</td>
-                      <td className="ant-table-cell">{item.position?.name}</td>
+                    <tr key={item.attributes.id} className="text-center">
+                      <td className="ant-table-cell">{index + 1}</td>
                       <td className="ant-table-cell">
-                        {item.attributes.created_at}
+                        {item.attributes?.onboarding_sample_step?.task}
+                      </td>
+                      <td className="ant-table-cell">
+                        {item.attributes?.assigned_person?.fullname}
+                      </td>
+                      <td className="ant-table-cell">
+                        {item.attributes.start_date}
+                      </td>
+                      <td className="ant-table-cell">
+                        {item.attributes.due_date}
+                      </td>
+                      <td className="ant-table-cell">
+                        <Button
+                          size="sm"
+                          variant={
+                            item.attributes.status === "outstanding"
+                              ? "outline-danger"
+                              : "outline-success"
+                          }
+                        >
+                          {item.attributes.status}
+                        </Button>
                       </td>
                       <td className="ant-table-cell">
                         <div className="d-flex justify-content-evenly">
-                          <AiFillInfoCircle
-                            style={{
-                              fontSize: "20px",
-                            }}
-                            // onClick={() =>
-                            //   handleShowOnboardingStep(item.attributes.id)
-                            // }
+                          <Form.Check.Input
+                            type="checkbox"
+                            isValid
+                            checked={
+                              item.attributes.status === "outstanding"
+                                ? false
+                                : true
+                            }
+                            disabled={
+                              item.attributes.status === "outstanding"
+                                ? false
+                                : true
+                            }
+                            onChange={() => handleCompleted(item.attributes.id)}
                           />
 
-                          <TbEdit
-                            style={{
-                              fontSize: "20px",
-                            }}
-                            // onClick={() => handleShow(item.attributes.id)}
-                          />
+                          {item.attributes.status === "outstanding" ? (
+                            <>
+                              <TbEdit
+                                style={{
+                                  fontSize: "20px",
+                                }}
+                                onClick={() => handleShow(item.attributes.id)}
+                              />
+
+                              <RiDeleteBinLine
+                                style={{
+                                  fontSize: "20px",
+                                }}
+                                onClick={() => handleDelete(item.attributes.id)}
+                              />
+                            </>
+                          ) : null}
                         </div>
                       </td>
                     </tr>
@@ -83,6 +132,8 @@ const Onboarding = () => {
           </div>
         </div>
       </Col>
+
+      <FormOnboarding show={show} close={handleClose} />
     </Row>
   );
 };

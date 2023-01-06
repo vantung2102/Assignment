@@ -133,17 +133,10 @@ const Sidebar = (prop) => {
                 <li className="submenu">
                   <NavLink
                     to="/onboarding_management/onboarding_sample"
-                    style={prop.active == "leave_application" ? active : null}
+                    style={prop.active == "onboarding_sample" ? active : null}
                   >
                     <BsFiles className={styles.iconSidebar} />
                     <span> Onboarding sample</span>
-                  </NavLink>
-                </li>
-
-                <li className="submenu">
-                  <NavLink>
-                    <AiOutlineUsergroupAdd className={styles.iconSidebar} />
-                    <span> Staff onboarding</span>
                   </NavLink>
                 </li>
 
@@ -152,9 +145,32 @@ const Sidebar = (prop) => {
                 </li>
 
                 <li className="submenu">
-                  <NavLink>
+                  <NavLink
+                    to="/performance_management/performance"
+                    style={prop.active == "performance" ? active : null}
+                  >
                     <FcSalesPerformance className={styles.iconSidebar} />
-                    <span> Forms</span>
+                    <span>Performance</span>
+                  </NavLink>
+                </li>
+
+                <li className="submenu">
+                  <NavLink
+                    to="/performance_management/self_review"
+                    style={prop.active === "self_review" ? active : null}
+                  >
+                    <FcSalesPerformance className={styles.iconSidebar} />
+                    <span>Self Review</span>
+                  </NavLink>
+                </li>
+
+                <li className="submenu">
+                  <NavLink
+                    to="/performance_management/review"
+                    style={prop.active === "review" ? active : null}
+                  >
+                    <FcSalesPerformance className={styles.iconSidebar} />
+                    <span>Review for Staff</span>
                   </NavLink>
                 </li>
 

@@ -11,6 +11,7 @@ import propertyProvidingHistoriesReducer from "../features/propertyProvidingHist
 import leaveReducer from "../features/leave/leaveSlice";
 import leaveApplicationReducer from "../features/leaveApplication/leaveApplicationSlice";
 import onboardingReducer from "../features/onboarding/onboardingSlice";
+import performanceReducer from "../features/performance/performanceSlice";
 
 export const store = configureStore({
   reducer: {
@@ -26,5 +27,6 @@ export const store = configureStore({
     leave: leaveReducer,
     leaveApplication: leaveApplicationReducer,
     onboarding: onboardingReducer,
+    performance: performanceReducer,
   },
 });

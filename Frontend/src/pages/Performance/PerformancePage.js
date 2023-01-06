@@ -1,31 +1,32 @@
 import React from "react";
 import { Container, Row } from "react-bootstrap";
-import { ToastContainer } from "react-toastify";
 import Header from "../../components/Header/Header";
 import PageHeader from "../../components/PageHeader/PageHeader";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { MainWrapper, PageWrapper } from "../../global/jsx/common";
 import pageHeader from "../../components/PageHeader/pageHeader.module.scss";
-import Leave from "../../components/Leave/Leave";
+import AdminPerformance from "../../components/Performance/AdminPerformance";
+import AddPerformance from "../../components/Performance/AddPerformance";
 
-const LeavePage = () => {
+const Performance = () => {
   return (
     <MainWrapper>
       <Header />
-      <Sidebar active="leave" />
+      <Sidebar active="performance" />
 
       <PageWrapper>
         <Container fluid className="content">
           <div className={pageHeader.PageHeader}>
             <Row className="align-items-center">
-              <PageHeader title="Leave" />
+              <PageHeader title="Performance" />
+              <AddPerformance />
             </Row>
           </div>
-          <Leave />
+          <AdminPerformance />
         </Container>
       </PageWrapper>
     </MainWrapper>
   );
 };
 
-export default LeavePage;
+export default Performance;

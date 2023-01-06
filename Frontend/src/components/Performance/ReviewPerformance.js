@@ -1,26 +1,11 @@
-import React, { useEffect } from "react";
-import { Button, Col, Row } from "react-bootstrap";
-import { AiFillInfoCircle } from "react-icons/ai";
-import { RiDeleteBinLine } from "react-icons/ri";
+import React from "react";
+import { Button, Col, Row, Table } from "react-bootstrap";
 import { TiArrowUnsorted } from "react-icons/ti";
-import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import {
-  historiesByProperty,
-  historiesByPropertySelector,
-  propertyProvidingHistoriesSelector,
-} from "../../../features/propertyProvidingHistories/propertyProvidingHistoriesSlice";
-import { Table } from "../../Staff/staff";
-import staff from "../../Staff/staff.module.scss";
+import staff from "../Staff/staff.module.scss";
 
-const HistoriesByProperty = ({ idRequest }) => {
-  const dispatch = useDispatch();
-  const propertyProvidingHistories = useSelector(historiesByPropertySelector);
-
-  useEffect(() => {
-    dispatch(historiesByProperty(idRequest));
-  }, []);
-
+const ReviewPerformance = () => {
+  const performances = null;
   return (
     <Row>
       <Col md={12}>
@@ -37,66 +22,84 @@ const HistoriesByProperty = ({ idRequest }) => {
                     </th>
                     <th className="ant-table-cell">
                       <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">Provider</span>
+                        <span className="table-column-title">Name</span>
                         <TiArrowUnsorted />
                       </div>
                     </th>
                     <th className="ant-table-cell">
                       <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">Receiver</span>
+                        <span className="table-column-title">Active</span>
                         <TiArrowUnsorted />
                       </div>
                     </th>
                     <th className="ant-table-cell">
                       <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">Property</span>
+                        <span className="table-column-title">Start day</span>
                         <TiArrowUnsorted />
                       </div>
                     </th>
                     <th className="ant-table-cell">
                       <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">
-                          Providing Date
-                        </span>
+                        <span className="table-column-title">End day</span>
                         <TiArrowUnsorted />
                       </div>
                     </th>
+
                     <th className="ant-table-cell">
                       <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">Type</span>
+                        <span className="table-column-title">Status</span>
                         <TiArrowUnsorted />
                       </div>
                     </th>
+
+                    <th className="ant-table-cell">Completion progress</th>
+                    <th className="ant-table-cell">Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {propertyProvidingHistories?.map((item, index) => (
-                    <tr key={item.attributes?.id}>
+                  {performances?.map((item, index) => (
+                    <tr key={item.attributes.id} disabled>
                       <td className="ant-table-cell">{index + 1}</td>
                       <td className="ant-table-cell">
-                        {item.attributes?.provider.fullname}
-                      </td>
-
-                      <td className="ant-table-cell">
-                        {item.attributes?.receiver.fullname}
-                      </td>
-                      <td className="ant-table-cell">
-                        {item.attributes?.property.name}
-                      </td>
-                      <td className="ant-table-cell">
-                        {item.attributes?.created_at}
+                        <Link to={item.id}>
+                          {item.attributes.staff.fullname}
+                        </Link>
                       </td>
                       <td className="ant-table-cell">
                         <Button
+                          size="sm"
                           variant={
-                            item.attributes?.status == "recall"
-                              ? "danger"
-                              : "success"
+                            item.attributes.active
+                              ? "outline-success"
+                              : "outline-danger"
                           }
                         >
-                          {item.attributes?.status}
+                          {item.attributes.active ? "Active" : "Inactive"}
                         </Button>
                       </td>
+                      <td className="ant-table-cell">
+                        {item.attributes.start_date}
+                      </td>
+                      <td className="ant-table-cell">
+                        {item.attributes.end_date}
+                      </td>
+
+                      <td className="ant-table-cell">
+                        <Button
+                          size="sm"
+                          variant={
+                            item.attributes.status === "pending"
+                              ? "warning"
+                              : item.attributes.status === "approved"
+                              ? "success"
+                              : "outline-danger"
+                          }
+                        >
+                          {item.attributes.status}
+                        </Button>
+                      </td>
+                      <td className="ant-table-cell">0/5 completed</td>
+                      <td className="ant-table-cell">remind</td>
                     </tr>
                   ))}
                 </tbody>
@@ -105,8 +108,10 @@ const HistoriesByProperty = ({ idRequest }) => {
           </div>
         </div>
       </Col>
+
+      {/* <FormPerformance close={handleClose} show={show} /> */}
     </Row>
   );
 };
 
-export default HistoriesByProperty;
+export default ReviewPerformance;

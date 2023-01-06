@@ -80,13 +80,12 @@ const Leave = () => {
                         <TiArrowUnsorted />
                       </div>
                     </th>
-                    <th className="ant-table-cell text-center">Action</th>
                   </tr>
                 </thead>
                 <tbody>
                   {leaves?.map((item, index) => (
                     <tr key={item.attributes.id}>
-                      <td className="ant-table-cell">{index}</td>
+                      <td className="ant-table-cell">{index + 1}</td>
                       <td className="ant-table-cell">
                         <Link to={item.id}>
                           {item.attributes.staff.fullname}
@@ -97,25 +96,6 @@ const Leave = () => {
                       </td>
                       <td className="ant-table-cell">
                         {TotalDayOff(item.attributes)}
-                      </td>
-
-                      <td className="ant-table-cell">
-                        <div className="d-flex justify-content-evenly">
-                          <TbEdit
-                            style={{
-                              fontSize: "20px",
-                            }}
-                          />
-
-                          <RiDeleteBinLine
-                            style={{
-                              fontSize: "20px",
-                            }}
-                            onClick={() =>
-                              handleDeletePosition(item.attributes.id)
-                            }
-                          />
-                        </div>
                       </td>
                     </tr>
                   ))}

@@ -86,21 +86,6 @@ const DetailLeave = ({ idRequest }) => {
                     <span className="text-danger">6 months</span>
                   </Col>
                 </Form.Group>
-                <Form.Group className="d-flex align-items-center mt-4">
-                  <Col md={2}>
-                    <Form.Label>Description:</Form.Label>
-                  </Col>
-                  <Col md={10}>
-                    <FloatingLabel controlId="floatingTextarea2">
-                      <Form.Control
-                        as="textarea"
-                        style={{ height: "100px" }}
-                        defaultValue={leave?.attributes.description}
-                        disabled
-                      />
-                    </FloatingLabel>
-                  </Col>
-                </Form.Group>
               </Row>
             </ProfileView>
           </Col>
