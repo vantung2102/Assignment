@@ -92,13 +92,14 @@ Rails.application.routes.draw do
       namespace :performance_management do
         resources :performance_appraisal_forms do
           member do
-            post 'remind_by_staff', to: 'performance_appraisal_forms#remind_by_staff'
+            get 'remind_by_staff', to: 'performance_appraisal_forms#remind_by_staff'
           end
           collection do
+            get 'show_self_review', to: 'performance_appraisal_forms#show_self_review'
             post 'create_all_fa_forms_for_staff', to: 'performance_appraisal_forms#create_all_fa_forms_for_staff'
             post 'update_all_active_or_inactive', to: 'performance_appraisal_forms#update_all_active_or_inactive'
-            post 'pa_forms_by_current_user', to: 'performance_appraisal_forms#pa_forms_by_current_user'
-            post 'pa_forms_by_my_reviewed', to: 'performance_appraisal_forms#pa_forms_by_my_reviewed'
+            get 'pa_forms_by_current_user', to: 'performance_appraisal_forms#pa_forms_by_current_user'
+            get 'pa_forms_by_my_reviewed', to: 'performance_appraisal_forms#pa_forms_by_my_reviewed'
             post 'remind_all_staff', to: 'performance_appraisal_forms#remind_all_staff'
           end
         end

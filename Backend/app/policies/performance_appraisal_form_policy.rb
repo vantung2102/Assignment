@@ -7,6 +7,10 @@ class PerformanceAppraisalFormPolicy < ApplicationPolicy
 		authenticate || record.staff_id == user.id || record.boss_id == user.id
 	end
 
+	def show_self_review?
+		authenticate || record.staff_id == user.id || record.boss_id == user.id
+  end
+
 	def create?
 		authenticate
 	end
@@ -32,12 +36,16 @@ class PerformanceAppraisalFormPolicy < ApplicationPolicy
 	end
 
 	def pa_forms_by_current_user?
-		false if record.map{ |el| el.staff_id == user.id }.include?(false)
+		record.map{ |el| el.staff_id == user.id }.include?(false) ? false : true
 	end
 
 	def pa_forms_by_my_reviewed?
-		false if record.map{ |el| el.boss_id == user.id }.include?(false)
+		record.map{ |el| el.boss_id == user.id }.include?(false) ? false : true
 	end
+
+	def remind_by_staff?
+		authenticate
+  end
 
 	private
 
