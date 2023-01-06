@@ -16,50 +16,13 @@ const StaffProfile = () => {
   return (
     <div className="main-wrapper">
       <Header />
-      <Sidebar />
+      <Sidebar active="staff" />
 
       <PageWrapper>
         <Container fluid className="content">
           <TopProfile idProfile={id} />
-          {/* 
-          <TabBox className="card">
-            <Row>
-              <Col lg={12} md={12} sm={12}>
-                <ul className="nav nav-tabs nav-tabs-bottom">
-                  <li className="nav-item">
-                    <Link data-bs-toggle="tab" className="nav-link active">
-                      HR PROFILE
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link data-bs-toggle="tab" className="nav-link">
-                      TIME OFF
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link data-bs-toggle="tab" className="nav-link">
-                      ONBOARDING
-                    </Link>
-                  </li>
 
-                  <li className="nav-item">
-                    <Link data-bs-toggle="tab" className="nav-link">
-                      PROJECT
-                    </Link>
-                  </li>
-
-                  <li className="nav-item">
-                    <Link data-bs-toggle="tab" className="nav-link">
-                      PERFORMANCE FROM
-                    </Link>
-                  </li>
-                </ul>
-              </Col>
-            </Row>
-          </TabBox> */}
           <TabStaff />
-
-          {/* <Profile /> */}
         </Container>
       </PageWrapper>
     </div>

@@ -19,10 +19,8 @@
 #
 class PerformanceAppraisalFormSerializer < BaseSerializer
   attributes  :id,
-              :title,
               :status,
               :active,
-              :title,
               :goals_set_staff,
               :goals_set_boss,
               :goals_with_company_staff,
@@ -44,5 +42,9 @@ class PerformanceAppraisalFormSerializer < BaseSerializer
               :description_staff,
               :description_boss,
               :updated_at,
-              :created_at
+              :created_at,
+              :start_date,
+              :end_date,
+              :staff,
+              :boss
 end

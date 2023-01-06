@@ -3,7 +3,6 @@ import { Col, Row, Tab, Tabs } from "react-bootstrap";
 import { TabBox } from "../../../pages/ProfilePage/profilePage";
 import Onboarding from "../Onboarding/Onboarding";
 import Profile from "../Profile/Profile";
-import TopProfile from "../TopProfile/TopProfile";
 
 const TabStaff = () => {
   return (
@@ -19,9 +18,6 @@ const TabStaff = () => {
             </Tab>
             <Tab eventKey="onboarding" title="ONBOARDING">
               <Onboarding />
-            </Tab>
-            <Tab eventKey="performance_form" title="PERFORMANCE FROM">
-              hihihi
             </Tab>
           </Tabs>
         </Col>

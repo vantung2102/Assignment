@@ -24,6 +24,9 @@ import DetailLeaveApplicationPage from "./pages/DetailLeaveApplicationPage/Detai
 import DetailPropertyPage from "./pages/DetailPropertyPage/DetailPropertyPage";
 import HistoriesByPropertyPage from "./pages/HistoriesByPropertyPage/HistoriesByPropertyPage";
 import OnboardingSamplePage from "./pages/OnboardingSamplePage/OnboardingSamplePage";
+import PerformancePage from "./pages/Performance/PerformancePage";
+import PerformanceSelfReviewPage from "./pages/PerformanceSelfReviewPage/PerformanceSelfReviewPage";
+import PerformanceReviewPage from "./pages/PerformanceReviewPage/PerformanceReviewPage";
 
 function App() {
   return (
@@ -209,6 +212,36 @@ function App() {
             element={
               <RequireAuth>
                 <OnboardingSamplePage />
+              </RequireAuth>
+            }
+          />
+        </Route>
+
+        {/* ================ Performance Management ================ */}
+        <Route path="performance_management">
+          <Route
+            path="performance"
+            element={
+              <RequireAuth>
+                <PerformancePage />
+              </RequireAuth>
+            }
+          />
+
+          <Route
+            path="self_review"
+            element={
+              <RequireAuth>
+                <PerformanceSelfReviewPage />
+              </RequireAuth>
+            }
+          />
+
+          <Route
+            path="review"
+            element={
+              <RequireAuth>
+                <PerformanceReviewPage />
               </RequireAuth>
             }
           />

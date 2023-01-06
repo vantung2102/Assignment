@@ -9,7 +9,7 @@ class Onboarding::CreateOnboardingService < ApplicationService
         staff.staff_onboardings.update_all(active: false) if staff.staff_onboardings.present?
 
         staff_onboarding = staff.staff_onboardings.create!(active: true, position_id: staff.position_id)
-        onboarding_sample_steps = OnboardingSampleStep.by_position(staff.position_id)
+        onboarding_sample_steps = OnboardingSampleStep.filter_by_position(staff.position_id)
         onboarding_sample_steps.each do |item|
           item.onboarding_steps.create!(staff_onboarding_id: staff_onboarding.id, status: :outstanding)
         end

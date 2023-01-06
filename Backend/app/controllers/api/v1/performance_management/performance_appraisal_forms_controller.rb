@@ -25,6 +25,7 @@ class Api::V1::PerformanceManagement::PerformanceAppraisalFormsController < Api:
   end
 
   def create_all_fa_forms_for_staff
+    p'@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
     authorize PerformanceAppraisalForm
     CreateAllPerformanceAppraisalFormWorker.perform_async(pa_form_params.to_json)
     head :ok
@@ -77,7 +78,7 @@ class Api::V1::PerformanceManagement::PerformanceAppraisalFormsController < Api:
     render_resource_collection(pa_forms, pagy: pagy)
   end
 
-  def pa_forms_by_my_reviewed
+  def pa_forms_by_my_reviewe
     pagy, pa_forms = paginate(PerformanceAppraisalForm.where(boss_id: current_user.id).order(created_at: :desc))
     authorize pa_forms
     render_resource_collection(pa_forms, pagy: pagy)
@@ -102,7 +103,7 @@ class Api::V1::PerformanceManagement::PerformanceAppraisalFormsController < Api:
   end
 
   def pa_form_params
-    params.require(:pa_form).permit(:title, :start_date, :end_date)
+    params.require(:pa_form).permit(:start_date, :end_date)
   end
  
   def staff_pa_form_params
