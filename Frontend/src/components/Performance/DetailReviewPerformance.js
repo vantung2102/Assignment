@@ -35,11 +35,10 @@ const DetailReviewPerformance = ({ idRequest }) => {
     question_10,
   } = question();
   const review = useSelector(performanceSelector);
-  console.log(review);
 
   useEffect(() => {
     dispatch(showPerformance(idRequest));
-  }, []);
+  }, [dispatch, idRequest]);
 
   useEffect(() => {
     if (review != null) {

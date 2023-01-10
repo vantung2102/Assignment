@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { SubmitSection } from "../Department/department";
 import Select from "react-select";
 import {
+  fetchAllPosition,
   fetchPosition,
   positionsSelector,
 } from "../../features/position/positionSlice";
@@ -26,8 +27,8 @@ const FormOnboardingSampleStep = ({ isNew, show, close }) => {
   const positions = useSelector(positionsSelector);
 
   useEffect(() => {
-    dispatch(fetchPosition());
-  }, []);
+    dispatch(fetchAllPosition());
+  }, [dispatch]);
 
   const handleNewOnboarding = () => {
     dispatch(

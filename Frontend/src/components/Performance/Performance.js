@@ -2,12 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Button, Card, Col, FloatingLabel, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  editReviewForStaff,
   editSelfReview,
   performanceSelector,
-  selfReviewPerformanceSelector,
   showPerformance,
-  showSelfReview,
 } from "../../features/performance/performanceSlice";
 import question from "./question";
 
@@ -42,7 +39,7 @@ const Performance = ({ idRequest }) => {
 
   useEffect(() => {
     dispatch(showPerformance(idRequest));
-  }, []);
+  }, [dispatch, idRequest]);
 
   useEffect(() => {
     if (selfReview != null) {
@@ -109,10 +106,6 @@ const Performance = ({ idRequest }) => {
       question11: question11,
     };
     dispatch(editSelfReview(data));
-  };
-
-  const disabledSelfReview = (selfReview) => {
-    return selfReview?.attributes.status === "self_reviewed" ? true : false;
   };
 
   return (

@@ -2,7 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiClient from "../../apiClient/apiClient";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
-import { useDestroy } from "../../common/hooks/hooks";
 
 const initialState = {
   status: null,
@@ -66,14 +65,11 @@ export const editLeave = createAsyncThunk("editLeave", async (data) => {
 });
 
 export const destroyLeave = createAsyncThunk("destroyLeave", async (id) => {
-  const response = await apiClient.delete(
-    `/api/v1/leave_management/leaves/${id}`,
-    {
-      headers: {
-        Authorization: Cookies.get("authorization"),
-      },
-    }
-  );
+  await apiClient.delete(`/api/v1/leave_management/leaves/${id}`, {
+    headers: {
+      Authorization: Cookies.get("authorization"),
+    },
+  });
 
   return id;
 });

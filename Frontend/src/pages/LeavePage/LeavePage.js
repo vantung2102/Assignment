@@ -1,6 +1,5 @@
 import React from "react";
 import { Container, Row } from "react-bootstrap";
-import { ToastContainer } from "react-toastify";
 import Header from "../../components/Header/Header";
 import PageHeader from "../../components/PageHeader/PageHeader";
 import Sidebar from "../../components/Sidebar/Sidebar";

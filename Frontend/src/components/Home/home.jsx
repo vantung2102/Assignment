@@ -13,7 +13,7 @@ export const TreeNode = styled.div`
 
 export const NodeTitle = styled.div`
   padding: 2px;
-  width: 95px;
+  width: 120px;
   text-align: center;
   font-size: 0.75rem;
   font-weight: bold;

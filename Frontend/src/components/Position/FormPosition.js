@@ -1,76 +1,57 @@
-import React, { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import React, { useEffect } from "react";
+import { useForm } from "react-hook-form";
 import { Button, FloatingLabel, Form, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { fetchDepartment } from "../../features/department/departmentSlice";
 import {
-  departmentsSelector,
-  fetchDepartment,
-} from "../../features/department/departmentSlice";
-import {
+  editPosition,
   newPosition,
   positionSelector,
 } from "../../features/position/positionSlice";
 import { SubmitSection } from "../Department/department";
-import Select from "react-select";
-import { optionSelect2 } from "../../common/hooks/hooks";
 
 const FormPosition = ({ isNew, show, close }) => {
   const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
-    control,
     watch,
     setValue,
     getValues,
     formState: { errors },
   } = useForm();
 
-  const departments = useSelector(departmentsSelector);
   const position = useSelector(positionSelector);
-
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [departmentId, setDepartmentId] = useState(null);
 
   useEffect(() => {
     dispatch(fetchDepartment());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
-    if (!isNew) {
-      setValue("name", position?.attributes.name);
-      setValue("description", position?.attributes.name);
-      setValue(
-        "department",
-        optionSelect2(departments, "name").filter(
-          (item) => item.value == position?.attributes.department.id
-        )[0]
-      );
-    }
-  }, [position]);
+    if (isNew || !position) return;
+    const { name, description } = position?.attributes;
+    setValue("name", name);
+    setValue("description", description);
+  }, [position, isNew, setValue]);
 
   const handleNewPosition = () => {
     dispatch(
       newPosition({
         name: watch("name"),
         description: watch("description"),
-        department_id: watch("department").value,
       })
     );
     close(false);
     setValue("name", "");
     setValue("description", "");
-    setValue("department", "");
   };
 
   const handleEditPosition = () => {
     dispatch(
-      newPosition({
-        id: position.attributes.id,
+      editPosition({
+        id: position.id,
         name: watch("name"),
         description: watch("description"),
-        department_id: watch("department").value,
       })
     );
     close(true);
@@ -87,31 +68,6 @@ const FormPosition = ({ isNew, show, close }) => {
             isNew ? handleNewPosition : handleEditPosition
           )}
         >
-          <Form.Group>
-            <Form.Label>Department Name</Form.Label>
-
-            <Controller
-              control={control}
-              name="department"
-              rules={{ required: "Select Departments" }}
-              render={({ field: { onChange, onBlur, value, name, ref } }) => (
-                <Select
-                  options={optionSelect2(departments, "name")}
-                  onChange={onChange}
-                  onBlur={onBlur}
-                  value={getValues("department")}
-                  name={name}
-                  ref={ref}
-                  placeholder="Select Departments"
-                />
-              )}
-            />
-
-            <Form.Control.Feedback type="invalid" className="d-block">
-              {errors.department?.message}
-            </Form.Control.Feedback>
-          </Form.Group>
-
           <Form.Group>
             <Form.Label>Position Name</Form.Label>
             <Form.Control

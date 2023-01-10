@@ -1,24 +1,5 @@
 import styled from "styled-components";
 
-export const ViewIcons = styled.div`
-  float: right;
-  margin-right: 10px;
-
-  .btn {
-    background-color: #fff;
-    border: 1px solid #e3e3e3;
-    color: #888;
-    font-size: 18px;
-    margin-right: 5px;
-    min-width: 40px;
-    padding: 4px;
-
-    &.active {
-      color: #333;
-    }
-  }
-`;
-
 export const Table = styled.table`
   width: 100%;
   text-align: left;

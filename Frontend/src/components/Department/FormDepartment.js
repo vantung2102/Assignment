@@ -23,10 +23,10 @@ const FormDepartment = ({ isNew, show, close }) => {
   const department = useSelector(departmentSelector);
 
   useEffect(() => {
-    if (!isNew) {
-      setValue("name", department?.attributes.name);
-      setValue("description", department?.attributes.description);
-    }
+    if (isNew || !department) return;
+
+    setValue("name", department?.attributes.name);
+    setValue("description", department?.attributes.description);
   }, [department]);
 
   const handleNewDepartment = () => {

@@ -88,7 +88,7 @@ const Leave = () => {
                       <td className="ant-table-cell">{index + 1}</td>
                       <td className="ant-table-cell">
                         <Link to={item.id}>
-                          {item.attributes.staff.fullname}
+                          {/* {item.attributes.staff.fullname} */}
                         </Link>
                       </td>
                       <td className="ant-table-cell">

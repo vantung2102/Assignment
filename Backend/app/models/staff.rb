@@ -16,6 +16,8 @@
 #  password_digest :string
 #  deleted_at      :datetime
 #  job_title_id    :bigint
+#  phone           :string
+#  address         :text
 #
 class Staff < ApplicationRecord
   include PgSearch::Model
@@ -26,6 +28,7 @@ class Staff < ApplicationRecord
   acts_as_paranoid
 
   after_create :create_onboarding, :create_leave
+  before_create :default_status
   
   enum status: { active: 0, inactive: 1 }
 
@@ -53,7 +56,6 @@ class Staff < ApplicationRecord
   belongs_to :department
   belongs_to :job_title
 
-
   validates :fullname, presence: true
   validates :email, presence: true, uniqueness: true
   validates :password, presence: true, allow_nil: true
@@ -62,8 +64,14 @@ class Staff < ApplicationRecord
   scope :filter_by_position, -> (position_id) { where position_id: position_id }
   scope :filter_by_job_title, -> (job_title_id) { where job_title_id: job_title_id }
   scope :filter_by_department, -> (department_id) { where department_id: department_id }
+  scope :includesModel, -> { includes(:position, :department, :job_title, :upper_level, :roles) }
+
 
   private
+
+  def default_status
+    self.status = :active
+  end
 
   def create_onboarding
     create, onboarding = Onboarding::CreateOnboardingService.call(self)

@@ -1,7 +1,14 @@
 class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
   def index
-    pagy, staffs = paginate(Staff.filter(params.slice(:status, :fullname, :position, :department, :job_title)))
-    render_resource_collection(staffs.order(created_at: :desc), pagy: pagy)
+    pagy, staffs = paginate(Staff.filter(params.slice(:fullname, :position, :department, :job_title)))
+    render_resource_collection(
+      staffs.includes(:position, :department, :job_title, :upper_level).order(created_at: :desc),
+      pagy: pagy
+    )
+  end
+
+  def get_all_staff
+    render_resource_collection(Staff.includesModel)
   end
 
   def show
@@ -23,20 +30,21 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
 
   def update
     authorize staff
-    update = staff.update(staff_params) ? render_resource(staff) : render_resource_errors(staff.errors)
+    staff.update(staff_params) ? render_resource(staff) : render_resource_errors(staff.errors)
   end
 
   def update_staff_activation_status
-    update, staff = Staffs::UpdateStaffActivationStatusService.call(staff, params[:status])
+    staff
+    update, staff = Staffs::UpdateStaffActivationStatusService.call(@staff, params[:status])
     update ? render_resource(staff) : render_resource_errors(detail: staff)
   end
 
   def destroy
     authorize Staff
-    staff_lower_levels = staff.staff_lower_levels
+    lower_levels = staff.lower_levels
 
-    if staff_lower_levels.present?
-      render_resource_collection(staff_lower_levels)
+    if lower_levels.present?
+      render_resource_collection(lower_levels)
     else
       staff.destroy!
       head :no_content
@@ -58,8 +66,6 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
   end
                                                                         
   def staff_chart
-    # chart = Staffs::StaffChartService.call
-    # render json: chart
     staffs = Staff.all
     render_resource_collection(staffs)
   end
@@ -79,7 +85,10 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
     params.require(:staff).permit(
       :fullname,
       :date_of_birth,
+      :join_date,
       :gender,
+      :phone,
+      :address,
       :email,
       :password,
       :position_id,

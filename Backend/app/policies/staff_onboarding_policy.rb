@@ -22,6 +22,6 @@ class StaffOnboardingPolicy < ApplicationPolicy
 	private
 
 	def authenticate
-		user.has_role?(:Hr_Manager)
+		user.has_role?(:Manager)
 	end
 end

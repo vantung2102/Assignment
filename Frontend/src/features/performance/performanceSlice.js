@@ -5,7 +5,7 @@ import Cookies from "js-cookie";
 
 const initialState = {
   status: null,
-  meta: {},
+  meta: null,
   performances: null,
   reviewForStaffs: null,
   reviewForStaff: null,

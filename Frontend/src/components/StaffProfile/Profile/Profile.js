@@ -1,80 +1,73 @@
-import React, { useEffect } from "react";
-import { Card, Col, Row, Tab, Tabs } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { Card } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
-import {
-  ProfileSelector,
-  fetchProfile,
-} from "../../../features/staff/staffSlice";
-import TopProfile from "../TopProfile/TopProfile";
+import { profileSelector } from "../../../features/staff/staffSlice";
+import PersonalInfoItem from "./PersonalInfoItem";
 
 import { PersonalInfo } from "./profile";
-const Profile = (prop) => {
-  const dispatch = useDispatch();
+const Profile = () => {
+  const profile = useSelector(profileSelector);
 
-  const profile = useSelector(ProfileSelector);
+  const [name, setName] = useState(null);
+  const [position, setPosition] = useState(null);
+  const [department, setDepartment] = useState(null);
+  const [jobTitle, setJobTitle] = useState(null);
+  const [email, setEmail] = useState(null);
+  const [date, setDate] = useState(null);
+  const [boss, setBoss] = useState(null);
+  const [phone, setPhone] = useState(null);
+  const [address, setAddress] = useState(null);
+  const [joinDate, setJoinDate] = useState(null);
 
   useEffect(() => {
-    dispatch(fetchProfile(prop.idProfile));
-  }, []);
+    if (!profile) return;
+    const {
+      fullname,
+      date_of_birth,
+      position,
+      department,
+      job_title,
+      upper_level,
+      address,
+      join_date,
+      phone,
+      email,
+    } = profile.attributes;
+
+    setName(fullname);
+    setEmail(email);
+    setJobTitle(job_title?.title);
+    setDepartment(department?.name);
+    setPosition(position?.name);
+    setDate(date_of_birth);
+    setBoss(upper_level?.fullname);
+    setPhone(phone);
+    setAddress(address);
+    setJoinDate(join_date);
+  }, [profile]);
 
   return (
     <Card>
       <Card.Body>
-        <Card.Title> Information Basic</Card.Title>
+        <Card.Title>Information Basic</Card.Title>
         <PersonalInfo>
-          <Row className="mb-3">
-            <Col md={3}>Full Name</Col>
-            <Col md={9}>{profile?.attributes.fullname}</Col>
-          </Row>
-          <Row className="mb-3">
-            <Col md={3}>English Name</Col>
-            <Col md={9}>{profile?.attributes.fullname}</Col>
-          </Row>
-          <Row className="mb-3">
-            <Col md={3}>Date of birth</Col>
-            <Col md={9}>{profile?.attributes.date_of_birth}</Col>
-          </Row>
-          <Row className="mb-3">
-            <Col md={3}>Position</Col>
-            <Col md={9}>{profile?.attributes.position?.name}</Col>
-          </Row>
-          <Row className="mb-3">
-            <Col md={3}>Department</Col>
-            <Col md={9}>{profile?.attributes.department?.name}</Col>
-          </Row>
-          <Row className="mb-3">
-            <Col md={3}>Job Title</Col>
-            <Col md={9}>{profile?.attributes.job_title.title}</Col>
-          </Row>
-          <Row className="mb-3">
-            <Col md={3}>Manager</Col>
-            <Col md={9}>
-              {profile?.attributes.upper_level
-                ? profile.upper_level?.fullname
-                : ""}
-            </Col>
-          </Row>
+          <PersonalInfoItem title="Full Name" value={name} />
+          <PersonalInfoItem title="English Name" value={name} />
+          <PersonalInfoItem title="Date of birth" value={date} />
+          <PersonalInfoItem title="Join Date" value={joinDate} />
+          <PersonalInfoItem title="Position" value={position} />
+          <PersonalInfoItem title="Department" value={department} />
+          <PersonalInfoItem title="Job Title" value={jobTitle} />
+          <PersonalInfoItem title="Manager" value={boss} />
         </PersonalInfo>
-        <Card.Title> Contact</Card.Title>
-        <PersonalInfo>
-          <Row className="mb-3">
-            <Col md={3}>Email</Col>
-            <Col md={9}>{profile?.attributes.email}</Col>
-          </Row>
 
-          <Row className="mb-3">
-            <Col md={3}>Company Email</Col>
-            <Col md={9}>{profile?.attributes.email}</Col>
-          </Row>
-          <Row className="mb-3">
-            <Col md={3}>Phone</Col>
-            <Col md={9}>{profile?.attributes.phone}</Col>
-          </Row>
-          <Row className="mb-3">
-            <Col md={3}>Address</Col>
-            <Col md={9}>85/23c kdc dai hai</Col>
-          </Row>
+        <Card.Title>Contact</Card.Title>
+        <PersonalInfo>
+          <PersonalInfoItem title="Email" value={email} />
+          <PersonalInfoItem title="Company Email" value={email} />
+          <PersonalInfoItem title="Phone" value={phone} />
+          <PersonalInfoItem title="Address" value={address} />
         </PersonalInfo>
       </Card.Body>
     </Card>

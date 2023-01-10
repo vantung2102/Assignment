@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Dropdown, Form, Row } from "react-bootstrap";
+import { Button, Col, Row } from "react-bootstrap";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { TbEdit } from "react-icons/tb";
 import { TiArrowUnsorted } from "react-icons/ti";
@@ -17,10 +17,8 @@ import { Table } from "../Staff/staff";
 import { Link } from "react-router-dom";
 import Select from "react-select";
 import {
-  fetchStaff,
   fetchStaffChart,
   staffChartSelector,
-  staffsSelector,
 } from "../../features/staff/staffSlice";
 
 const RequestProperty = () => {
@@ -40,7 +38,7 @@ const RequestProperty = () => {
   useEffect(() => {
     dispatch(fetchRequestProperties());
     dispatch(fetchStaffChart());
-  }, []);
+  }, [dispatch]);
 
   const getOption = (arr, attr) => {
     return arr?.map((item) => {
@@ -119,9 +117,9 @@ const RequestProperty = () => {
                         <td className="ant-table-cell d-flex justify-content-center">
                           <Button
                             variant={
-                              item.attributes.status == "pending"
+                              item.attributes.status === "pending"
                                 ? "warning"
-                                : item.attributes.status == "approved"
+                                : item.attributes.status === "approved"
                                 ? "success"
                                 : "danger"
                             }

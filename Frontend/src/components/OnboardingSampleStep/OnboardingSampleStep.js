@@ -1,34 +1,78 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Form, Row } from "react-bootstrap";
-import { RiDeleteBinLine } from "react-icons/ri";
-import { TbEdit } from "react-icons/tb";
-import { TiArrowUnsorted } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
 import { optionSelect2 } from "../../common/hooks/hooks";
 import {
+  destroyOnboarding,
+  metaOnboardingSelector,
   onboardingSample,
   onboardingSampleSelector,
+  sortOnboardingAsc,
+  sortOnboardingDesc,
 } from "../../features/onboarding/onboardingSlice";
 import {
+  allPositionSelector,
+  fetchAllPosition,
   fetchPosition,
   positionsSelector,
 } from "../../features/position/positionSlice";
-import { Table } from "../Staff/staff";
-import staff from "../Staff/staff.module.scss";
 import Select from "react-select";
+import { TableCell, TableComponent } from "../../global/jsx/common";
+import TableHead from "../Table/TableHead";
+import ActionColumn from "../Table/ActionColumn";
+import Paginate from "../Paginate/Paginate";
+import FormOnboardingSampleStep from "./FormOnboardingSampleStep";
 
 const OnboardingSampleStep = () => {
   const dispatch = useDispatch();
-  const onboardingSampleSteps = useSelector(onboardingSampleSelector);
-  const positions = useSelector(positionsSelector);
+  const onboarding = useSelector(onboardingSampleSelector);
+  const positions = useSelector(allPositionSelector);
+  const meta = useSelector(metaOnboardingSelector);
+  console.log(onboarding);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsCount, setItemsCount] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(1);
+  const [show, setShow] = useState(false);
+  const [toggle, setToggle] = useState(false);
 
   useEffect(() => {
-    dispatch(onboardingSample(null));
-    dispatch(fetchPosition());
-  }, []);
+    dispatch(onboardingSample({ id: null, number: null }));
+    dispatch(fetchAllPosition());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!meta) return;
+    setItemsCount(meta.total_count);
+    setItemsPerPage(meta.page_size);
+  }, [meta]);
+
+  const handleClose = () => setShow(false);
+  const handleShow = (id) => {
+    // dispatch(showDepartment(id));
+    setShow(true);
+  };
 
   const handleFilter = (val) => {
-    dispatch(onboardingSample(val));
+    dispatch(onboardingSample({ id: null, number: val }));
+  };
+
+  const handleDelete = (id) => {
+    dispatch(destroyOnboarding(id));
+  };
+
+  const handleSortAsc = () => {
+    dispatch(sortOnboardingAsc());
+    setToggle(!toggle);
+  };
+
+  const handleSortDesc = () => {
+    dispatch(sortOnboardingDesc());
+    setToggle(!toggle);
+  };
+
+  const getCurrentPage = (number) => {
+    dispatch(onboardingSample({ id: null, number: number }));
   };
 
   return (
@@ -50,72 +94,59 @@ const OnboardingSampleStep = () => {
 
       <Row>
         <Col md={12}>
-          <div className="table-responsive">
-            <div className="table">
-              <div className="table-content">
-                <Table>
-                  <thead>
-                    <tr>
-                      <th className="ant-table-cell">
-                        <div className={staff.TableColumnSorters}>
-                          <span className="table-column-title">STT</span>
-                          <TiArrowUnsorted />
-                        </div>
-                      </th>
-                      <th className="ant-table-cell">
-                        <div className={staff.TableColumnSorters}>
-                          <span className="table-column-title">Position</span>
-                          <TiArrowUnsorted />
-                        </div>
-                      </th>
-                      <th className="ant-table-cell">
-                        <div className={staff.TableColumnSorters}>
-                          <span className="table-column-title">Task</span>
-                          <TiArrowUnsorted />
-                        </div>
-                      </th>
-
-                      <th className="ant-table-cell text-center">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {onboardingSampleSteps?.map((item, index) => (
-                      <tr key={item.attributes.id}>
-                        <td className="ant-table-cell">{index}</td>
-                        <td className="ant-table-cell">
-                          {item.attributes.position.name}
-                        </td>
-                        <td className="ant-table-cell">
-                          {item.attributes.task}
-                        </td>
-
-                        <td className="ant-table-cell">
-                          <div className="d-flex justify-content-evenly">
-                            <TbEdit
-                              style={{
-                                fontSize: "20px",
-                              }}
-                              // onClick={() => handleShow(item.attributes.id)}
-                            />
-                            <RiDeleteBinLine
-                              style={{
-                                fontSize: "20px",
-                              }}
-                              // onClick={() =>
-                              //   handleDeletePosition(item.attributes.id)
-                              // }
-                            />
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              </div>
-            </div>
-          </div>
+          <TableComponent>
+            <thead>
+              <tr>
+                <TableHead title="STT" />
+                <TableHead title="Position" />
+                <TableHead
+                  title="Task"
+                  isSort={true}
+                  toggle={toggle}
+                  desc={handleSortDesc}
+                  asc={handleSortAsc}
+                />
+                <TableHead title="Action" centerTitle={true} />
+              </tr>
+            </thead>
+            <tbody>
+              {onboarding?.map((item, index) => {
+                const { id, position, task } = item.attributes;
+                return (
+                  <tr key={id}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{position?.name}</TableCell>
+                    <TableCell>{task}</TableCell>
+                    <TableCell>
+                      <ActionColumn
+                        id={id}
+                        edit={handleShow}
+                        destroy={handleDelete}
+                      />
+                    </TableCell>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </TableComponent>
         </Col>
+        <FormOnboardingSampleStep
+          isNew={false}
+          show={show}
+          close={handleClose}
+        />
       </Row>
+
+      {meta && (
+        <Paginate
+          itemsCount={itemsCount}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          alwaysShown={false}
+          getCurrentPage={getCurrentPage}
+        />
+      )}
     </>
   );
 };

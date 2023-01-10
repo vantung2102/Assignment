@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  CreateAllPerformance,
   fetchPerformance,
   performancesSelector,
   remindPerformance,
@@ -12,20 +11,14 @@ import FormPerformance from "./FormPerformance";
 import staff from "../Staff/staff.module.scss";
 import { TiArrowUnsorted } from "react-icons/ti";
 import { Link } from "react-router-dom";
-import { TbEdit } from "react-icons/tb";
-import { RiDeleteBinLine } from "react-icons/ri";
 
 const AdminPerformance = () => {
   const dispatch = useDispatch();
   const performances = useSelector(performancesSelector);
-  console.log(performances);
 
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
-  const handleShow = (id) => {
-    setShow(true);
-  };
 
   const handRemind = (id) => {
     dispatch(remindPerformance(id));
@@ -33,7 +26,7 @@ const AdminPerformance = () => {
 
   useEffect(() => {
     dispatch(fetchPerformance());
-  }, []);
+  }, [dispatch]);
 
   if (performances?.length === 0) {
     return "chua toi ky danh gia";

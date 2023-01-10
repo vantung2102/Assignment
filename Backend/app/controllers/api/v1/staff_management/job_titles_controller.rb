@@ -5,6 +5,10 @@ class Api::V1::StaffManagement::JobTitlesController < Api::V1::BaseController
     render_resource_collection(job_titles, pagy: pagy)
   end
 
+  def get_all_job_title
+    render_resource_collection(JobTitle.all)
+  end
+
   def show
     authorize JobTitle
     render_resource(job_title)

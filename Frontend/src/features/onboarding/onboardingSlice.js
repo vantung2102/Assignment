@@ -3,11 +3,11 @@ import apiClient from "../../apiClient/apiClient";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import { useDestroy, useEdit } from "../../common/hooks/hooks";
+import { sortAsc, sortDesc } from "../../common/helpers/sort";
 
 const initialState = {
-  status: null,
   loading: true,
-  meta: {},
+  meta: null,
   onboardingSteps: null,
   onboardingStep: null,
   staffOnboarding: null,
@@ -33,14 +33,16 @@ export const staffOnboarding = createAsyncThunk(
 
 export const onboardingSample = createAsyncThunk(
   "onboardingSample",
-  async (id) => {
+  async (data) => {
     const response = await apiClient.get(
-      "/api/v1/onboarding_management/onboarding_sample_steps",
+      `/api/v1/onboarding_management/onboarding_sample_steps?page[number]=${
+        data.number ? data.number : 1
+      }`,
       {
         headers: {
           Authorization: Cookies.get("authorization"),
         },
-        params: { position: id },
+        params: { position: data.id },
       }
     );
     return response.data;
@@ -136,11 +138,11 @@ export const completeOnboardingStep = createAsyncThunk(
   }
 );
 
-export const destroyDepartment = createAsyncThunk(
-  "destroyDepartment",
+export const destroyOnboarding = createAsyncThunk(
+  "destroyOnboarding",
   async (id) => {
-    const response = await apiClient.delete(
-      `/api/v1/staff_management/departments/${id}`,
+    await apiClient.delete(
+      `/api/v1/onboarding_management/onboarding_sample_steps/${id}`,
       {
         headers: {
           Authorization: Cookies.get("authorization"),
@@ -155,110 +157,92 @@ export const destroyDepartment = createAsyncThunk(
 export const onboardingSlice = createSlice({
   name: "onboarding",
   initialState,
-  reducers: {},
+  reducers: {
+    sortOnboardingAsc: (state) => sortAsc(state.onboardingSample, "task"),
+    sortOnboardingDesc: (state) => sortDesc(state.onboardingSample, "task"),
+  },
   extraReducers: (builder) => {
     // ================== All Department =================
     builder
       .addCase(staffOnboarding.pending, (state) => {
-        state.status = "loading";
         state.loading = true;
       })
       .addCase(staffOnboarding.fulfilled, (state, action) => {
         state.loading = false;
         state.staffOnboarding = action.payload.data;
       })
-      .addCase(staffOnboarding.rejected, (state) => {
-        state.status = "error";
-      });
+      .addCase(staffOnboarding.rejected, (state) => {});
     // ================== show Department =================
     builder
       .addCase(onboardingSample.pending, (state) => {
-        state.status = "loading";
         state.loading = true;
       })
       .addCase(onboardingSample.fulfilled, (state, action) => {
         state.onboardingSample = action.payload.data;
+        console.log(action.payload);
+        state.meta = action.payload.meta;
       })
-      .addCase(onboardingSample.rejected, (state) => {
-        state.status = "error";
-      });
-    // ================== New Department =================
+      .addCase(onboardingSample.rejected, (state) => {});
+    // ================== New  =================
     builder
-      .addCase(newOnboardingSampleStep.pending, (state) => {
-        state.status = "loading";
-      })
+      .addCase(newOnboardingSampleStep.pending, (state) => {})
       .addCase(newOnboardingSampleStep.fulfilled, (state, action) => {
         state.onboardingSample.unshift(action.payload.data);
-        toast.success("Create Department Successfully!");
+        toast.success("Create Successfully!");
       })
       .addCase(newOnboardingSampleStep.rejected, (state) => {
-        state.status = "error";
-        toast.error("Create Department failed!");
+        toast.error("Create failed!");
       });
-    // ================== edit Department =================
+    // ================== edit  =================
     builder
-      .addCase(fetchOnboardingStep.pending, (state) => {
-        state.status = "loading";
-      })
+      .addCase(fetchOnboardingStep.pending, (state) => {})
       .addCase(fetchOnboardingStep.fulfilled, (state, action) => {
         state.onboardingSteps = action.payload.data;
       })
-      .addCase(fetchOnboardingStep.rejected, (state) => {
-        state.status = "error";
-      });
+      .addCase(fetchOnboardingStep.rejected, (state) => {});
 
-    // ================== show Department =================
+    // ================== show  =================
     builder
-      .addCase(showOnboardingStep.pending, (state) => {
-        state.status = "loading";
-      })
+      .addCase(showOnboardingStep.pending, (state) => {})
       .addCase(showOnboardingStep.fulfilled, (state, action) => {
         state.onboardingStep = action.payload.data;
       })
-      .addCase(showOnboardingStep.rejected, (state) => {
-        state.status = "error";
-      });
-    // ================== show Department =================
+      .addCase(showOnboardingStep.rejected, (state) => {});
+    // ================== show  =================
     builder
-      .addCase(editOnboardingStep.pending, (state) => {
-        state.status = "loading";
-      })
+      .addCase(editOnboardingStep.pending, (state) => {})
       .addCase(editOnboardingStep.fulfilled, (state, action) => {
         toast.success("Successfully");
         state.onboardingSteps = useEdit(state.onboardingSteps, action);
       })
       .addCase(editOnboardingStep.rejected, (state) => {
         toast.success("Failed");
-        state.status = "error";
       });
-    // ================== completed Department =================
+    // ================== completed  =================
     builder
-      .addCase(completeOnboardingStep.pending, (state) => {
-        state.status = "loading";
-      })
+      .addCase(completeOnboardingStep.pending, (state) => {})
       .addCase(completeOnboardingStep.fulfilled, (state, action) => {
         toast.success("Successfully");
         state.onboardingSteps = useEdit(state.onboardingSteps, action);
       })
       .addCase(completeOnboardingStep.rejected, (state, action) => {
         toast.error("Please complete all information");
-        state.status = "error";
       });
-    // ================== Destroy Department =================
+    // ================== Destroy  =================
     builder
-      .addCase(destroyDepartment.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(destroyDepartment.fulfilled, (state, action) => {
-        state.departments = useDestroy(state.departments, action);
+      .addCase(destroyOnboarding.pending, (state) => {})
+      .addCase(destroyOnboarding.fulfilled, (state, action) => {
+        state.onboardingSample = useDestroy(state.onboardingSample, action);
         toast.success("Destroy Successfully !");
       })
-      .addCase(destroyDepartment.rejected, (state) => {
-        state.status = "error";
+      .addCase(destroyOnboarding.rejected, (state) => {
         toast.error("Destroy Successfully !");
       });
   },
 });
+
+export const { sortOnboardingAsc, sortOnboardingDesc } =
+  onboardingSlice.actions;
 
 export const staffOnboardingSelector = (state) =>
   state.onboarding.staffOnboarding;
@@ -268,5 +252,6 @@ export const onboardingStepsSelector = (state) =>
   state.onboarding.onboardingSteps;
 export const onboardingStepSelector = (state) =>
   state.onboarding.onboardingStep;
+export const metaOnboardingSelector = (state) => state.onboarding.meta;
 
 export default onboardingSlice.reducer;

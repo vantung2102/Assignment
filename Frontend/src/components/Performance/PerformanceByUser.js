@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
   fetchPerformanceByUser,
-  reviewForStaffsSelector,
   selfReviewsPerformanceSelector,
 } from "../../features/performance/performanceSlice";
 import { Table } from "../Staff/staff";
@@ -13,10 +12,9 @@ import staff from "../Staff/staff.module.scss";
 const PerformanceByUser = () => {
   const dispatch = useDispatch();
   const selfReview = useSelector(selfReviewsPerformanceSelector);
-  console.log(selfReview);
   useEffect(() => {
     dispatch(fetchPerformanceByUser());
-  }, []);
+  }, [dispatch]);
   return (
     <Row>
       <Col md={12}>

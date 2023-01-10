@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { Button, Col, Row, Table } from "react-bootstrap";
-import { TiArrowUnsorted } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
@@ -15,7 +14,7 @@ const ReviewPerformance = () => {
 
   useEffect(() => {
     dispatch(fetchReviewForStaff());
-  }, []);
+  }, [dispatch]);
 
   return (
     <Row>

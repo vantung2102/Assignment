@@ -84,7 +84,7 @@ export const editLeaveApplication = createAsyncThunk(
 export const destroyLeaveApplication = createAsyncThunk(
   "destroyLeaveApplication",
   async (id) => {
-    const response = await apiClient.delete(
+    await apiClient.delete(
       `/api/v1/leave_management/leave_applications/${id}`,
       {
         headers: {

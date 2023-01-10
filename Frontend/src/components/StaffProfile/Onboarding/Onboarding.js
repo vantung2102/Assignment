@@ -1,21 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
-import { AiFillCheckCircle, AiFillInfoCircle } from "react-icons/ai";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { TbEdit } from "react-icons/tb";
-import { TiArrowUnsorted } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   completeOnboardingStep,
-  editOnboardingStep,
   fetchOnboardingStep,
-  onboardingStepSelector,
   onboardingStepsSelector,
   showOnboardingStep,
 } from "../../../features/onboarding/onboardingSlice";
 import { Table } from "../../Staff/staff";
-import staff from "../../Staff/staff.module.scss";
 import FormOnboarding from "./FormOnboarding";
 
 const Onboarding = () => {
@@ -24,11 +19,10 @@ const Onboarding = () => {
   const [show, setShow] = useState(false);
 
   const onboarding = useSelector(onboardingStepsSelector);
-  const onboardingStep = useSelector(onboardingStepSelector);
 
   useEffect(() => {
     dispatch(fetchOnboardingStep(id));
-  }, []);
+  }, [dispatch, id]);
 
   const handleClose = () => setShow(false);
   const handleShow = (id) => {
