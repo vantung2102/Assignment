@@ -3,15 +3,14 @@ import apiClient from "../../apiClient/apiClient";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
 import { useDestroy, useEdit } from "../../common/hooks/hooks";
-import { sortAsc, sortDesc } from "../../common/helpers/sort";
 
 const initialState = {
   loading: true,
-  meta: null,
   onboardingSteps: null,
   onboardingStep: null,
   staffOnboarding: null,
   onboardingSample: null,
+  onboardingSampleStep: null,
 };
 
 export const staffOnboarding = createAsyncThunk(
@@ -33,16 +32,51 @@ export const staffOnboarding = createAsyncThunk(
 
 export const onboardingSample = createAsyncThunk(
   "onboardingSample",
-  async (data) => {
+  async (id) => {
     const response = await apiClient.get(
-      `/api/v1/onboarding_management/onboarding_sample_steps?page[number]=${
-        data.number ? data.number : 1
-      }`,
+      `/api/v1/onboarding_management/onboarding_sample_steps`,
       {
         headers: {
           Authorization: Cookies.get("authorization"),
         },
-        params: { position: data.id },
+        params: { position: id },
+      }
+    );
+    return response.data;
+  }
+);
+
+export const showOnboardingSample = createAsyncThunk(
+  "showOnboardingSample",
+  async (id) => {
+    const response = await apiClient.get(
+      `/api/v1/onboarding_management/onboarding_sample_steps/${id}`,
+      {
+        headers: {
+          Authorization: Cookies.get("authorization"),
+        },
+      }
+    );
+    return response.data;
+  }
+);
+
+export const editOnboardingSample = createAsyncThunk(
+  "editOnboardingSample",
+  async (data) => {
+    const response = await apiClient.put(
+      `/api/v1/onboarding_management/onboarding_sample_steps/${data.id}`,
+      {
+        onboarding_sample_step: {
+          position_id: data.position_id,
+          task: data.task,
+          description: data.description,
+        },
+      },
+      {
+        headers: {
+          Authorization: Cookies.get("authorization"),
+        },
       }
     );
     return response.data;
@@ -122,6 +156,23 @@ export const editOnboardingStep = createAsyncThunk(
   }
 );
 
+export const destroyOnboardingStep = createAsyncThunk(
+  "destroyOnboardingStep",
+  async (id) => {
+    await apiClient.delete(
+      `/api/v1/onboarding_management/onboarding_steps/${id}`,
+
+      {
+        headers: {
+          Authorization: Cookies.get("authorization"),
+        },
+      }
+    );
+
+    return id;
+  }
+);
+
 export const completeOnboardingStep = createAsyncThunk(
   "completeOnboardingStep",
   async (id) => {
@@ -157,12 +208,9 @@ export const destroyOnboarding = createAsyncThunk(
 export const onboardingSlice = createSlice({
   name: "onboarding",
   initialState,
-  reducers: {
-    sortOnboardingAsc: (state) => sortAsc(state.onboardingSample, "task"),
-    sortOnboardingDesc: (state) => sortDesc(state.onboardingSample, "task"),
-  },
+  reducers: {},
   extraReducers: (builder) => {
-    // ================== All Department =================
+    // ================== All  =================
     builder
       .addCase(staffOnboarding.pending, (state) => {
         state.loading = true;
@@ -172,17 +220,33 @@ export const onboardingSlice = createSlice({
         state.staffOnboarding = action.payload.data;
       })
       .addCase(staffOnboarding.rejected, (state) => {});
-    // ================== show Department =================
+    // ================== all  =================
     builder
       .addCase(onboardingSample.pending, (state) => {
         state.loading = true;
       })
       .addCase(onboardingSample.fulfilled, (state, action) => {
         state.onboardingSample = action.payload.data;
-        console.log(action.payload);
-        state.meta = action.payload.meta;
       })
       .addCase(onboardingSample.rejected, (state) => {});
+    // ================== show  =================
+    builder
+      .addCase(showOnboardingSample.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(showOnboardingSample.fulfilled, (state, action) => {
+        state.onboardingSampleStep = action.payload.data;
+      })
+      .addCase(showOnboardingSample.rejected, (state) => {});
+    // ================== edit  =================
+    builder
+      .addCase(editOnboardingSample.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(editOnboardingSample.fulfilled, (state, action) => {
+        state.onboardingSample = useEdit(state.onboardingSample, action);
+      })
+      .addCase(editOnboardingSample.rejected, (state) => {});
     // ================== New  =================
     builder
       .addCase(newOnboardingSampleStep.pending, (state) => {})
@@ -238,6 +302,17 @@ export const onboardingSlice = createSlice({
       .addCase(destroyOnboarding.rejected, (state) => {
         toast.error("Destroy Successfully !");
       });
+
+    // ================== Destroy  =================
+    builder
+      .addCase(destroyOnboardingStep.pending, (state) => {})
+      .addCase(destroyOnboardingStep.fulfilled, (state, action) => {
+        state.onboardingSteps = useDestroy(state.onboardingSteps, action);
+        toast.success("Destroy Successfully !");
+      })
+      .addCase(destroyOnboardingStep.rejected, (state) => {
+        toast.error("Destroy Successfully !");
+      });
   },
 });
 
@@ -252,6 +327,7 @@ export const onboardingStepsSelector = (state) =>
   state.onboarding.onboardingSteps;
 export const onboardingStepSelector = (state) =>
   state.onboarding.onboardingStep;
-export const metaOnboardingSelector = (state) => state.onboarding.meta;
+export const onboardingSampleStepSelector = (state) =>
+  state.onboarding.onboardingSampleStep;
 
 export default onboardingSlice.reducer;

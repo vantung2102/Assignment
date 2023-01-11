@@ -14,11 +14,12 @@ import "./header.scss";
 import logo from "../../assets/images/logo/logo1.png";
 import avatar from "../../assets/images/home/user.jpg";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { logout } from "../../features/auth/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { logout, getUserSelector } from "../../features/auth/authSlice";
 
 const Header = () => {
   const dispatch = useDispatch();
+  const profile = useSelector(getUserSelector);
 
   const [isOpenNotification, setIsOpenNotification] = useState(false);
   const [isOpenSetting, setIsOpenSetting] = useState(false);
@@ -156,7 +157,12 @@ const Header = () => {
             className={isOpenSetting ? `show dropdown-menu` : "dropdown-menu"}
             style={{ position: "absolute", right: "20px" }}
           >
-            <Link className="dropdown-item">My Profile</Link>
+            <Link
+              to={`/staff_management/staff/${profile?.id}`}
+              className="dropdown-item"
+            >
+              My Profile
+            </Link>
             <Link className="dropdown-item">Settings</Link>
             <Link className="dropdown-item" onClick={handleLogout}>
               Logout

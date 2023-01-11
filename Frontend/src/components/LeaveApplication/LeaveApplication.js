@@ -1,138 +1,141 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Row } from "react-bootstrap";
+import { Button, Col, Form, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Table } from "../Staff/staff";
 import FormLeaveApplication from "./FormLeaveApplication";
-import staff from "../Staff/staff.module.scss";
-import { TiArrowUnsorted } from "react-icons/ti";
-import { TbEdit } from "react-icons/tb";
-import { RiDeleteBinLine } from "react-icons/ri";
 import {
   destroyLeaveApplication,
   fetchLeaveApplication,
+  leaveApplicationByStatus,
+  leaveApplicationByUser,
   leaveApplicationsSelector,
-  showLeaveApplication,
 } from "../../features/leaveApplication/leaveApplicationSlice";
 import { Link } from "react-router-dom";
+import { TableCell, TableComponent } from "../../global/jsx/common";
+import TableHead from "../Table/TableHead";
+import {
+  getRoleSelector,
+  getUserSelector,
+} from "../../features/auth/authSlice";
+import { RiDeleteBinLine } from "react-icons/ri";
+import { Popconfirm } from "antd";
+import Select from "react-select";
 
 const LeaveApplication = () => {
   const dispatch = useDispatch();
+  const role = useSelector(getRoleSelector);
+  const currentUser = useSelector(getUserSelector);
   const leaveApplications = useSelector(leaveApplicationsSelector);
   const [show, setShow] = useState(false);
 
-  const handleClose = () => setShow(false);
-  const handleShow = (id) => {
-    dispatch(showLeaveApplication(id));
-    setShow(true);
-  };
+  const statusList = [
+    { label: "Pending", value: 0 },
+    { label: "Approve", value: 1 },
+    { label: "Cancel", value: 2 },
+  ];
 
   useEffect(() => {
-    dispatch(fetchLeaveApplication());
-  }, []);
+    if (!currentUser) return;
+    !role
+      ? dispatch(leaveApplicationByUser(currentUser?.id))
+      : dispatch(fetchLeaveApplication());
+  }, [dispatch, role, currentUser]);
 
-  const handleDeletePosition = (id) => {
+  const handleClose = () => setShow(false);
+
+  const handleDelete = (id) => {
     dispatch(destroyLeaveApplication(id));
   };
 
+  const handleFilter = (val) => {
+    dispatch(leaveApplicationByStatus(val));
+  };
+
   return (
-    <Row>
-      <Col md={12}>
-        <div className="table-responsive">
-          <div className="table">
-            <div className="table-content">
-              <Table>
-                <thead>
-                  <tr>
-                    <th className="ant-table-cell">
-                      <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">STT</span>
-                      </div>
-                    </th>
-                    <th className="ant-table-cell">
-                      <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">Name</span>
-                        <TiArrowUnsorted />
-                      </div>
-                    </th>
-                    <th className="ant-table-cell">
-                      <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">Start day</span>
-                        <TiArrowUnsorted />
-                      </div>
-                    </th>
-                    <th className="ant-table-cell">
-                      <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">End day</span>
-                        <TiArrowUnsorted />
-                      </div>
-                    </th>
-                    <th className="ant-table-cell">
-                      <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">Status</span>
-                        <TiArrowUnsorted />
-                      </div>
-                    </th>
-                    <th className="ant-table-cell text-center">Action</th>
+    <>
+      <Row className="justify-content-end mb-4">
+        <Col md={3} sm={6}>
+          <Form.Group>
+            <Select
+              name="position"
+              options={statusList}
+              placeholder="Select Status"
+              onChange={(e) => handleFilter(e.value)}
+            />
+          </Form.Group>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col md={12}>
+          <TableComponent>
+            <thead>
+              <tr>
+                <TableHead title="STT" />
+                <TableHead title="Name" />
+                <TableHead title="Start day" />
+                <TableHead title="End day" />
+                <TableHead title="status" />
+                <TableHead title="Number of day" />
+                <TableHead title="Action" />
+              </tr>
+            </thead>
+            <tbody>
+              {leaveApplications?.map((item, index) => {
+                const {
+                  id,
+                  staff,
+                  end_day,
+                  start_day,
+                  status,
+                  number_of_days_off,
+                } = item.attributes;
+                return (
+                  <tr key={id}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>
+                      {!role ? (
+                        staff.fullname
+                      ) : (
+                        <Link to={item.id}>{staff.fullname}</Link>
+                      )}
+                    </TableCell>
+                    <TableCell>{start_day}</TableCell>
+                    <TableCell>{end_day}</TableCell>
+                    <TableCell>
+                      <Button
+                        size="sm"
+                        variant={
+                          status === "pending"
+                            ? "outline-warning"
+                            : status === "approved"
+                            ? "outline-success"
+                            : "outline-danger"
+                        }
+                      >
+                        {status}
+                      </Button>
+                    </TableCell>
+                    <TableCell>{number_of_days_off}</TableCell>
+                    <TableCell>
+                      <Popconfirm
+                        title="Are you sure?"
+                        onConfirm={() => handleDelete(id)}
+                        okText="Yes"
+                        cancelText="No"
+                      >
+                        <RiDeleteBinLine />
+                      </Popconfirm>
+                    </TableCell>
                   </tr>
-                </thead>
-                <tbody>
-                  {leaveApplications?.map((item, index) => (
-                    <tr key={item.attributes.id}>
-                      <td className="ant-table-cell">{index}</td>
-                      <td className="ant-table-cell">
-                        <Link to={item.id}>
-                          {item.attributes.staff.fullname}
-                        </Link>
-                      </td>
-                      <td className="ant-table-cell">
-                        {item.attributes.start_day}
-                      </td>
-                      <td className="ant-table-cell">
-                        {item.attributes.end_day}
-                      </td>
-                      <td className="ant-table-cell">
-                        <Button
-                          variant={
-                            item.attributes.status === "pending"
-                              ? "warning"
-                              : item.attributes.status === "approved"
-                              ? "success"
-                              : "danger"
-                          }
-                        >
-                          {item.attributes.status}
-                        </Button>
-                      </td>
+                );
+              })}
+            </tbody>
+          </TableComponent>
+        </Col>
 
-                      <td className="ant-table-cell">
-                        <div className="d-flex justify-content-evenly">
-                          <TbEdit
-                            style={{
-                              fontSize: "20px",
-                            }}
-                          />
-
-                          <RiDeleteBinLine
-                            style={{
-                              fontSize: "20px",
-                            }}
-                            onClick={() =>
-                              handleDeletePosition(item.attributes.id)
-                            }
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </div>
-          </div>
-        </div>
-      </Col>
-
-      <FormLeaveApplication isNew={false} show={show} close={handleClose} />
-    </Row>
+        <FormLeaveApplication isNew={false} show={show} close={handleClose} />
+      </Row>
+    </>
   );
 };
 

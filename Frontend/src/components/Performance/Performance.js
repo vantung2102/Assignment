@@ -6,6 +6,7 @@ import {
   performanceSelector,
   showPerformance,
 } from "../../features/performance/performanceSlice";
+import QuestionForm from "./helper_performance/QuestionForm";
 import question from "./question";
 
 const Performance = ({ idRequest }) => {
@@ -21,6 +22,7 @@ const Performance = ({ idRequest }) => {
   const [question9, setQuestion9] = useState("");
   const [question10, setQuestion10] = useState("");
   const [question11, setQuestion11] = useState("");
+  const [status, setStatus] = useState(null);
 
   const selfReview = useSelector(performanceSelector);
 
@@ -42,33 +44,34 @@ const Performance = ({ idRequest }) => {
   }, [dispatch, idRequest]);
 
   useEffect(() => {
-    if (selfReview != null) {
-      const {
-        goals_set_staff,
-        achievement_staff,
-        goals_with_company_staff,
-        challenging_staff,
-        least_enjoy_staff,
-        contribute_staff,
-        current_job_staff,
-        improvement_staff,
-        obstructing_staff,
-        feedback_staff,
-        description_staff,
-      } = selfReview?.attributes;
+    if (!selfReview) return;
+    const {
+      goals_set_staff,
+      achievement_staff,
+      goals_with_company_staff,
+      challenging_staff,
+      least_enjoy_staff,
+      contribute_staff,
+      current_job_staff,
+      improvement_staff,
+      obstructing_staff,
+      feedback_staff,
+      description_staff,
+      status,
+    } = selfReview?.attributes;
 
-      if (goals_set_staff) setQuestion1(goals_set_staff);
-      if (achievement_staff) setQuestion2(achievement_staff);
-      if (goals_with_company_staff) setQuestion3(goals_with_company_staff);
-      if (challenging_staff) setQuestion4(challenging_staff);
-      if (least_enjoy_staff) setQuestion8(least_enjoy_staff);
-      if (contribute_staff) setQuestion5(contribute_staff);
-      if (current_job_staff) setQuestion6(current_job_staff);
-      if (improvement_staff) setQuestion7(improvement_staff);
-      if (obstructing_staff) setQuestion9(obstructing_staff);
-      if (feedback_staff) setQuestion10(feedback_staff);
-      if (description_staff) setQuestion11(description_staff);
-    }
+    setQuestion1(goals_set_staff);
+    setQuestion2(achievement_staff);
+    setQuestion3(goals_with_company_staff);
+    setQuestion4(challenging_staff);
+    setQuestion8(least_enjoy_staff);
+    setQuestion5(contribute_staff);
+    setQuestion6(current_job_staff);
+    setQuestion7(improvement_staff);
+    setQuestion9(obstructing_staff);
+    setQuestion10(feedback_staff);
+    setQuestion11(description_staff);
+    setStatus(status);
   }, [selfReview]);
 
   const handleSavePerformance = () => {
@@ -122,11 +125,7 @@ const Performance = ({ idRequest }) => {
                 style={{ height: "100px" }}
                 value={question1}
                 onChange={(e) => setQuestion1(e.target.value)}
-                disabled={
-                  selfReview?.attributes.status === "self_reviewed"
-                    ? true
-                    : false
-                }
+                disabled={status === "self_reviewed" ? true : false}
               />
             </FloatingLabel>
           </Form.Group>
@@ -141,11 +140,7 @@ const Performance = ({ idRequest }) => {
                 style={{ height: "100px" }}
                 value={question2}
                 onChange={(e) => setQuestion2(e.target.value)}
-                disabled={
-                  selfReview?.attributes.status === "self_reviewed"
-                    ? true
-                    : false
-                }
+                disabled={status === "self_reviewed" ? true : false}
               />
             </FloatingLabel>
           </Form.Group>
@@ -160,11 +155,7 @@ const Performance = ({ idRequest }) => {
                 style={{ height: "100px" }}
                 value={question3}
                 onChange={(e) => setQuestion3(e.target.value)}
-                disabled={
-                  selfReview?.attributes.status === "self_reviewed"
-                    ? true
-                    : false
-                }
+                disabled={status === "self_reviewed" ? true : false}
               />
             </FloatingLabel>
           </Form.Group>
@@ -179,11 +170,7 @@ const Performance = ({ idRequest }) => {
                 style={{ height: "100px" }}
                 value={question4}
                 onChange={(e) => setQuestion4(e.target.value)}
-                disabled={
-                  selfReview?.attributes.status === "self_reviewed"
-                    ? true
-                    : false
-                }
+                disabled={status === "self_reviewed" ? true : false}
               />
             </FloatingLabel>
           </Form.Group>
@@ -198,11 +185,7 @@ const Performance = ({ idRequest }) => {
                 style={{ height: "100px" }}
                 value={question5}
                 onChange={(e) => setQuestion5(e.target.value)}
-                disabled={
-                  selfReview?.attributes.status === "self_reviewed"
-                    ? true
-                    : false
-                }
+                disabled={status === "self_reviewed" ? true : false}
               />
             </FloatingLabel>
           </Form.Group>
@@ -217,11 +200,7 @@ const Performance = ({ idRequest }) => {
                 style={{ height: "100px" }}
                 value={question6}
                 onChange={(e) => setQuestion6(e.target.value)}
-                disabled={
-                  selfReview?.attributes.status === "self_reviewed"
-                    ? true
-                    : false
-                }
+                disabled={status === "self_reviewed" ? true : false}
               />
             </FloatingLabel>
           </Form.Group>
@@ -237,11 +216,7 @@ const Performance = ({ idRequest }) => {
                 style={{ height: "100px" }}
                 value={question7}
                 onChange={(e) => setQuestion7(e.target.value)}
-                disabled={
-                  selfReview?.attributes.status === "self_reviewed"
-                    ? true
-                    : false
-                }
+                disabled={status === "self_reviewed" ? true : false}
               />
             </FloatingLabel>
           </Form.Group>
@@ -257,11 +232,7 @@ const Performance = ({ idRequest }) => {
                 style={{ height: "100px" }}
                 value={question8}
                 onChange={(e) => setQuestion8(e.target.value)}
-                disabled={
-                  selfReview?.attributes.status === "self_reviewed"
-                    ? true
-                    : false
-                }
+                disabled={status === "self_reviewed" ? true : false}
               />
             </FloatingLabel>
           </Form.Group>
@@ -276,11 +247,7 @@ const Performance = ({ idRequest }) => {
                 style={{ height: "100px" }}
                 value={question9}
                 onChange={(e) => setQuestion9(e.target.value)}
-                disabled={
-                  selfReview?.attributes.status === "self_reviewed"
-                    ? true
-                    : false
-                }
+                disabled={status === "self_reviewed" ? true : false}
               />
             </FloatingLabel>
           </Form.Group>
@@ -295,11 +262,7 @@ const Performance = ({ idRequest }) => {
                 style={{ height: "100px" }}
                 value={question10}
                 onChange={(e) => setQuestion10(e.target.value)}
-                disabled={
-                  selfReview?.attributes.status === "self_reviewed"
-                    ? true
-                    : false
-                }
+                disabled={status === "self_reviewed" ? true : false}
               />
             </FloatingLabel>
           </Form.Group>
@@ -314,11 +277,7 @@ const Performance = ({ idRequest }) => {
                 style={{ height: "100px" }}
                 value={question11}
                 onChange={(e) => setQuestion11(e.target.value)}
-                disabled={
-                  selfReview?.attributes.status === "self_reviewed"
-                    ? true
-                    : false
-                }
+                disabled={status === "self_reviewed" ? true : false}
               />
             </FloatingLabel>
           </Form.Group>

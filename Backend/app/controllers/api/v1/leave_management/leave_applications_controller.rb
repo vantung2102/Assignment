@@ -1,7 +1,7 @@
 class Api::V1::LeaveManagement::LeaveApplicationsController < Api::V1::BaseController
   def index
-    pagy, leave_applications = current_user.has_role?(:Manager) ? paginate(LeaveApplication.order(created_at: :desc)) : paginate(LeaveApplication.find_by(staff_id: current_user.id))
-    render_resource_collection(leave_applications, pagy: pagy)
+    leave_applications = LeaveApplication.where(status: :pending).order(created_at: :desc)
+    render_resource_collection(leave_applications.includes(:staff, :approver))
   end
 
   def show
@@ -27,8 +27,8 @@ class Api::V1::LeaveManagement::LeaveApplicationsController < Api::V1::BaseContr
 
   def leave_application_by_user
     if current_user.has_role?(:Manager) || params[:staff_id] == current_user.id.to_s
-      pagy, leave_applications = paginate(LeaveApplication.where(staff_id: params[:staff_id]).order(created_at: :desc))
-      render_resource_collection(leave_applications, pagy: pagy)
+      leave_applications = LeaveApplication.where(staff_id: params[:staff_id]).order(created_at: :desc)
+      render_resource_collection(leave_applications)
     else
       render_resource_errors(status: "error", detail: I18n.t('error_codes.E205'))
     end
@@ -36,8 +36,8 @@ class Api::V1::LeaveManagement::LeaveApplicationsController < Api::V1::BaseContr
 
   def leave_application_by_status
     authorize LeaveApplication
-    pagy, leave_application = paginate(LeaveApplication.where(status: params[:status]).order(created_at: :desc))
-    render_resource_collection(leave_application, pagy: pagy)
+    leave_application = LeaveApplication.where(status: params[:status]).order(created_at: :desc)
+    render_resource_collection(leave_application.includes(:staff, :approver))
   end
 
   def respond_to_leave_application

@@ -2,13 +2,13 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
   def index
     pagy, staffs = paginate(Staff.filter(params.slice(:fullname, :position, :department, :job_title)))
     render_resource_collection(
-      staffs.includes(:position, :department, :job_title, :upper_level).order(created_at: :desc),
+      staffs.includes(:position, :department, :job_title, :upper_level, :roles).order(created_at: :desc),
       pagy: pagy
     )
   end
 
   def get_all_staff
-    render_resource_collection(Staff.includesModel)
+    render_resource_collection(Staff.where(status: :active).includesModel)
   end
 
   def show

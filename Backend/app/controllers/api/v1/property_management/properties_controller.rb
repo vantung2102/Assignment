@@ -2,7 +2,7 @@ class Api::V1::PropertyManagement::PropertiesController < Api::V1::BaseControlle
   def index
     authorize Property
     pagy, properties = paginate(Property.order(created_at: :desc))
-    render_resource_collection(properties, pagy: pagy)
+    render_resource_collection(properties.includes(:group_property), pagy: pagy)
   end
 
   def show

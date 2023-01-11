@@ -4,16 +4,19 @@ import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { SubmitSection } from "../Department/department";
 import Select from "react-select";
-import {
-  fetchAllPosition,
-  fetchPosition,
-  positionsSelector,
-} from "../../features/position/positionSlice";
+import { allPositionSelector } from "../../features/position/positionSlice";
 import { optionSelect2 } from "../../common/hooks/hooks";
-import { newOnboardingSampleStep } from "../../features/onboarding/onboardingSlice";
+import {
+  editOnboardingSample,
+  newOnboardingSampleStep,
+  onboardingSampleStepSelector,
+} from "../../features/onboarding/onboardingSlice";
 
 const FormOnboardingSampleStep = ({ isNew, show, close }) => {
   const dispatch = useDispatch();
+  const positions = useSelector(allPositionSelector);
+  const onboardingStep = useSelector(onboardingSampleStepSelector);
+
   const {
     register,
     handleSubmit,
@@ -24,11 +27,17 @@ const FormOnboardingSampleStep = ({ isNew, show, close }) => {
     formState: { errors },
   } = useForm();
 
-  const positions = useSelector(positionsSelector);
-
   useEffect(() => {
-    dispatch(fetchAllPosition());
-  }, [dispatch]);
+    if (isNew || !onboardingStep) return;
+    const { task, description, position } = onboardingStep.attributes;
+
+    setValue("task", task);
+    setValue("description", description);
+    setValue("position", {
+      value: position.id,
+      label: position.name,
+    });
+  }, [onboardingStep, isNew, setValue]);
 
   const handleNewOnboarding = () => {
     dispatch(
@@ -40,8 +49,24 @@ const FormOnboardingSampleStep = ({ isNew, show, close }) => {
     );
 
     close(false);
-    setValue("name", "");
+    setValue("task", "");
+    setValue("description", "");
+    setValue("position", "");
+  };
 
+  const handleEditOnboarding = () => {
+    dispatch(
+      editOnboardingSample({
+        id: onboardingStep?.attributes.id,
+        position_id: watch("position").value,
+        task: watch("task"),
+        description: watch("description"),
+      })
+    );
+
+    close(false);
+    setValue("task", "");
+    setValue("description", "");
     setValue("description", "");
   };
 
@@ -53,7 +78,11 @@ const FormOnboardingSampleStep = ({ isNew, show, close }) => {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={handleSubmit(handleNewOnboarding)}>
+        <Form
+          onSubmit={handleSubmit(
+            isNew ? handleNewOnboarding : handleEditOnboarding
+          )}
+        >
           <Form.Group>
             <Form.Label>Position</Form.Label>
 

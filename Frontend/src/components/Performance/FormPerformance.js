@@ -29,7 +29,7 @@ const FormPerformance = ({ show, close }) => {
     const number = (date2 - date1) / 3600000 / 24;
 
     return (number + 1).toString() === numberOfDay ||
-      (number + 0.5).toString() == numberOfDay
+      (number + 0.5).toString() === numberOfDay
       ? true
       : false;
   };

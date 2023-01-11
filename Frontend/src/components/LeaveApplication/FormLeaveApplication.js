@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, FloatingLabel, Form, Modal } from "react-bootstrap";
 import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { SubmitSection } from "../Department/department";
 import Select from "react-select";
-import { optionSelect2 } from "../../common/hooks/hooks";
 import { newLeaveApplication } from "../../features/leaveApplication/leaveApplicationSlice";
 import {
   leaveByUser,
@@ -27,10 +26,6 @@ const FormLeaveApplication = ({ isNew, close, show }) => {
     getValues,
     formState: { errors },
   } = useForm();
-
-  useEffect(() => {
-    // dispatch(fetchStaff());
-  }, []);
 
   const handleNewLeaveApplication = () => {
     dispatch(
@@ -93,7 +88,7 @@ const FormLeaveApplication = ({ isNew, close, show }) => {
     const number = (date2 - date1) / 3600000 / 24;
 
     return (number + 1).toString() === numberOfDay ||
-      (number + 0.5).toString() == numberOfDay
+      (number + 0.5).toString() === numberOfDay
       ? true
       : false;
   };
@@ -108,24 +103,24 @@ const FormLeaveApplication = ({ isNew, close, show }) => {
 
     switch (watch("leave_type").value) {
       case 0:
-        handMessage(12 - leaveCurrentUser.attributes.casual_leave);
+        handMessage(12 - leaveCurrentUser?.attributes.casual_leave);
         break;
       case 1:
         setMessage(
-          `You took ${leaveCurrentUser.attributes.unpaid_leave} days off work`
+          `You took ${leaveCurrentUser?.attributes.unpaid_leave} days off work`
         );
         break;
       case 2:
-        handMessage(3 - leaveCurrentUser.attributes.marriage_leave);
+        handMessage(3 - leaveCurrentUser?.attributes.marriage_leave);
         break;
       case 3:
-        handMessage(3 - leaveCurrentUser.attributes.compassionate_leave);
+        handMessage(3 - leaveCurrentUser?.attributes.compassionate_leave);
         break;
       case 4:
-        handMessage(1 - leaveCurrentUser.attributes.paternity_leave);
+        handMessage(1 - leaveCurrentUser?.attributes.paternity_leave);
         break;
       case 5:
-        handMessage(30 * 6 - leaveCurrentUser.attributes.maternity_leave);
+        handMessage(30 * 6 - leaveCurrentUser?.attributes.maternity_leave);
         break;
       default:
         setMessage("");

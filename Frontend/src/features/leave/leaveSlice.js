@@ -11,12 +11,15 @@ const initialState = {
   leaveCurrentUser: null,
 };
 
-export const fetchLeave = createAsyncThunk("fetchLeave", async () => {
-  const response = await apiClient.get("/api/v1/leave_management/leaves", {
-    headers: {
-      Authorization: Cookies.get("authorization"),
-    },
-  });
+export const fetchLeave = createAsyncThunk("fetchLeave", async (number) => {
+  const response = await apiClient.get(
+    `/api/v1/leave_management/leaves?page[number]=${number ? number : 1}`,
+    {
+      headers: {
+        Authorization: Cookies.get("authorization"),
+      },
+    }
+  );
   return response.data;
 });
 
@@ -95,60 +98,44 @@ export const leaveSlice = createSlice({
   extraReducers: (builder) => {
     // ================== get all leave =================
     builder
-      .addCase(fetchLeave.pending, (state) => {
-        state.status = "loading";
-      })
+      .addCase(fetchLeave.pending, (state) => {})
       .addCase(fetchLeave.fulfilled, (state, action) => {
-        state.status = "succeeded";
         state.leaves = action.payload.data;
+        state.meta = action.payload.meta;
       })
-      .addCase(fetchLeave.rejected, (state) => {
-        state.status = "error";
-      });
+      .addCase(fetchLeave.rejected, (state) => {});
 
     // ================== new leave =================
     builder
-      .addCase(newLeave.pending, (state) => {
-        state.status = "loading";
-      })
+      .addCase(newLeave.pending, (state) => {})
       .addCase(newLeave.fulfilled, (state, action) => {
-        state.status = "succeeded";
         state.leaves.unshift(action.payload.data);
         toast.success("Create Success");
       })
       .addCase(newLeave.rejected, (state) => {
-        state.status = "error";
         toast.success("Create  Failed");
       });
     // ================== show leave =================
     builder
-      .addCase(showLeave.pending, (state) => {
-        state.status = "loading";
-      })
+      .addCase(showLeave.pending, (state) => {})
       .addCase(showLeave.fulfilled, (state, action) => {
-        state.status = "succeeded";
         state.leave = action.payload.data;
       })
-      .addCase(showLeave.rejected, (state) => {
-        state.status = "error";
-      });
+      .addCase(showLeave.rejected, (state) => {});
     // ================== leave by user leave =================
     builder
-      .addCase(leaveByUser.pending, (state) => {
-        state.status = "loading";
-      })
+      .addCase(leaveByUser.pending, (state) => {})
       .addCase(leaveByUser.fulfilled, (state, action) => {
-        state.status = "succeeded";
+        state.leave = action.payload.data;
         state.leaveCurrentUser = action.payload.data;
       })
-      .addCase(leaveByUser.rejected, (state) => {
-        state.status = "error";
-      });
+      .addCase(leaveByUser.rejected, (state) => {});
   },
 });
 
 export const leavesSelector = (state) => state.leave.leaves;
 export const leaveSelector = (state) => state.leave.leave;
 export const leaveCurrentUserSelector = (state) => state.leave.leaveCurrentUser;
+export const metaLeaveSelector = (state) => state.leave.meta;
 
 export default leaveSlice.reducer;

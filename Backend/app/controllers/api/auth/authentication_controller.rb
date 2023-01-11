@@ -15,6 +15,6 @@ class Api::Auth::AuthenticationController < Api::V1::BaseController
   end
 
   def get_current_user
-    render_resource(current_user, status: :ok)
+    render_resource(current_user)
   end
 end

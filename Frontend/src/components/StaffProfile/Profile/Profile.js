@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Card } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import {
+  getRoleSelector,
+  getUserSelector,
+} from "../../../features/auth/authSlice";
 
 import { profileSelector } from "../../../features/staff/staffSlice";
 import PersonalInfoItem from "./PersonalInfoItem";
 
 import { PersonalInfo } from "./profile";
 const Profile = () => {
-  const profile = useSelector(profileSelector);
+  const role = useSelector(getRoleSelector);
+  const profile = useSelector(!role ? getUserSelector : profileSelector);
 
   const [name, setName] = useState(null);
   const [position, setPosition] = useState(null);

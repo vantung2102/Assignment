@@ -19,6 +19,6 @@ class RequestProperty < ApplicationRecord
 
   belongs_to :requester, class_name: 'Staff'
   belongs_to :approver, class_name: 'Staff', optional: true
-  belongs_to :group_property
+  belongs_to :group_property, optional: true
   has_many :comments, as: :commentable, dependent: :destroy
 end

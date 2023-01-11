@@ -10,6 +10,8 @@ import question from "./question";
 
 const DetailReviewPerformance = ({ idRequest }) => {
   const dispatch = useDispatch();
+  const review = useSelector(performanceSelector);
+
   const [bossQuestion1, setBossQuestion1] = useState("");
   const [bossQuestion2, setBossQuestion2] = useState("");
   const [bossQuestion3, setBossQuestion3] = useState("");
@@ -21,6 +23,7 @@ const DetailReviewPerformance = ({ idRequest }) => {
   const [bossQuestion9, setBossQuestion9] = useState("");
   const [bossQuestion10, setBossQuestion10] = useState("");
   const [bossQuestion11, setBossQuestion11] = useState("");
+  const [status, setStatus] = useState(null);
 
   const {
     question_1,
@@ -34,40 +37,40 @@ const DetailReviewPerformance = ({ idRequest }) => {
     question_9,
     question_10,
   } = question();
-  const review = useSelector(performanceSelector);
 
   useEffect(() => {
     dispatch(showPerformance(idRequest));
   }, [dispatch, idRequest]);
 
   useEffect(() => {
-    if (review != null) {
-      const {
-        goals_set_boss,
-        achievement_boss,
-        goals_with_company_boss,
-        challenging_boss,
-        least_enjoy_boss,
-        contribute_boss,
-        current_job_boss,
-        improvement_boss,
-        obstructing_boss,
-        feedback_boss,
-        description_boss,
-      } = review.attributes;
+    if (!review) return;
+    const {
+      goals_set_boss,
+      achievement_boss,
+      goals_with_company_boss,
+      challenging_boss,
+      least_enjoy_boss,
+      contribute_boss,
+      current_job_boss,
+      improvement_boss,
+      obstructing_boss,
+      feedback_boss,
+      description_boss,
+      status,
+    } = review.attributes;
 
-      if (goals_set_boss) setBossQuestion1(goals_set_boss);
-      if (achievement_boss) setBossQuestion2(achievement_boss);
-      if (goals_with_company_boss) setBossQuestion3(goals_with_company_boss);
-      if (challenging_boss) setBossQuestion4(challenging_boss);
-      if (least_enjoy_boss) setBossQuestion8(least_enjoy_boss);
-      if (contribute_boss) setBossQuestion5(contribute_boss);
-      if (current_job_boss) setBossQuestion6(current_job_boss);
-      if (improvement_boss) setBossQuestion7(improvement_boss);
-      if (obstructing_boss) setBossQuestion9(obstructing_boss);
-      if (feedback_boss) setBossQuestion10(feedback_boss);
-      if (description_boss) setBossQuestion11(description_boss);
-    }
+    setBossQuestion1(goals_set_boss);
+    setBossQuestion2(achievement_boss);
+    setBossQuestion3(goals_with_company_boss);
+    setBossQuestion4(challenging_boss);
+    setBossQuestion8(least_enjoy_boss);
+    setBossQuestion5(contribute_boss);
+    setBossQuestion6(current_job_boss);
+    setBossQuestion7(improvement_boss);
+    setBossQuestion9(obstructing_boss);
+    setBossQuestion10(feedback_boss);
+    setBossQuestion11(description_boss);
+    setStatus(status);
   }, [review]);
 
   const handleSavePerformance = () => {
@@ -155,9 +158,7 @@ const DetailReviewPerformance = ({ idRequest }) => {
                     style={{ height: "100px" }}
                     value={bossQuestion1}
                     onChange={(e) => setBossQuestion1(e.target.value)}
-                    disabled={
-                      review.attributes.status === "completed" ? true : false
-                    }
+                    disabled={status === "completed" ? true : false}
                   />
                 </FloatingLabel>
               </Form.Group>
@@ -187,9 +188,7 @@ const DetailReviewPerformance = ({ idRequest }) => {
                     style={{ height: "100px" }}
                     value={bossQuestion2}
                     onChange={(e) => setBossQuestion2(e.target.value)}
-                    disabled={
-                      review.attributes.status === "completed" ? true : false
-                    }
+                    disabled={status === "completed" ? true : false}
                   />
                 </FloatingLabel>
               </Form.Group>
@@ -219,9 +218,7 @@ const DetailReviewPerformance = ({ idRequest }) => {
                     style={{ height: "100px" }}
                     value={bossQuestion3}
                     onChange={(e) => setBossQuestion3(e.target.value)}
-                    disabled={
-                      review.attributes.status === "completed" ? true : false
-                    }
+                    disabled={status === "completed" ? true : false}
                   />
                 </FloatingLabel>
               </Form.Group>
@@ -251,9 +248,7 @@ const DetailReviewPerformance = ({ idRequest }) => {
                     style={{ height: "100px" }}
                     value={bossQuestion4}
                     onChange={(e) => setBossQuestion4(e.target.value)}
-                    disabled={
-                      review.attributes.status === "completed" ? true : false
-                    }
+                    disabled={status === "completed" ? true : false}
                   />
                 </FloatingLabel>
               </Form.Group>
@@ -283,9 +278,7 @@ const DetailReviewPerformance = ({ idRequest }) => {
                     style={{ height: "100px" }}
                     value={bossQuestion5}
                     onChange={(e) => setBossQuestion5(e.target.value)}
-                    disabled={
-                      review.attributes.status === "completed" ? true : false
-                    }
+                    disabled={status === "completed" ? true : false}
                   />
                 </FloatingLabel>
               </Form.Group>
@@ -315,9 +308,7 @@ const DetailReviewPerformance = ({ idRequest }) => {
                     style={{ height: "100px" }}
                     value={bossQuestion6}
                     onChange={(e) => setBossQuestion6(e.target.value)}
-                    disabled={
-                      review.attributes.status === "completed" ? true : false
-                    }
+                    disabled={status === "completed" ? true : false}
                   />
                 </FloatingLabel>
               </Form.Group>
@@ -347,9 +338,7 @@ const DetailReviewPerformance = ({ idRequest }) => {
                     style={{ height: "100px" }}
                     value={bossQuestion7}
                     onChange={(e) => setBossQuestion7(e.target.value)}
-                    disabled={
-                      review.attributes.status === "completed" ? true : false
-                    }
+                    disabled={status === "completed" ? true : false}
                   />
                 </FloatingLabel>
               </Form.Group>
@@ -379,9 +368,7 @@ const DetailReviewPerformance = ({ idRequest }) => {
                     style={{ height: "100px" }}
                     value={bossQuestion8}
                     onChange={(e) => setBossQuestion8(e.target.value)}
-                    disabled={
-                      review.attributes.status === "completed" ? true : false
-                    }
+                    disabled={status === "completed" ? true : false}
                   />
                 </FloatingLabel>
               </Form.Group>
@@ -411,9 +398,7 @@ const DetailReviewPerformance = ({ idRequest }) => {
                     style={{ height: "100px" }}
                     value={bossQuestion9}
                     onChange={(e) => setBossQuestion9(e.target.value)}
-                    disabled={
-                      review.attributes.status === "completed" ? true : false
-                    }
+                    disabled={status === "completed" ? true : false}
                   />
                 </FloatingLabel>
               </Form.Group>
@@ -443,9 +428,7 @@ const DetailReviewPerformance = ({ idRequest }) => {
                     style={{ height: "100px" }}
                     value={bossQuestion10}
                     onChange={(e) => setBossQuestion10(e.target.value)}
-                    disabled={
-                      review.attributes.status === "completed" ? true : false
-                    }
+                    disabled={status === "completed" ? true : false}
                   />
                 </FloatingLabel>
               </Form.Group>
@@ -475,9 +458,7 @@ const DetailReviewPerformance = ({ idRequest }) => {
                     style={{ height: "100px" }}
                     value={bossQuestion11}
                     onChange={(e) => setBossQuestion11(e.target.value)}
-                    disabled={
-                      review.attributes.status === "completed" ? true : false
-                    }
+                    disabled={status === "completed" ? true : false}
                   />
                 </FloatingLabel>
               </Form.Group>

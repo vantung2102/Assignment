@@ -94,7 +94,7 @@ const Sidebar = ({ active }) => {
                 )}
 
                 <SideBarTitle title="Leave Management" />
-                {/* Leave */}
+
                 {role && (
                   <li>
                     <NavLink

@@ -5,10 +5,7 @@ import { Button } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserSelector } from "../../features/auth/authSlice";
-import {
-  leaveByUser,
-  leaveCurrentUserSelector,
-} from "../../features/leave/leaveSlice";
+import { leaveByUser } from "../../features/leave/leaveSlice";
 
 const AddLeaveApplication = () => {
   const dispatch = useDispatch();
@@ -17,7 +14,7 @@ const AddLeaveApplication = () => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => {
-    dispatch(leaveByUser(currentUser.id));
+    dispatch(leaveByUser(currentUser?.id));
     setShow(true);
   };
 

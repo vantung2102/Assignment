@@ -2,11 +2,12 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiClient from "../../apiClient/apiClient";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
+import { useDestroy } from "../../common/hooks/hooks";
 
 const initialState = {
   status: null,
   meta: null,
-  leaveApplications: [],
+  leaveApplications: null,
   leaveApplication: null,
 };
 
@@ -47,6 +48,23 @@ export const showLeaveApplication = createAsyncThunk(
   async (id) => {
     const response = await apiClient.get(
       `api/v1/leave_management/leave_applications/${id}`,
+      {
+        headers: {
+          Authorization: Cookies.get("authorization"),
+        },
+      }
+    );
+
+    return response.data;
+  }
+);
+
+export const leaveApplicationByUser = createAsyncThunk(
+  "leaveApplicationByUser",
+  async (id) => {
+    const response = await apiClient.post(
+      `/api/v1/leave_management/leave_applications/leave_application_by_user`,
+      { staff_id: id },
       {
         headers: {
           Authorization: Cookies.get("authorization"),
@@ -116,6 +134,23 @@ export const responseLeaveApplication = createAsyncThunk(
   }
 );
 
+export const leaveApplicationByStatus = createAsyncThunk(
+  "leaveApplicationByStatus",
+  async (status) => {
+    const response = await apiClient.post(
+      `/api/v1/leave_management/leave_applications/leave_application_by_status`,
+      { status: status },
+      {
+        headers: {
+          Authorization: Cookies.get("authorization"),
+        },
+      }
+    );
+
+    return response.data;
+  }
+);
+
 export const leaveApplicationSlice = createSlice({
   name: "leaveApplicationSlice",
   initialState,
@@ -123,52 +158,60 @@ export const leaveApplicationSlice = createSlice({
   extraReducers: (builder) => {
     // ================== get all LeaveApplication =================
     builder
-      .addCase(fetchLeaveApplication.pending, (state) => {
-        state.status = "loading";
-      })
+      .addCase(fetchLeaveApplication.pending, (state) => {})
       .addCase(fetchLeaveApplication.fulfilled, (state, action) => {
-        state.status = "succeeded";
         state.leaveApplications = action.payload.data;
       })
-      .addCase(fetchLeaveApplication.rejected, (state) => {
-        state.status = "error";
-      });
+      .addCase(fetchLeaveApplication.rejected, (state) => {});
 
-    // ================== get all LeaveApplication =================
+    // ================== newLeaveApplication =================
     builder
-      .addCase(newLeaveApplication.pending, (state) => {
-        state.status = "loading";
-      })
+      .addCase(newLeaveApplication.pending, (state) => {})
       .addCase(newLeaveApplication.fulfilled, (state, action) => {
-        state.status = "succeeded";
         state.leaveApplications.unshift(action.payload.data);
         toast.success("Create Success");
       })
       .addCase(newLeaveApplication.rejected, (state, action) => {
-        state.status = "error";
         toast.error("Create  Failed");
-      }); // ================== get all LeaveApplication =================
-    builder
-      .addCase(showLeaveApplication.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(showLeaveApplication.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.leaveApplication = action.payload.data;
-      })
-      .addCase(showLeaveApplication.rejected, (state) => {
-        state.status = "error";
       });
+    // ================== show LeaveApplication =================
     builder
-      .addCase(responseLeaveApplication.pending, (state) => {
-        state.status = "loading";
-      })
-      .addCase(responseLeaveApplication.fulfilled, (state, action) => {
-        state.status = "succeeded";
+      .addCase(showLeaveApplication.pending, (state) => {})
+      .addCase(showLeaveApplication.fulfilled, (state, action) => {
         state.leaveApplication = action.payload.data;
       })
-      .addCase(responseLeaveApplication.rejected, (state) => {
-        state.status = "error";
+      .addCase(showLeaveApplication.rejected, (state) => {});
+    // ================== res LeaveApplication =================
+    builder
+      .addCase(responseLeaveApplication.pending, (state) => {})
+      .addCase(responseLeaveApplication.fulfilled, (state, action) => {
+        state.leaveApplication = action.payload.data;
+      })
+      .addCase(responseLeaveApplication.rejected, (state) => {});
+    // ================== res LeaveApplication =================
+    builder
+      .addCase(leaveApplicationByUser.pending, (state) => {})
+      .addCase(leaveApplicationByUser.fulfilled, (state, action) => {
+        state.leaveApplications = action.payload.data;
+      })
+      .addCase(leaveApplicationByUser.rejected, (state) => {});
+    // ================== status LeaveApplication =================
+    builder
+      .addCase(leaveApplicationByStatus.pending, (state) => {})
+      .addCase(leaveApplicationByStatus.fulfilled, (state, action) => {
+        state.leaveApplications = action.payload.data;
+      })
+      .addCase(leaveApplicationByStatus.rejected, (state) => {});
+
+    // ================== destroy LeaveApplication =================
+    builder
+      .addCase(destroyLeaveApplication.pending, (state) => {})
+      .addCase(destroyLeaveApplication.fulfilled, (state, action) => {
+        state.leaveApplications = useDestroy(state.leaveApplications, action);
+        toast.success("Destroy success");
+      })
+      .addCase(destroyLeaveApplication.rejected, (state) => {
+        toast.success("Destroy Failed");
       });
   },
 });
