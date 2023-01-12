@@ -12,7 +12,6 @@
 class PositionSerializer < BaseSerializer
   attributes  :id,
               :name,
-              :department,
               :description,
               :created_at,
               :updated_at

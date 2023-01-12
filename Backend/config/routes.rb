@@ -11,16 +11,36 @@ Rails.application.routes.draw do
         resources :staffs do
           member do
             get 'staff_chart_by_node', to: "staffs#staff_chart_by_node"
-            post 'update_staff_activation_status', to: "staffs#update_staff_activation_status"
+            put 'update_staff_activation_status', to: "staffs#update_staff_activation_status"
             post 'destroy_and_update_staff_boss', to: "staffs#destroy_and_update_staff_boss"
+            get 'recover_staff', to: "staffs#recover_staff"
+            get 'permanent_destroy', to: "staffs#permanent_destroy"
           end
           collection do
+            get 'get_inactive_staff', to: "staffs#get_inactive_staff"
             get 'chart', to: "staffs#staff_chart"
+            get 'get_all_staff', to: "staffs#get_all_staff"
           end
         end
-        resources :positions
-        resources :departments
-        resources :job_titles
+
+        resources :positions do
+          collection do
+            get 'get_all_position', to: "positions#get_all_position"
+          end
+        end
+
+        resources :departments do
+          collection do
+            get 'get_all_department', to: "departments#get_all_department"
+          end
+        end
+
+        resources :job_titles do
+          collection do
+            get 'get_all_job_title', to: "job_titles#get_all_job_title"
+          end
+        end
+
         resources :staff_contracts
       end
 

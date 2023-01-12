@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import {
@@ -28,7 +27,7 @@ const Login = () => {
     if (isAuthenticated) {
       navigate("/", { replace: true });
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, navigate]);
 
   const handleClickEye = () => {
     eye === "password" ? setEye("text") : setEye("password");

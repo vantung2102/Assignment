@@ -1,8 +1,8 @@
 class Api::V1::PerformanceManagement::PerformanceAppraisalFormsController < Api::V1::BaseController
   def index
     authorize PerformanceAppraisalForm
-    pagy, pa_forms = paginate(PerformanceAppraisalForm.where(active: true).order(created_at: :desc))
-    render_resource_collection(pa_forms, pagy: pagy)
+    pa_forms = PerformanceAppraisalForm.where(active: true).order(created_at: :desc)
+    render_resource_collection(pa_forms)
   end
 
   def show

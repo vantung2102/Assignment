@@ -19,6 +19,10 @@ class LeaveApplicationPolicy < ApplicationPolicy
 		authenticate
 	end
 
+	def leave_application_by_status?
+		authenticate
+	end
+
 	private
 
 	def authenticate

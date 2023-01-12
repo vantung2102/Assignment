@@ -1,27 +1,46 @@
 import React, { useEffect, useState } from "react";
-import { Col, Row } from "react-bootstrap";
-import { RiDeleteBinLine } from "react-icons/ri";
-import { TbEdit } from "react-icons/tb";
-import { TiArrowUnsorted } from "react-icons/ti";
+import { Col, Row, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
   departmentsSelector,
   destroyDepartment,
   fetchDepartment,
+  metaDepartmentSelector,
   showDepartment,
-  sortDepartment,
+  sortDepartmentAsc,
   sortDepartmentDesc,
 } from "../../features/department/departmentSlice";
-import { Table } from "../Staff/staff";
-import staff from "../Staff/staff.module.scss";
+import {
+  TableCell,
+  TableComponent,
+  TableResponsive,
+} from "../../global/jsx/common";
+import Paginate from "../Paginate/Paginate";
+import ActionColumn from "../Table/ActionColumn";
+import TableHead from "../Table/TableHead";
 import FormDepartment from "./FormDepartment";
 
 const Department = () => {
   const dispatch = useDispatch();
 
   const departments = useSelector(departmentsSelector);
+  const meta = useSelector(metaDepartmentSelector);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsCount, setItemsCount] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(1);
   const [show, setShow] = useState(false);
   const [toggle, setToggle] = useState(false);
+
+  useEffect(() => {
+    dispatch(fetchDepartment());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!meta) return;
+    setItemsCount(meta.total_count);
+    setItemsPerPage(meta.page_size);
+  }, [meta]);
 
   const handleClose = () => setShow(false);
   const handleShow = (id) => {
@@ -29,16 +48,12 @@ const Department = () => {
     setShow(true);
   };
 
-  useEffect(() => {
-    dispatch(fetchDepartment());
-  }, [dispatch]);
-
   const handleDelete = (id) => {
     dispatch(destroyDepartment(id));
   };
 
-  const handleSort = () => {
-    dispatch(sortDepartment());
+  const handleSortAsc = () => {
+    dispatch(sortDepartmentAsc());
     setToggle(!toggle);
   };
 
@@ -47,67 +62,66 @@ const Department = () => {
     setToggle(!toggle);
   };
 
+  const getCurrentPage = (number) => {
+    dispatch(fetchDepartment(number));
+  };
+
   return (
-    <Row>
-      <Col md={12}>
-        <div className="table-responsive">
-          <div className="table">
-            <div className="table-content">
-              <Table>
-                <thead>
-                  <tr>
-                    <th className="ant-table-cell">
-                      <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">STT</span>
-                      </div>
-                    </th>
-                    <th className="ant-table-cell">
-                      <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">Department</span>
-                        <TiArrowUnsorted
-                          onClick={toggle ? handleSortDesc : handleSort}
+    <>
+      <Row>
+        <Col md={12}>
+          <TableResponsive>
+            <TableComponent>
+              <thead>
+                <tr>
+                  <TableHead title="STT" />
+                  <TableHead
+                    title="Department"
+                    isSort={true}
+                    toggle={toggle}
+                    desc={handleSortDesc}
+                    asc={handleSortAsc}
+                  />
+                  <TableHead title="Action" centerTitle={true} />
+                </tr>
+              </thead>
+              <tbody>
+                {departments?.map((item, index) => {
+                  const { id, name } = item.attributes;
+
+                  return (
+                    <tr key={id}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{name}</TableCell>
+                      <TableCell>
+                        <ActionColumn
+                          id={id}
+                          edit={handleShow}
+                          destroy={handleDelete}
                         />
-                      </div>
-                    </th>
-
-                    <th className="ant-table-cell text-center">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {departments.map((item, index) => (
-                    <tr key={item.attributes?.id}>
-                      <td className="ant-table-cell">{index}</td>
-                      <td className="ant-table-cell">
-                        {item.attributes?.name}
-                      </td>
-
-                      <td className="ant-table-cell">
-                        <div className="d-flex justify-content-evenly">
-                          <TbEdit
-                            style={{
-                              fontSize: "20px",
-                            }}
-                            onClick={() => handleShow(item.attributes.id)}
-                          />
-                          <RiDeleteBinLine
-                            style={{
-                              fontSize: "20px",
-                            }}
-                            onClick={() => handleDelete(item.attributes.id)}
-                          />
-                        </div>
-                      </td>
+                      </TableCell>
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </div>
-          </div>
-        </div>
-      </Col>
+                  );
+                })}
+              </tbody>
+            </TableComponent>
+          </TableResponsive>
+        </Col>
 
-      <FormDepartment isNew={false} show={show} close={handleClose} />
-    </Row>
+        <FormDepartment isNew={false} show={show} close={handleClose} />
+      </Row>
+
+      {meta && (
+        <Paginate
+          itemsCount={itemsCount}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          alwaysShown={false}
+          getCurrentPage={getCurrentPage}
+        />
+      )}
+    </>
   );
 };
 

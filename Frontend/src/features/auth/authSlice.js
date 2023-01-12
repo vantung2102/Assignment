@@ -7,6 +7,7 @@ const initialState = {
   user: null,
   token: {},
   isAuthenticated: false,
+  role: null,
 };
 
 export const login = createAsyncThunk("auth/login", async (payload) => {
@@ -39,6 +40,11 @@ const authSlice = createSlice({
     updateAuthenticated: (state) => {
       state.isAuthenticated = false;
     },
+    setRole: (state) => {
+      if (!state.role || !state.user) state.role = null;
+      const { role } = state.user.attributes.roles;
+      if (role) state.role = role[0].name;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -63,7 +69,11 @@ const authSlice = createSlice({
       .addCase(getUser.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.isAuthenticated = true;
-        state.user = action.payload.user;
+        state.user = action.payload.data;
+
+        if (action.payload.data.attributes.roles.length > 0) {
+          state.role = action.payload.data.attributes.roles[0].name;
+        }
       })
       .addCase(getUser.rejected, (state, action) => {
         state.isAuthenticated = false;
@@ -73,10 +83,11 @@ const authSlice = createSlice({
   },
 });
 
-export const { logout, updateAuthenticated } = authSlice.actions;
+export const { logout, updateAuthenticated, getRole } = authSlice.actions;
 
 export const loginSelector = (state) => state.auth.token;
 export const getUserSelector = (state) => state.auth.user;
 export const isAuthenticatedSelector = (state) => state.auth.isAuthenticated;
+export const getRoleSelector = (state) => state.auth.role;
 
 export default authSlice.reducer;

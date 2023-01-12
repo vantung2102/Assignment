@@ -16,16 +16,22 @@
 #  password_digest :string
 #  deleted_at      :datetime
 #  job_title_id    :bigint
+#  phone           :string
+#  address         :text
 #
 class StaffSerializer < BaseSerializer
   attributes  :id,
               :fullname,
               :email,
+              :phone,
+              :address,
+              :join_date,
               :date_of_birth,
               :gender,
               :status,
               :position,
               :department,
               :job_title,
-              :upper_level
+              :upper_level,
+              :roles
 end

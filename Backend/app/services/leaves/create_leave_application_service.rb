@@ -11,6 +11,7 @@ class Leaves::CreateLeaveApplicationService < ApplicationService
         leave = Leave.find_by(staff_id: current_user.id)
         number_of_days_off = leave_application_params[:number_of_days_off]
         
+        
         case leave_type
         when LeaveApplication.leave_types[:marriage_leave]
           create, message = check_leave_application(leave, "marriage_leave", 3, number_of_days_off)
@@ -47,6 +48,6 @@ class Leaves::CreateLeaveApplicationService < ApplicationService
   attr_accessor :current_user, :leave_application_params
 
   def check_leave_application(leave, leave_type, allow_days, number_of_days_off)
-    [false, "The number of days exceeds the allowed limit"] if (number_of_days_off + leave.send(leave_type)) > allow_days
+    [false, "The number of days exceeds the allowed limit"] if (number_of_days_off.to_f + leave.send(leave_type)) > allow_days
   end
 end

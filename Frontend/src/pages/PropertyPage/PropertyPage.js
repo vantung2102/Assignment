@@ -7,13 +7,17 @@ import Properties from "../../components/Property/Properties";
 import Sidebar from "../../components/Sidebar/Sidebar";
 import { MainWrapper, PageWrapper } from "../../global/jsx/common";
 import pageHeader from "../../components/PageHeader/pageHeader.module.scss";
+import { isOpenSelector } from "../../features/sidebar/sidebarSlice";
+import { useSelector } from "react-redux";
 
 const PropertyPage = () => {
+  const isOpenSidebar = useSelector(isOpenSelector);
+
   return (
     <MainWrapper>
       <Header />
       <Sidebar active="properties" />
-      <PageWrapper>
+      <PageWrapper isOpen={isOpenSidebar}>
         <Container fluid className="content">
           <div className={pageHeader.PageHeader}>
             <Row className="align-items-center">

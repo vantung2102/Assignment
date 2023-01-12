@@ -66,9 +66,7 @@ const FormPropertiesGroup = ({ isNew, show, close }) => {
           )}
         >
           <Form.Group>
-            <Form.Label>
-              Property Group Name <span className="text-danger">*</span>
-            </Form.Label>
+            <Form.Label>Property Group Name</Form.Label>
             <Form.Control
               defaultValue={getValues("name")}
               {...register("name", { required: "Name is required" })}
@@ -80,9 +78,7 @@ const FormPropertiesGroup = ({ isNew, show, close }) => {
           </Form.Group>
 
           <Form.Group>
-            <Form.Label>
-              Description <span className="text-danger">*</span>
-            </Form.Label>
+            <Form.Label>Description</Form.Label>
             <FloatingLabel controlId="floatingTextarea2">
               <Form.Control
                 as="textarea"

@@ -13,7 +13,7 @@ const AddProperties = () => {
   return (
     <div className="col-auto float-end ml-auto">
       <Button className={common.AddBtn} onClick={handleShow}>
-        <FaPlus style={{ lineHeight: "38px" }} /> Add Department
+        <FaPlus style={{ lineHeight: "38px" }} /> Add Property
       </Button>
 
       <FormProperties isNew={true} show={show} close={handleClose} />

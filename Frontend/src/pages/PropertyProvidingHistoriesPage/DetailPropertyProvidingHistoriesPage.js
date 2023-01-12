@@ -7,15 +7,18 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import { MainWrapper, PageWrapper } from "../../global/jsx/common";
 import pageHeader from "../../components/PageHeader/pageHeader.module.scss";
 import DetailPropertyProvidingHistories from "../../components/Property/PropertyProvidingHistories/DetailPropertyProvidingHistories";
+import { isOpenSelector } from "../../features/sidebar/sidebarSlice";
+import { useSelector } from "react-redux";
 
 const DetailPropertyProvidingHistoriesPage = () => {
   const { id } = useParams();
+  const isOpenSidebar = useSelector(isOpenSelector);
 
   return (
     <MainWrapper>
       <Header />
       <Sidebar active="property_providing_histories" />
-      <PageWrapper>
+      <PageWrapper isOpen={isOpenSidebar}>
         <Container fluid className="content">
           <div className={pageHeader.PageHeader}>
             <Row className="align-items-center">

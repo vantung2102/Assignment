@@ -8,14 +8,18 @@ import { Container, Row } from "react-bootstrap";
 import AddPosition from "../../components/Position/AddPosition";
 import Position from "../../components/Position/Position";
 import { ToastContainer } from "react-toastify";
+import { isOpenSelector } from "../../features/sidebar/sidebarSlice";
+import { useSelector } from "react-redux";
 
 const PositionPage = () => {
+  const isOpenSidebar = useSelector(isOpenSelector);
+
   return (
     <MainWrapper>
       <Header />
       <Sidebar active="position" />
 
-      <PageWrapper>
+      <PageWrapper isOpen={isOpenSidebar}>
         <Container fluid className="content">
           <div className={pageHeader.PageHeader}>
             <Row className="align-items-center">

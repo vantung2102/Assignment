@@ -2,7 +2,7 @@ class Api::V1::OnboardingManagement::OnboardingSampleStepsController < Api::V1::
   def index
     authorize OnboardingSampleStep
     onboarding_sample_step = OnboardingSampleStep.filter(params.slice(:position))
-    render_resource_collection(onboarding_sample_step.order(position_id: :desc))
+    render_resource_collection(onboarding_sample_step.includes(:position).order(position_id: :desc))
   end
 
   def show

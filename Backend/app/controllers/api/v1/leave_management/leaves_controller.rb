@@ -1,7 +1,7 @@
 class Api::V1::LeaveManagement::LeavesController < Api::V1::BaseController
   def index
-    pagy, leaves = current_user.has_role?(:Manager) ? paginate(Leave.order(created_at: :desc)) : paginate(Leave.find_by(staff_id: current_user.id))
-    render_resource_collection(leaves, pagy: pagy)
+    pagy, leaves = paginate(Leave.order(created_at: :desc))
+    render_resource_collection(leaves.includes(:staff), pagy: pagy)
   end
 
   def show

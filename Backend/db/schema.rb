@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_12_27_051607) do
+ActiveRecord::Schema.define(version: 2023_01_07_185350) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -222,6 +222,9 @@ ActiveRecord::Schema.define(version: 2022_12_27_051607) do
     t.string "password_digest"
     t.datetime "deleted_at"
     t.bigint "job_title_id"
+    t.string "phone"
+    t.text "address"
+    t.date "join_date"
     t.index ["deleted_at"], name: "index_staffs_on_deleted_at"
     t.index ["department_id"], name: "index_staffs_on_department_id"
     t.index ["job_title_id"], name: "index_staffs_on_job_title_id"

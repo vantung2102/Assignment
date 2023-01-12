@@ -1,24 +1,63 @@
-import React, { useEffect } from "react";
-import { Card, Col, Dropdown, Row } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Button, Card, Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-
 import avatar from "../../../assets/images/home/user.jpg";
+import "./toggleSwitch.scss";
+
 import {
-  ProfileSelector,
+  getRoleSelector,
+  getUserSelector,
+} from "../../../features/auth/authSlice";
+import {
+  profileSelector,
   fetchProfile,
+  destroyStaff,
+  lowerLevelStaff,
 } from "../../../features/staff/staffSlice";
-import { ProfileView } from "./topProfile";
-
+import { ProfileView, ButtonToggleSwitch } from "./topProfile";
 import topProfile from "./topProfile.module.scss";
+import FormInactive from "./FormInactive";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
-const TopProfile = (prop) => {
-  const profile = useSelector(ProfileSelector);
+const TopProfile = ({ idProfile }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const role = useSelector(getRoleSelector);
+  const profile = useSelector(!role ? getUserSelector : profileSelector);
+  const lowerLevel = useSelector(lowerLevelStaff);
+  const [name, setName] = useState("");
+  const [active, setActive] = useState(null);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
-    dispatch(fetchProfile(prop.idProfile));
-  }, []);
+    dispatch(fetchProfile(idProfile));
+  }, [dispatch, idProfile]);
+
+  useEffect(() => {
+    if (!profile) return;
+
+    const { status, fullname } = profile?.attributes;
+    setName(fullname);
+    setActive(status);
+  }, [profile]);
+
+  useEffect(() => {
+    if (!lowerLevel) return;
+
+    setShow(true);
+  }, [lowerLevel]);
+
+  const handleClose = () => setShow(false);
+
+  const handleInactive = () => {
+    dispatch(destroyStaff(idProfile));
+    setTimeout(() => {
+      if (!lowerLevel) {
+        navigate("/staff_management/staff", { replace: true });
+      }
+    }, 1000);
+  };
 
   return (
     <Card className="mb-0">
@@ -35,74 +74,34 @@ const TopProfile = (prop) => {
                     <div className={topProfile.ProfileInfoLeft}>
                       <div className="d-flex align-items-center">
                         <div style={{ flex: 1 }}>
-                          <h3 className="user-name m-t-0 mb-0">
-                            {profile?.attributes.fullname}
-                          </h3>
-                          <div className="staff-id">Employee ID : FT-0001</div>
+                          <h3 className="mb-0">{name}</h3>
 
-                          <h6 className="text-muted">
-                            {profile?.attributes?.department?.name}
-                            {","}
-                            {profile?.attributes?.position?.name}
-                            {","}
-                            {profile?.attributes?.job_title?.title}
-                          </h6>
-                        </div>
-
-                        <div className="justify-content-end">
-                          <Link className="btn btn-active">Active</Link>
+                          <div className="staff-id">
+                            Employee ID : {profile?.id}
+                          </div>
+                          <Button
+                            size="sm"
+                            className="mt-3"
+                            variant="danger"
+                            onClick={handleInactive}
+                          >
+                            Inactive
+                          </Button>
                         </div>
                       </div>
                     </div>
-                  </Col>
-                  <Col md={7}>
-                    <ul className="personal-info d-flex justify-content-end">
-                      <li>
-                        <Dropdown>
-                          <Dropdown.Toggle id={topProfile.DropdownBasic}>
-                            Job Change
-                          </Dropdown.Toggle>
-
-                          <Dropdown.Menu>
-                            <Dropdown.Item>Action</Dropdown.Item>
-                            <Dropdown.Item>Another action</Dropdown.Item>
-                            <Dropdown.Item>Something else</Dropdown.Item>
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </li>
-                      <li>
-                        <Dropdown>
-                          <Dropdown.Toggle id={topProfile.DropdownBasic}>
-                            Probation
-                          </Dropdown.Toggle>
-
-                          <Dropdown.Menu>
-                            <Dropdown.Item>Action</Dropdown.Item>
-                            <Dropdown.Item>Another action</Dropdown.Item>
-                            <Dropdown.Item>Something else</Dropdown.Item>
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </li>
-                      <li>
-                        <Dropdown>
-                          <Dropdown.Toggle id={topProfile.DropdownBasic}>
-                            More
-                          </Dropdown.Toggle>
-
-                          <Dropdown.Menu>
-                            <Dropdown.Item>Action</Dropdown.Item>
-                            <Dropdown.Item>Another action</Dropdown.Item>
-                            <Dropdown.Item>Something else</Dropdown.Item>
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </li>
-                    </ul>
                   </Col>
                 </Row>
               </div>
             </ProfileView>
           </Col>
         </Row>
+        <FormInactive
+          isNew={false}
+          show={show}
+          close={handleClose}
+          idProfile={idProfile}
+        />
       </Card.Body>
     </Card>
   );

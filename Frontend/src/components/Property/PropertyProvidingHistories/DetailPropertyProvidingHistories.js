@@ -16,18 +16,43 @@ import {
   showPropertyProvidingHistory,
 } from "../../../features/propertyProvidingHistories/propertyProvidingHistoriesSlice";
 import { ProfileView } from "../../StaffProfile/TopProfile/topProfile";
+import ColumnProperty from "../DetailProperties/ColumnProperty";
 
 const DetailPropertyProvidingHistories = ({ idRequest }) => {
   const dispatch = useDispatch();
   const history = useSelector(PropertyProvidingHistorySelector);
+  const [status, setStatus] = useState(null);
+  const [provider, setProvider] = useState(null);
+  const [receiver, setReceiver] = useState(null);
+  const [code, setCode] = useState(null);
+  const [name, setName] = useState(null);
+  const [brand, setBrand] = useState(null);
+  const [numberOfRepairs, setNumberOfRepairs] = useState(null);
+  const [statusProperty, setStatusProperty] = useState(null);
+  const [buyDay, setBuyDay] = useState(null);
+  const [price, setPrice] = useState(null);
+  const [groupProperty, setGroupProperty] = useState(null);
 
   useEffect(() => {
     dispatch(showPropertyProvidingHistory(idRequest));
-  }, []);
+  }, [dispatch]);
 
-  const handleRecall = (id) => {
-    dispatch(propertyRecall(id));
-  };
+  useEffect(() => {
+    if (!history) return;
+
+    const { status, property, provider, receiver } = history.attributes;
+
+    setStatus(status);
+    setProvider(property.fullname);
+    setReceiver(receiver.fullname);
+    setCode(property?.code_seri);
+    setName(property?.name);
+    setBrand(property?.brand);
+    setNumberOfRepairs(property?.number_of_repairs);
+    setStatusProperty(property?.status);
+    setPrice(property?.price);
+    setBuyDay(property?.date_buy);
+  }, [history]);
 
   return (
     <Card className="mb-0">
@@ -40,106 +65,49 @@ const DetailPropertyProvidingHistories = ({ idRequest }) => {
                   <Form.Group>
                     <Form.Label style={{ width: "100%" }}>Status</Form.Label>
                     <Button
-                      variant="danger"
-                      disabled={
-                        history?.attributes.status == "recall" ? true : false
+                      variant={
+                        status === "recall"
+                          ? "outline-success"
+                          : "outline-danger"
                       }
-                      onClick={() => handleRecall(idRequest)}
                     >
-                      Recalled
+                      {status === "recall" ? "recalled" : "provided"}
                     </Button>
                   </Form.Group>
                 </Col>
                 <Col md={4}>
                   <Form.Group>
                     <Form.Label>Property</Form.Label>
-                    <Form.Control
-                      defaultValue={history?.attributes.property.name}
-                      disabled
-                    />
+                    <Form.Control defaultValue={name} disabled />
                   </Form.Group>
                 </Col>
 
                 <Col md={3}>
                   <Form.Group>
                     <Form.Label>Provider</Form.Label>
-                    <Form.Control
-                      defaultValue={history?.attributes?.provider?.fullname}
-                      disabled
-                    />
+                    <Form.Control defaultValue={provider} disabled />
                   </Form.Group>
                 </Col>
                 <Col md={3}>
                   <Form.Group>
                     <Form.Label>Receiver</Form.Label>
-                    <Form.Control
-                      defaultValue={history?.attributes?.receiver?.fullname}
-                      disabled
-                    />
+                    <Form.Control defaultValue={receiver} disabled />
                   </Form.Group>
                 </Col>
                 <Col md={12} className="mt-4">
                   <Form.Label>Detail Property</Form.Label>
                 </Col>
                 <>
-                  <Form.Group className="d-flex align-items-center mt-4">
-                    <Col md={2}>
-                      <Form.Label>Name</Form.Label>
-                    </Col>
-                    <Col md={10}>
-                      <Form.Control
-                        defaultValue={history?.attributes.property.name}
-                        disabled
-                      />
-                    </Col>
-                  </Form.Group>
-                  <Form.Group className="d-flex align-items-center mt-4">
-                    <Col md={2}>
-                      <Form.Label>Code Seri</Form.Label>
-                    </Col>
-                    <Col md={10}>
-                      <Form.Control
-                        defaultValue={history?.attributes.property.code_seri}
-                        disabled
-                      />
-                    </Col>
-                  </Form.Group>
+                  <ColumnProperty title="Name" value={name} />
+                  <ColumnProperty title="Code Seri" value={code} />
+                  <ColumnProperty title="Brand" value={brand} />
 
-                  <Form.Group className="d-flex align-items-center mt-4">
-                    <Col md={2}>
-                      <Form.Label>Buy day</Form.Label>
-                    </Col>
-                    <Col md={10}>
-                      <Form.Control
-                        defaultValue={history?.attributes.property.date_buy}
-                        disabled
-                      />
-                    </Col>
-                  </Form.Group>
-                  <Form.Group className="d-flex align-items-center mt-4">
-                    <Col md={2}>
-                      <Form.Label>number_of_repairs</Form.Label>
-                    </Col>
-                    <Col md={10}>
-                      <Form.Control
-                        defaultValue={
-                          history?.attributes.property.number_of_repairs
-                        }
-                        disabled
-                      />
-                    </Col>
-                  </Form.Group>
-                  <Form.Group className="d-flex align-items-center mt-4">
-                    <Col md={2}>
-                      <Form.Label>Price</Form.Label>
-                    </Col>
-                    <Col md={10}>
-                      <Form.Control
-                        defaultValue={history?.attributes.property.price}
-                        disabled
-                      />
-                    </Col>
-                  </Form.Group>
+                  <ColumnProperty title="Buy day" value={buyDay} />
+                  <ColumnProperty
+                    title="Number of repairs"
+                    value={numberOfRepairs}
+                  />
+                  <ColumnProperty title="Price" value={price} />
                 </>
               </Row>
             </ProfileView>

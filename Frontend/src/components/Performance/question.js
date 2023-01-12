@@ -1,5 +1,3 @@
-import React from "react";
-
 const question = () => {
   const listQuestion = {
     question_1:

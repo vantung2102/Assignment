@@ -1,16 +1,54 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Col, Row, Form, FloatingLabel } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { leaveSelector, showLeave } from "../../features/leave/leaveSlice";
+import {
+  leaveByUser,
+  leaveSelector,
+  showLeave,
+} from "../../features/leave/leaveSlice";
 import { ProfileView } from "../StaffProfile/TopProfile/topProfile";
+import { ColumnDetail, ColumnDetailType } from "./ColumnDetail";
 
-const DetailLeave = ({ idRequest }) => {
+const DetailLeave = ({ idRequest, isUser }) => {
   const dispatch = useDispatch();
   const leave = useSelector(leaveSelector);
+  const [staff, setStaff] = useState(null);
+  const [casual, setCasual] = useState(null);
+  const [unpaid, setUnpaid] = useState(null);
+  const [compassionate, setCompassionate] = useState(null);
+  const [marriage, setMarriage] = useState(null);
+  const [paternity, setPaternity] = useState(null);
+  const [maternity, setMaternity] = useState(null);
+  const [number, setNumber] = useState(null);
 
   useEffect(() => {
-    dispatch(showLeave(idRequest));
-  }, []);
+    isUser ? dispatch(leaveByUser(idRequest)) : dispatch(showLeave(idRequest));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!leave) return;
+    const {
+      staff,
+      allowed_number_of_days_off,
+      casual_leave,
+      unpaid_leave,
+      compassionate_leave,
+      marriage_leave,
+      paternity_leave,
+      maternity_leave,
+    } = leave?.attributes;
+
+    setStaff(staff?.fullname);
+    setCasual(casual_leave);
+    setUnpaid(unpaid_leave);
+    setCompassionate(compassionate_leave);
+    setCompassionate(unpaid_leave);
+    setMarriage(marriage_leave);
+    setPaternity(paternity_leave);
+    setMaternity(maternity_leave);
+    setNumber(allowed_number_of_days_off);
+  }, [leave]);
+
   return (
     <Card className="mb-0">
       <Card.Body>
@@ -18,74 +56,37 @@ const DetailLeave = ({ idRequest }) => {
           <Col md={12}>
             <ProfileView>
               <Row>
-                <Form.Group className="d-flex align-items-center mt-4">
-                  <Col md={2}>
-                    <Form.Label>Staff:</Form.Label>
-                  </Col>
-                  <Col md={10}>
-                    <Form.Control
-                      defaultValue={leave?.attributes.staff.fullname}
-                      disabled
-                    />
-                  </Col>
-                </Form.Group>
-
-                <Form.Group className="d-flex align-items-center mt-4">
-                  <Col md={2}>
-                    <Form.Label>Casual leave:</Form.Label>
-                  </Col>
-                  <Col md={10}>
-                    {leave?.attributes.casual_leave}/
-                    <span className="text-danger">
-                      {leave?.attributes.allowed_number_of_days_off}
-                    </span>
-                  </Col>
-                </Form.Group>
-                <Form.Group className="d-flex align-items-center mt-4">
-                  <Col md={2}>
-                    <Form.Label>Unpaid leave:</Form.Label>
-                  </Col>
-                  <Col md={10}>
-                    {leave?.attributes.unpaid_leave}/
-                    <span className="text-danger">15</span>
-                  </Col>
-                </Form.Group>
-                <Form.Group className="d-flex align-items-center mt-4">
-                  <Col md={2}>
-                    <Form.Label>Marriage leave:</Form.Label>
-                  </Col>
-                  <Col md={10}>
-                    {leave?.attributes.marriage_leave}/
-                    <span className="text-danger">3</span>
-                  </Col>
-                </Form.Group>
-                <Form.Group className="d-flex align-items-center mt-4">
-                  <Col md={2}>
-                    <Form.Label>Compassionate leave:</Form.Label>
-                  </Col>
-                  <Col md={10}>
-                    {leave?.attributes.compassionate_leave}/
-                    <span className="text-danger">3</span>
-                  </Col>
-                </Form.Group>
-                <Form.Group className="d-flex align-items-center mt-4">
-                  <Col md={2}>
-                    <Form.Label>Paternity leave:</Form.Label>
-                  </Col>
-                  <Col md={10}>
-                    {leave?.attributes.paternity_leave}/
-                    <span className="text-danger">1</span>
-                  </Col>
-                </Form.Group>
-                <Form.Group className="d-flex align-items-center mt-4">
-                  <Col md={2}>
-                    <Form.Label>Maternity leave:</Form.Label>
-                  </Col>
-                  <Col md={10}>
-                    {leave?.attributes.maternity_leave}/
-                    <span className="text-danger">6 months</span>
-                  </Col>
-                </Form.Group>
+                <ColumnDetail title="Staff:" value={staff} disabled={true} />
+                <ColumnDetailType
+                  title="Casual leave:"
+                  value={casual}
+                  defaultValue={number}
+                />
+                <ColumnDetailType
+                  title="Unpaid leave:"
+                  value={unpaid}
+                  defaultValue={15}
+                />
+                <ColumnDetailType
+                  title="Marriage leave:"
+                  value={marriage}
+                  defaultValue={3}
+                />
+                <ColumnDetailType
+                  title="Compassionate leave:"
+                  value={compassionate}
+                  defaultValue={3}
+                />
+                <ColumnDetailType
+                  title="Paternity leave:"
+                  value={paternity}
+                  defaultValue={1}
+                />
+                <ColumnDetailType
+                  title="Maternity leave:"
+                  value={maternity}
+                  defaultValue={6 * 30}
+                />
               </Row>
             </ProfileView>
           </Col>

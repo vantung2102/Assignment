@@ -1,13 +1,9 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa";
-
 import common from "../../global/module/common.module.scss";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  departmentsSelector,
-  fetchDepartment,
-} from "../../features/department/departmentSlice";
+
 import FormPosition from "./FormPosition";
 
 const AddPosition = () => {

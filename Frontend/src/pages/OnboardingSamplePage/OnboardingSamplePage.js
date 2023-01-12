@@ -7,14 +7,18 @@ import { MainWrapper, PageWrapper } from "../../global/jsx/common";
 import pageHeader from "../../components/PageHeader/pageHeader.module.scss";
 import OnboardingSampleStep from "../../components/OnboardingSampleStep/OnboardingSampleStep";
 import AddOnboardingSampleStep from "../../components/OnboardingSampleStep/AddOnboardingSampleStep";
+import { useSelector } from "react-redux";
+import { isOpenSelector } from "../../features/sidebar/sidebarSlice";
 
 const OnboardingSamplePage = () => {
+  const isOpenSidebar = useSelector(isOpenSelector);
+
   return (
     <MainWrapper>
       <Header />
       <Sidebar active="onboarding_sample" />
 
-      <PageWrapper>
+      <PageWrapper isOpen={isOpenSidebar}>
         <Container fluid className="content">
           <div className={pageHeader.PageHeader}>
             <Row className="align-items-center">

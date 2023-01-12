@@ -29,7 +29,7 @@ const FormPerformance = ({ show, close }) => {
     const number = (date2 - date1) / 3600000 / 24;
 
     return (number + 1).toString() === numberOfDay ||
-      (number + 0.5).toString() == numberOfDay
+      (number + 0.5).toString() === numberOfDay
       ? true
       : false;
   };
@@ -45,7 +45,7 @@ const FormPerformance = ({ show, close }) => {
   return (
     <Modal show={show} onHide={close}>
       <Modal.Header closeButton>
-        <Modal.Title>Add Department</Modal.Title>
+        <Modal.Title>Add Performance</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={handleSubmit(handleNewDepartment)}>

@@ -8,7 +8,7 @@ import { commentRequestProperty } from "../../features/requestProperty/requestPr
 import { ChatBody, ChatContent, ChatMessage } from "./comment";
 import "./comment.module.scss";
 
-const Comment = ({ commentable_id, commentable_type, comments, name }) => {
+const Comment = ({ commentable_id, commentable_type, comments }) => {
   const dispatch = useDispatch();
 
   const currentUser = useSelector(getUserSelector);
@@ -36,14 +36,6 @@ const Comment = ({ commentable_id, commentable_type, comments, name }) => {
 
   return (
     <Card className="mt-2">
-      <Card.Header>
-        <div className="d-flex align-items-center">
-          <div className="name flex-grow-1">
-            <h6 className="mb-0">{name}</h6>
-          </div>
-        </div>
-      </Card.Header>
-
       <Card.Body>
         <ChatContent>
           {comments?.map((comment, index) => (

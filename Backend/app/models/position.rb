@@ -15,9 +15,7 @@ class Position < ApplicationRecord
   has_many :probations, :foreign_key => 'position_id'
 
   has_one :staff
-  belongs_to :department
 
   validates :name, presence: true
   validates :description, presence: true, length: { minimum: 5 }
-  validates :department_id, presence: true
 end

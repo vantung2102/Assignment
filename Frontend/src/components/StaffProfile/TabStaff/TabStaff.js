@@ -1,10 +1,17 @@
 import React from "react";
 import { Col, Row, Tab, Tabs } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { getRoleSelector } from "../../../features/auth/authSlice";
 import { TabBox } from "../../../pages/ProfilePage/profilePage";
+import DetailLeave from "../../Leave/DetailLeave";
 import Onboarding from "../Onboarding/Onboarding";
 import Profile from "../Profile/Profile";
 
 const TabStaff = () => {
+  const role = useSelector(getRoleSelector);
+  const { id } = useParams();
+
   return (
     <TabBox className="card">
       <Row>
@@ -14,11 +21,13 @@ const TabStaff = () => {
               <Profile />
             </Tab>
             <Tab eventKey="time_off" title="TIME OFF">
-              hohoho
+              <DetailLeave idRequest={id} isUser={true} />
             </Tab>
-            <Tab eventKey="onboarding" title="ONBOARDING">
-              <Onboarding />
-            </Tab>
+            {role && (
+              <Tab eventKey="onboarding" title="ONBOARDING">
+                <Onboarding />
+              </Tab>
+            )}
           </Tabs>
         </Col>
       </Row>

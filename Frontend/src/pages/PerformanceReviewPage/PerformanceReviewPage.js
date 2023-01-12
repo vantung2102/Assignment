@@ -6,14 +6,18 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import { MainWrapper, PageWrapper } from "../../global/jsx/common";
 import pageHeader from "../../components/PageHeader/pageHeader.module.scss";
 import ReviewPerformance from "../../components/Performance/ReviewPerformance";
+import { isOpenSelector } from "../../features/sidebar/sidebarSlice";
+import { useSelector } from "react-redux";
 
 const PerformanceReviewPage = () => {
+  const isOpenSidebar = useSelector(isOpenSelector);
+
   return (
     <MainWrapper>
       <Header />
       <Sidebar active="review" />
 
-      <PageWrapper>
+      <PageWrapper isOpen={isOpenSidebar}>
         <Container fluid className="content">
           <div className={pageHeader.PageHeader}>
             <Row className="align-items-center">

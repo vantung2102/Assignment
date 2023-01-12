@@ -13,67 +13,84 @@ import {
 } from "../../features/propertyGroup/propertyGroupSlice";
 import { SubmitSection } from "../Department/department";
 import Select from "react-select";
+import { optionSelect2 } from "../../common/hooks/hooks";
 
 const FormProperties = ({ isNew, show, close }) => {
   const dispatch = useDispatch();
   const property = useSelector(propertySelector);
   const propertiesGroup = useSelector(propertiesGroupSelector);
-
-  const [code, setCode] = useState("");
-  const [name, setName] = useState("");
-  const [brand, setBrand] = useState("");
-  const [groupProperty, setGroupProperty] = useState("");
-  const [price, setPrice] = useState(0);
-  const [buyDay, setBuyDay] = useState("");
-  const [numberOfRepairs, setNumberOfRepairs] = useState(0);
-  const [status, setStatus] = useState(false);
-
-  const getOption = (arr, attr) => {
-    return arr?.map((item) => {
-      return { value: item.id, label: item.attributes[attr] };
-    });
-  };
-
-  useEffect(() => {
-    dispatch(fetchPropertiesGroup);
-  }, []);
-
-  useEffect(() => {
-    if (!isNew) {
-      setCode(property?.code_seri);
-      setName(property?.name);
-      setBrand(property?.brand);
-      setGroupProperty(property?.group_property.id);
-      setPrice(property?.price);
-      setBuyDay(property?.date_buy);
-      setNumberOfRepairs(property?.number_of_repairs);
-      setStatus(property?.status);
-    }
-  }, [property]);
-
   const {
     register,
     control,
     handleSubmit,
     watch,
+    setValue,
+    getValues,
     formState: { errors },
   } = useForm();
 
+  useEffect(() => {
+    dispatch(fetchPropertiesGroup());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (isNew || !property) return;
+    console.log(property);
+
+    const {
+      code_seri,
+      name,
+      brand,
+      group_property,
+      price,
+      date_buy,
+      number_of_repairs,
+    } = property;
+
+    setValue("code", code_seri);
+    setValue("name", name);
+    setValue("brand", brand);
+    setValue("propertyGroup", {
+      value: group_property.id,
+      label: group_property.name,
+    });
+    setValue("price", price);
+    setValue("buyDay", date_buy);
+    setValue("numberOfRepairs", number_of_repairs);
+  }, [property]);
+
   const handleNewProperty = () => {
     const data = {
+      code_seri: watch("code"),
       name: watch("name"),
-      description: watch("description"),
+      brand: watch("brand"),
+      group_property_id: watch("propertyGroup").value,
+      price: watch("price"),
+      date_buy: watch("buyDay"),
+      number_of_repairs: watch("numberOfRepairs"),
     };
 
     dispatch(newProperty(data));
+    setValue("code", "");
+    setValue("name", "");
+    setValue("brand", "");
+    setValue("propertyGroup", "");
+    setValue("price", "");
+    setValue("buyDay", "");
+    setValue("numberOfRepairs", "");
     close(true);
   };
 
   const handleEditProperty = () => {
     const data = {
-      id: property?.attributes.id,
+      id: property.id,
+      code_seri: watch("code"),
       name: watch("name"),
       brand: watch("brand"),
+      group_property_id: watch("propertyGroup").value,
+      price: watch("price"),
+      date_buy: watch("buyDay"),
+      number_of_repairs: watch("numberOfRepairs"),
     };
 
     dispatch(editProperty(data));
@@ -94,12 +111,9 @@ const FormProperties = ({ isNew, show, close }) => {
           )}
         >
           <Form.Group>
-            <Form.Label>
-              Code <span className="text-danger">*</span>
-            </Form.Label>
+            <Form.Label>Code</Form.Label>
             <Form.Control
-              defaultValue={code}
-              onChange={(e) => setCode(e.target.value)}
+              defaultValue={getValues("code")}
               {...register("code", { required: "Code is required" })}
             ></Form.Control>
 
@@ -109,12 +123,9 @@ const FormProperties = ({ isNew, show, close }) => {
           </Form.Group>
 
           <Form.Group>
-            <Form.Label>
-              Name <span className="text-danger">*</span>
-            </Form.Label>
+            <Form.Label>Name</Form.Label>
             <Form.Control
-              defaultValue={name}
-              onChange={(e) => setName(e.target.value)}
+              defaultValue={getValues("name")}
               {...register("name", { required: "Name is required" })}
             ></Form.Control>
 
@@ -124,12 +135,9 @@ const FormProperties = ({ isNew, show, close }) => {
           </Form.Group>
 
           <Form.Group>
-            <Form.Label>
-              Brand <span className="text-danger">*</span>
-            </Form.Label>
+            <Form.Label>Brand</Form.Label>
             <Form.Control
-              defaultValue={brand}
-              onChange={(e) => setBrand(e.target.value)}
+              defaultValue={getValues("brand")}
               {...register("brand", { required: "brand is required" })}
             ></Form.Control>
 
@@ -139,12 +147,9 @@ const FormProperties = ({ isNew, show, close }) => {
           </Form.Group>
 
           <Form.Group>
-            <Form.Label>
-              Price <span className="text-danger">*</span>
-            </Form.Label>
+            <Form.Label>Price</Form.Label>
             <Form.Control
-              defaultValue={price}
-              onChange={(e) => setPrice(e.target.value)}
+              defaultValue={getValues("price")}
               {...register("price", { required: "price is required" })}
             ></Form.Control>
 
@@ -154,13 +159,10 @@ const FormProperties = ({ isNew, show, close }) => {
           </Form.Group>
 
           <Form.Group>
-            <Form.Label>
-              Buy day <span className="text-danger">*</span>
-            </Form.Label>
+            <Form.Label>Buy day</Form.Label>
             <Form.Control
               type="date"
-              defaultValue={buyDay}
-              onChange={(e) => setBuyDay(e.target.value)}
+              defaultValue={getValues("buyDay")}
               {...register("buyDay", { required: "brand is required" })}
             ></Form.Control>
 
@@ -170,14 +172,11 @@ const FormProperties = ({ isNew, show, close }) => {
           </Form.Group>
 
           <Form.Group>
-            <Form.Label>
-              Number of repairs <span className="text-danger">*</span>
-            </Form.Label>
+            <Form.Label>Number of repairs</Form.Label>
             <Form.Control
-              defaultValue={numberOfRepairs}
-              onChange={(e) => setNumberOfRepairs(e.target.value)}
+              defaultValue={getValues("numberOfRepairs")}
               {...register("numberOfRepairs", {
-                required: "brand is required",
+                required: "number Of Repairs is required",
               })}
             ></Form.Control>
 
@@ -194,7 +193,7 @@ const FormProperties = ({ isNew, show, close }) => {
               rules={{ required: "Property Group is required" }}
               render={({ field: { onChange, onBlur, value, name, ref } }) => (
                 <Select
-                  options={getOption(propertiesGroup, "name")}
+                  options={optionSelect2(propertiesGroup, "name")}
                   onChange={onChange}
                   onBlur={onBlur}
                   value={value}

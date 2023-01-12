@@ -9,8 +9,18 @@ export const SidebarContainer = styled.div`
   position: fixed;
   top: 60px;
   transition: all 0.2s ease-in-out 0s;
-  width: 230px;
+  width: ${({ isOpen }) => (isOpen ? "230px" : "0")};
   z-index: 999;
+
+  @media screen and (max-width: 767px) {
+    width: ${({ isOpen }) => (!isOpen ? "230px" : "0")};
+  }
+
+  @media screen and (min-width: 768px) and (max-width: 1023px) {
+  }
+
+  @media screen and (min-width: 1024px) and (max-width: 1439px) {
+  }
 `;
 
 export const SidebarInner = styled.div`

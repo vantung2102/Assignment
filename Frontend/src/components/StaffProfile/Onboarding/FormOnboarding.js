@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Button, FloatingLabel, Form, Modal } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 import { Controller, useForm } from "react-hook-form";
 import { SubmitSection } from "../../Department/department";
 import Select from "react-select";
@@ -18,7 +18,6 @@ const FormOnboarding = ({ close, show }) => {
     handleSubmit,
     control,
     watch,
-    setValue,
     getValues,
     formState: { errors },
   } = useForm();
@@ -28,24 +27,12 @@ const FormOnboarding = ({ close, show }) => {
 
   useEffect(() => {
     dispatch(fetchStaff());
-  }, []);
+  }, [dispatch]);
 
   const compareDate = (start, end) => {
     const date1 = new Date(start).getTime();
     const date2 = new Date(end).getTime();
     return date2 >= date1 ? true : false;
-  };
-
-  const compareNumberOfDay = (start, end, numberOfDay) => {
-    const date1 = new Date(start).getTime();
-    const date2 = new Date(end).getTime();
-
-    const number = (date2 - date1) / 3600000 / 24;
-
-    return (number + 1).toString() === numberOfDay ||
-      (number + 0.5).toString() == numberOfDay
-      ? true
-      : false;
   };
 
   const handleUpdateOnboardingStep = () => {

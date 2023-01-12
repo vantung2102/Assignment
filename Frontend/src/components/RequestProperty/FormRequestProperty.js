@@ -12,6 +12,7 @@ import {
   fetchPropertiesGroup,
   propertiesGroupSelector,
 } from "../../features/propertyGroup/propertyGroupSlice";
+import { optionSelect2 } from "../../common/hooks/hooks";
 
 const FormRequestProperty = ({ isNew, show, close }) => {
   const dispatch = useDispatch();
@@ -29,16 +30,7 @@ const FormRequestProperty = ({ isNew, show, close }) => {
 
   useEffect(() => {
     dispatch(fetchPropertiesGroup());
-  }, []);
-
-  const optionsPropertyGroup = (arr) => {
-    return arr?.map((item) => {
-      return {
-        value: item.attributes.id,
-        label: item.attributes.name,
-      };
-    });
-  };
+  }, [dispatch]);
 
   const handleNewProperty = () => {
     const data = {
@@ -54,7 +46,6 @@ const FormRequestProperty = ({ isNew, show, close }) => {
 
   const handleEditProperty = () => {
     const data = {
-      // id: propertyGroup?.attributes.id,
       reason: watch("reason"),
       description: watch("description"),
     };
@@ -75,9 +66,7 @@ const FormRequestProperty = ({ isNew, show, close }) => {
           )}
         >
           <Form.Group>
-            <Form.Label>
-              Type <span className="text-danger">*</span>
-            </Form.Label>
+            <Form.Label>Type</Form.Label>
             <Controller
               control={control}
               name="type"
@@ -85,8 +74,8 @@ const FormRequestProperty = ({ isNew, show, close }) => {
               render={({ field: { onChange, onBlur, value, name, ref } }) => (
                 <Select
                   options={[
-                    { value: 1, label: "account" },
-                    { value: 0, label: "device" },
+                    { value: 1, label: "Account" },
+                    { value: 0, label: "Device" },
                   ]}
                   onChange={onChange}
                   onBlur={onBlur}
@@ -104,16 +93,14 @@ const FormRequestProperty = ({ isNew, show, close }) => {
           </Form.Group>
 
           <Form.Group>
-            <Form.Label>
-              Group properties <span className="text-danger">*</span>
-            </Form.Label>
+            <Form.Label>Group properties</Form.Label>
             <Controller
               control={control}
               name="propertyGroup"
               rules={{ required: "Select Type" }}
               render={({ field: { onChange, onBlur, value, name, ref } }) => (
                 <Select
-                  options={optionsPropertyGroup(propertiesGroup)}
+                  options={optionSelect2(propertiesGroup, "name")}
                   onChange={onChange}
                   onBlur={onBlur}
                   value={value}
@@ -130,9 +117,7 @@ const FormRequestProperty = ({ isNew, show, close }) => {
           </Form.Group>
 
           <Form.Group>
-            <Form.Label>
-              Reason <span className="text-danger">*</span>
-            </Form.Label>
+            <Form.Label>Reason</Form.Label>
             <Form.Control
               defaultValue={reason}
               onChange={(e) => setReason(e.target.value)}
@@ -145,9 +130,7 @@ const FormRequestProperty = ({ isNew, show, close }) => {
           </Form.Group>
 
           <Form.Group>
-            <Form.Label>
-              Detail <span className="text-danger">*</span>
-            </Form.Label>
+            <Form.Label>Detail</Form.Label>
             <FloatingLabel controlId="floatingTextarea2">
               <Form.Control
                 as="textarea"

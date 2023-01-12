@@ -2,25 +2,31 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiClient from "../../apiClient/apiClient";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
+import { useDestroy } from "../../common/hooks/hooks";
 
 const initialState = {
   loading: true,
-  meta: {},
+  meta: null,
   properties: null,
   property: null,
 };
 
-export const fetchProperties = createAsyncThunk("fetchProperties", async () => {
-  const response = await apiClient.get(
-    "/api/v1/property_management/properties",
-    {
-      headers: {
-        Authorization: Cookies.get("authorization"),
-      },
-    }
-  );
-  return response.data;
-});
+export const fetchProperties = createAsyncThunk(
+  "fetchProperties",
+  async (number) => {
+    const response = await apiClient.get(
+      `/api/v1/property_management/properties?page[number]=${
+        number ? number : 1
+      }`,
+      {
+        headers: {
+          Authorization: Cookies.get("authorization"),
+        },
+      }
+    );
+    return response.data;
+  }
+);
 
 export const showProperty = createAsyncThunk("showProperties", async (id) => {
   const response = await apiClient.get(
@@ -51,7 +57,17 @@ export const newProperty = createAsyncThunk("newProperty", async (data) => {
 export const editProperty = createAsyncThunk("editProperty", async (data) => {
   const response = await apiClient.put(
     `/api/v1/property_management/properties/${data.id}`,
-    { property: { name: data.name, description: data.description } },
+    {
+      property: {
+        code_seri: data.code_seri,
+        name: data.name,
+        brand: data.brand,
+        group_property_id: data.group_property_id,
+        price: data.price,
+        date_buy: data.date_buy,
+        number_of_repairs: data.number_of_repairs,
+      },
+    },
     {
       headers: {
         Authorization: Cookies.get("authorization"),
@@ -65,15 +81,12 @@ export const editProperty = createAsyncThunk("editProperty", async (data) => {
 export const destroyProperty = createAsyncThunk(
   "destroyProperty",
   async (id) => {
-    const response = await apiClient.delete(
-      `/api/v1/property_management/properties/${id}`,
-      {
-        headers: {
-          Authorization: Cookies.get("authorization"),
-        },
-      }
-    );
-    return response.data;
+    await apiClient.delete(`/api/v1/property_management/properties/${id}`, {
+      headers: {
+        Authorization: Cookies.get("authorization"),
+      },
+    });
+    return id;
   }
 );
 
@@ -107,6 +120,7 @@ export const propertySlice = createSlice({
       .addCase(fetchProperties.fulfilled, (state, action) => {
         state.loading = false;
         state.properties = action.payload.data;
+        state.meta = action.payload.meta;
       })
       .addCase(fetchProperties.rejected, (state, action) => {});
     // ================== show properties =================
@@ -140,6 +154,7 @@ export const propertySlice = createSlice({
     builder
       .addCase(destroyProperty.pending, (state) => {})
       .addCase(destroyProperty.fulfilled, (state, action) => {
+        state.properties = useDestroy(state.properties, action);
         toast.success("Destroy Successfully!");
       })
       .addCase(destroyProperty.rejected, (state) => {
@@ -161,5 +176,6 @@ export const propertySlice = createSlice({
 
 export const propertiesSelector = (state) => state.property.properties;
 export const propertySelector = (state) => state.property.property;
+export const metaPropertySelector = (state) => state.property.meta;
 
 export default propertySlice.reducer;

@@ -1,100 +1,126 @@
 import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import { RiDeleteBinLine } from "react-icons/ri";
-import { TbEdit } from "react-icons/tb";
-import { TiArrowUnsorted } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
 import {
   destroyPosition,
   fetchPosition,
-  positionsSelector,
+  metaPositionSelector,
   showPosition,
+  sortPositionAsc,
+  sortPositionDesc,
+  positionsSelector,
 } from "../../features/position/positionSlice";
-import { Table } from "../Staff/staff";
-import staff from "../Staff/staff.module.scss";
+import TableHead from "../Table/TableHead";
 import FormPosition from "./FormPosition";
+import {
+  TableCell,
+  TableComponent,
+  TableResponsive,
+} from "../../global/jsx/common";
+import ActionColumn from "../Table/ActionColumn";
+import Paginate from "../Paginate/Paginate";
 
 const Position = () => {
   const dispatch = useDispatch();
-  const positions = useSelector(positionsSelector);
 
+  const positions = useSelector(positionsSelector);
+  const meta = useSelector(metaPositionSelector);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsCount, setItemsCount] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(1);
   const [show, setShow] = useState(false);
+  const [toggle, setToggle] = useState(false);
 
   const handleClose = () => setShow(false);
-  const handleShow = async (id) => {
-    await dispatch(showPosition(id));
+  const handleShow = (id) => {
+    dispatch(showPosition(id));
     setShow(true);
   };
 
   useEffect(() => {
     dispatch(fetchPosition());
-  }, []);
+  }, [dispatch]);
 
-  const handleDeletePosition = async (id) => {
-    await dispatch(destroyPosition(id));
-    dispatch(fetchPosition());
+  useEffect(() => {
+    if (!meta) return;
+    setItemsCount(meta.total_count);
+    setItemsPerPage(meta.page_size);
+  }, [meta]);
+
+  const handleDelete = (id) => {
+    dispatch(destroyPosition(id));
   };
 
+  const handleSortAsc = () => {
+    dispatch(sortPositionAsc());
+    setToggle(!toggle);
+  };
+
+  const handleSortDesc = () => {
+    dispatch(sortPositionDesc());
+    setToggle(!toggle);
+  };
+
+  const getCurrentPage = (number) => {
+    dispatch(fetchPosition(number));
+  };
   return (
-    <Row>
-      <Col md={12}>
-        <div className="table-responsive">
-          <div className="table">
-            <div className="table-content">
-              <Table>
-                <thead>
-                  <tr>
-                    <th className="ant-table-cell">
-                      <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">STT</span>
-                        <TiArrowUnsorted />
-                      </div>
-                    </th>
-                    <th className="ant-table-cell">
-                      <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">Position</span>
-                        <TiArrowUnsorted />
-                      </div>
-                    </th>
+    <>
+      <Row>
+        <Col md={12}>
+          <TableResponsive>
+            <TableComponent>
+              <thead>
+                <tr>
+                  <TableHead title="STT" />
+                  <TableHead
+                    title="Position"
+                    isSort={true}
+                    toggle={toggle}
+                    desc={handleSortDesc}
+                    asc={handleSortAsc}
+                  />
+                  <TableHead title="Action" centerTitle={true} />
+                </tr>
+              </thead>
+              <tbody>
+                {positions?.map((item, index) => {
+                  const { id, name } = item.attributes;
 
-                    <th className="ant-table-cell text-center">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {positions.map((item, index) => (
-                    <tr key={item.attributes.id}>
-                      <td className="ant-table-cell">{index}</td>
-                      <td className="ant-table-cell">{item.attributes.name}</td>
-
-                      <td className="ant-table-cell">
-                        <div className="d-flex justify-content-evenly">
-                          <TbEdit
-                            style={{
-                              fontSize: "20px",
-                            }}
-                            onClick={() => handleShow(item.attributes.id)}
-                          />
-                          <RiDeleteBinLine
-                            style={{
-                              fontSize: "20px",
-                            }}
-                            onClick={() =>
-                              handleDeletePosition(item.attributes.id)
-                            }
-                          />
-                        </div>
-                      </td>
+                  return (
+                    <tr key={id}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{name}</TableCell>
+                      <TableCell>
+                        <ActionColumn
+                          id={id}
+                          edit={handleShow}
+                          destroy={handleDelete}
+                        />
+                      </TableCell>
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </div>
-          </div>
-        </div>
-      </Col>
+                  );
+                })}
+              </tbody>
+            </TableComponent>
+          </TableResponsive>
+        </Col>
 
-      <FormPosition isNew={false} show={show} close={handleClose} />
-    </Row>
+        <FormPosition isNew={false} show={show} close={handleClose} />
+      </Row>
+
+      {meta && (
+        <Paginate
+          itemsCount={itemsCount}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          alwaysShown={false}
+          getCurrentPage={getCurrentPage}
+        />
+      )}
+    </>
   );
 };
 

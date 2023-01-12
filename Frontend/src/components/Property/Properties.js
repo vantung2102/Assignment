@@ -1,24 +1,43 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Row } from "react-bootstrap";
-import { RiDeleteBinLine } from "react-icons/ri";
-import { TbEdit } from "react-icons/tb";
-import { TiArrowUnsorted } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
 import {
   destroyProperty,
   fetchProperties,
+  metaPropertySelector,
   propertiesSelector,
   showProperty,
 } from "../../features/property/propertySlice";
-import { Table } from "../Staff/staff";
 import FormProperties from "./FormProperties";
-import staff from "../Staff/staff.module.scss";
 import { Link } from "react-router-dom";
+import {
+  TableCell,
+  TableComponent,
+  TableResponsive,
+} from "../../global/jsx/common";
+import TableHead from "../Table/TableHead";
+import ActionColumn from "../Table/ActionColumn";
+import Paginate from "../Paginate/Paginate";
 
 const Properties = () => {
   const dispatch = useDispatch();
   const properties = useSelector(propertiesSelector);
+  const meta = useSelector(metaPropertySelector);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsCount, setItemsCount] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(1);
   const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    dispatch(fetchProperties());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!meta) return;
+    setItemsCount(meta.total_count);
+    setItemsPerPage(meta.page_size);
+  }, [meta]);
 
   const handleClose = () => setShow(false);
   const handleShow = (id) => {
@@ -26,89 +45,81 @@ const Properties = () => {
     setShow(true);
   };
 
-  useEffect(() => {
-    dispatch(fetchProperties());
-  }, []);
-
   const handleDelete = (id) => {
     dispatch(destroyProperty(id));
   };
 
+  const getCurrentPage = (number) => {
+    dispatch(fetchProperties(number));
+  };
+
   return (
-    <Row>
-      <Col md={12}>
-        <div className="table-responsive">
-          <div className="table">
-            <div className="table-content">
-              <Table>
-                <thead>
-                  <tr>
-                    <th className="ant-table-cell">
-                      <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">STT</span>
-                        <TiArrowUnsorted />
-                      </div>
-                    </th>
-                    <th className="ant-table-cell">
-                      <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">Property</span>
-                        <TiArrowUnsorted />
-                      </div>
-                    </th>
-                    <th className="ant-table-cell text-center">Status</th>
-                    <th className="ant-table-cell text-center">Action</th>
-                    <th className="ant-table-cell text-center">View history</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {properties?.map((item, index) => (
-                    <tr key={item.attributes.id}>
-                      <td className="ant-table-cell">{index}</td>
-                      <td className="ant-table-cell">
-                        <Link to={item.id}>{item.attributes.name}</Link>
-                      </td>
-                      <td className="ant-table-cell d-flex justify-content-center">
+    <>
+      <Row>
+        <Col md={12}>
+          <TableResponsive>
+            <TableComponent>
+              <thead>
+                <tr>
+                  <TableHead title="STT" />
+                  <TableHead title="Name" />
+                  <TableHead title="status" centerTitle={true} />
+                  <TableHead title="Action" centerTitle={true} />
+                  <TableHead title="View history" centerTitle={true} />
+                </tr>
+              </thead>
+              <tbody>
+                {properties?.map((item, index) => {
+                  const { id, name, status } = item.attributes;
+                  return (
+                    <tr key={id}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>
+                        <Link to={item.id}>{name}</Link>
+                      </TableCell>
+                      <TableCell className="text-center">
                         <Button
                           variant={
-                            item.attributes.status == "available"
-                              ? "success"
-                              : "danger"
+                            status === "available"
+                              ? "outline-success"
+                              : "outline-danger"
                           }
                         >
-                          {item.attributes.status}
+                          {status}
                         </Button>
-                      </td>
-
-                      <td className="ant-table-cell">
-                        <div className="d-flex justify-content-evenly">
-                          <TbEdit
-                            style={{
-                              fontSize: "20px",
-                            }}
-                            onClick={() => handleShow(item.attributes.id)}
-                          />
-                          <RiDeleteBinLine
-                            style={{
-                              fontSize: "20px",
-                            }}
-                            onClick={() => handleDelete(item.attributes.id)}
-                          />
-                        </div>
-                      </td>
-                      <td className="ant-table-cell text-center">
-                        <Link to={`${item.id}/history`}>View</Link>
-                      </td>
+                      </TableCell>
+                      <TableCell>
+                        <ActionColumn
+                          id={id}
+                          edit={handleShow}
+                          destroy={handleDelete}
+                        />
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <Link to={`${id}/history`}>View</Link>
+                      </TableCell>
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </div>
-          </div>
-        </div>
-      </Col>
+                  );
+                })}
+              </tbody>
+            </TableComponent>
+          </TableResponsive>
+        </Col>
 
-      <FormProperties isNew={false} show={show} close={handleClose} />
-    </Row>
+        <FormProperties isNew={false} show={show} close={handleClose} />
+      </Row>
+
+      {meta && (
+        <Paginate
+          itemsCount={itemsCount}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          alwaysShown={false}
+          getCurrentPage={getCurrentPage}
+        />
+      )}
+    </>
   );
 };
 

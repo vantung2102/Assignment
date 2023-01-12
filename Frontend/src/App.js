@@ -1,6 +1,8 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+
+// =============== router ===================
 import NotFound from "./pages/404/NotFound";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import Login from "./pages/Auth/Login";
@@ -29,6 +31,7 @@ import PerformanceSelfReviewPage from "./pages/PerformanceSelfReviewPage/Perform
 import PerformanceReviewPage from "./pages/PerformanceReviewPage/PerformanceReviewPage";
 import DetailPerformanceReviewPage from "./pages/DetailPerformanceReviewPage/DetailPerformanceReviewPage";
 import DetailPerformanceSelfReviewPage from "./pages/DetailPerformanceSelfReviewPage/DetailPerformanceSelfReviewPage";
+import InactiveStaffPage from "./pages/InactiveStaffPage/InactiveStaffPage";
 
 function App() {
   return (
@@ -66,6 +69,25 @@ function App() {
               </RequireAuth>
             }
           />
+
+          <Route
+            path="inactive_staff"
+            element={
+              <RequireAuth>
+                <InactiveStaffPage />
+              </RequireAuth>
+            }
+          />
+
+          <Route
+            path="inactive_staff/:id"
+            element={
+              <RequireAuth>
+                <InactiveStaffPage />
+              </RequireAuth>
+            }
+          />
+
           <Route
             path="departments"
             element={

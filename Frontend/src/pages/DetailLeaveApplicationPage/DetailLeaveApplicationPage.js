@@ -7,15 +7,19 @@ import Sidebar from "../../components/Sidebar/Sidebar";
 import { MainWrapper, PageWrapper } from "../../global/jsx/common";
 import pageHeader from "../../components/PageHeader/pageHeader.module.scss";
 import PageHeader from "../../components/PageHeader/PageHeader";
+import { isOpenSelector } from "../../features/sidebar/sidebarSlice";
+import { useSelector } from "react-redux";
 
 const DetailLeaveApplicationPage = () => {
   const { id } = useParams();
+  const isOpenSidebar = useSelector(isOpenSelector);
+
   return (
     <MainWrapper>
       <Header />
       <Sidebar active="leave_application" />
 
-      <PageWrapper>
+      <PageWrapper isOpen={isOpenSidebar}>
         <Container fluid className="content">
           <div className={pageHeader.PageHeader}>
             <Row className="align-items-center">
