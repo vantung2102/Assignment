@@ -31,6 +31,7 @@ import PerformanceSelfReviewPage from "./pages/PerformanceSelfReviewPage/Perform
 import PerformanceReviewPage from "./pages/PerformanceReviewPage/PerformanceReviewPage";
 import DetailPerformanceReviewPage from "./pages/DetailPerformanceReviewPage/DetailPerformanceReviewPage";
 import DetailPerformanceSelfReviewPage from "./pages/DetailPerformanceSelfReviewPage/DetailPerformanceSelfReviewPage";
+import InactiveStaffPage from "./pages/InactiveStaffPage/InactiveStaffPage";
 
 function App() {
   return (
@@ -68,6 +69,25 @@ function App() {
               </RequireAuth>
             }
           />
+
+          <Route
+            path="inactive_staff"
+            element={
+              <RequireAuth>
+                <InactiveStaffPage />
+              </RequireAuth>
+            }
+          />
+
+          <Route
+            path="inactive_staff/:id"
+            element={
+              <RequireAuth>
+                <InactiveStaffPage />
+              </RequireAuth>
+            }
+          />
+
           <Route
             path="departments"
             element={

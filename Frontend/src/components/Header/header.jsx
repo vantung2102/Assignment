@@ -17,13 +17,21 @@ export const HeaderContainer = styled.div`
     padding: 0 20px;
     position: relative;
     text-align: center;
-    width: 230px;
+    width: ${({ isOpen }) => (isOpen ? "230px" : "0")};
     z-index: 1;
     transition: all 0.2s ease-in-out;
 
     .logo {
-      display: inline-block;
+      display: ${({ isOpen }) => (isOpen ? "inline-block" : "none")};
       line-height: 60px;
+    }
+
+    @media screen and (max-width: 767px) {
+      width: ${({ isOpen }) => (!isOpen ? "230px" : "0")};
+
+      .logo {
+        display: ${({ isOpen }) => (!isOpen ? "inline-block" : "none")};
+      }
     }
   }
 

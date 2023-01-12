@@ -29,6 +29,17 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'pry-rails'
+  # unitest
+  gem 'rspec-rails', '~> 6.0.0'
+  gem 'rspec-mocks', '~> 3.12'
+  gem 'rspec-expectations', '~> 3.12'
+  gem "factory_bot_rails"
+  gem 'shoulda-matchers'
+  gem 'database_cleaner'
+  gem 'capybara', '>= 3.26'
+  gem 'rails-controller-testing'
+  gem 'webdrivers'
+  gem 'pundit-matchers'
 end
 
 group :development do

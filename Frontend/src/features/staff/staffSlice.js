@@ -10,9 +10,11 @@ const initialState = {
   meta: null,
   profile: null,
   staffs: null,
+  inactiveStaffs: null,
   allStaff: null,
   staffChart: null,
   staffChartByNode: [],
+  lowerLevel: false,
 };
 
 export const fetchStaff = createAsyncThunk("fetchStaff", async (number) => {
@@ -30,6 +32,22 @@ export const fetchStaff = createAsyncThunk("fetchStaff", async (number) => {
 
   return response.data;
 });
+
+export const fetchInactiveStaff = createAsyncThunk(
+  "fetchInactiveStaff",
+  async () => {
+    const response = await apiClient.get(
+      `/api/v1/staff_management/staffs/get_inactive_staff`,
+      {
+        headers: {
+          Authorization: Cookies.get("authorization"),
+        },
+      }
+    );
+
+    return response.data;
+  }
+);
 
 export const filterStaff = createAsyncThunk("filterStaff", async (data) => {
   const { fullname, department, position, job_title } = data;
@@ -142,7 +160,53 @@ export const fetchStaffChart = createAsyncThunk("fetchStaffChart", async () => {
 });
 
 export const destroyStaff = createAsyncThunk("destroyStaff", async (id) => {
-  await apiClient.delete(`/api/v1/staff_management/staffs/${id}`, {
+  const response = await apiClient.delete(
+    `/api/v1/staff_management/staffs/${id}`,
+    {
+      headers: {
+        Authorization: Cookies.get("authorization"),
+      },
+    }
+  );
+
+  return response.data;
+});
+
+export const destroyAndUpdateStaffBoss = createAsyncThunk(
+  "destroyAndUpdateStaffBoss",
+  async (data) => {
+    await apiClient.post(
+      `/api/v1/staff_management/staffs/${data.id}/destroy_and_update_staff_boss`,
+      { boss_id: data.boss_id },
+      {
+        headers: {
+          Authorization: Cookies.get("authorization"),
+        },
+      }
+    );
+
+    return data.id;
+  }
+);
+
+export const permanentDestroy = createAsyncThunk(
+  "permanentDestroy",
+  async (id) => {
+    await apiClient.get(
+      `/api/v1/staff_management/staffs/${id}/permanent_destroy`,
+      {
+        headers: {
+          Authorization: Cookies.get("authorization"),
+        },
+      }
+    );
+
+    return id;
+  }
+);
+
+export const recoverStaff = createAsyncThunk("recoverStaff", async (id) => {
+  await apiClient.get(`/api/v1/staff_management/staffs/${id}/recover_staff`, {
     headers: {
       Authorization: Cookies.get("authorization"),
     },
@@ -160,6 +224,19 @@ export const staffSlice = createSlice({
   },
   extraReducers: (builder) => {
     // ================== index Staff =================
+    builder
+      .addCase(fetchInactiveStaff.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchInactiveStaff.fulfilled, (state, action) => {
+        state.loading = false;
+        state.inactiveStaffs = action.payload.data;
+      })
+      .addCase(fetchInactiveStaff.rejected, (state) => {
+        state.loading = true;
+      });
+
+    // ================== get inactive Staff =================
     builder
       .addCase(fetchStaff.pending, (state) => {
         state.loading = true;
@@ -262,12 +339,49 @@ export const staffSlice = createSlice({
     builder
       .addCase(destroyStaff.pending, (state) => {
         state.loading = true;
+        state.lowerLevel = false;
       })
       .addCase(destroyStaff.fulfilled, (state, action) => {
-        state.staffs = useDestroy(state.staffs, action);
-        toast.success("Destroy Successfully !");
+        if (action.payload) state.lowerLevel = true;
       })
       .addCase(destroyStaff.rejected, (state) => {
+        state.loading = false;
+      });
+
+    // ================== Destroy and update boss =================
+    builder
+      .addCase(destroyAndUpdateStaffBoss.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(destroyAndUpdateStaffBoss.fulfilled, (state, action) => {
+        state.staffs = useDestroy(state.staffs, action);
+        toast.success("Inactive success!");
+      })
+      .addCase(destroyAndUpdateStaffBoss.rejected, (state) => {
+        state.loading = false;
+      });
+    // ================== Destroy and update boss =================
+    builder
+      .addCase(permanentDestroy.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(permanentDestroy.fulfilled, (state, action) => {
+        state.inactiveStaffs = useDestroy(state.inactiveStaffs, action);
+        toast.success("Successfully!");
+      })
+      .addCase(permanentDestroy.rejected, (state) => {
+        state.loading = false;
+      });
+    // ================== Destroy and update boss =================
+    builder
+      .addCase(recoverStaff.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(recoverStaff.fulfilled, (state, action) => {
+        state.inactiveStaffs = useDestroy(state.inactiveStaffs, action);
+        toast.success("Successfully!");
+      })
+      .addCase(recoverStaff.rejected, (state) => {
         state.loading = false;
       });
   },
@@ -276,11 +390,13 @@ export const staffSlice = createSlice({
 export const { sortStaffAsc, sortStaffDesc } = staffSlice.actions;
 
 export const staffsSelector = (state) => state.staff.staffs;
+export const inactiveStaffsSelector = (state) => state.staff.inactiveStaffs;
 export const profileSelector = (state) => state.staff.profile;
 export const staffChartSelector = (state) => state.staff.staffChart;
 export const staffChartByNodeSelector = (state) => state.staff.staffChartByNode;
 export const allStaffSelector = (state) => state.staff.allStaff;
 export const metaStaffSelector = (state) => state.staff.meta;
+export const lowerLevelStaff = (state) => state.staff.lowerLevel;
 export const loadingStaff = (state) => state.staff.loading;
 
 export default staffSlice.reducer;

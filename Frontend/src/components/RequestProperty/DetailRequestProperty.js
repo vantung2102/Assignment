@@ -16,10 +16,12 @@ import {
 } from "../../features/requestProperty/requestPropertySlice";
 import { ProfileView } from "../StaffProfile/TopProfile/topProfile";
 import Comment from "../Comment/Comment";
+import { getRoleSelector } from "../../features/auth/authSlice";
 
 const DetailRequestProperty = ({ idRequest }) => {
   const dispatch = useDispatch();
   const requestProperty = useSelector(requestPropertySelector);
+  const role = useSelector(getRoleSelector);
   const [status, setStatus] = useState(null);
   const [type, setType] = useState(null);
   const [requester, setRequester] = useState(null);
@@ -65,23 +67,25 @@ const DetailRequestProperty = ({ idRequest }) => {
   return (
     <>
       <Card className="mb-0">
-        <Card.Header>
-          <Button
-            size="sm"
-            variant="success"
-            className="me-4"
-            onClick={() => handleResponse(idRequest, "approved")}
-          >
-            Approved
-          </Button>
-          <Button
-            size="sm"
-            variant="danger"
-            onClick={() => handleResponse(idRequest, "cancelled")}
-          >
-            Cancel
-          </Button>
-        </Card.Header>
+        {role && (
+          <Card.Header>
+            <Button
+              size="sm"
+              variant="success"
+              className="me-4"
+              onClick={() => handleResponse(idRequest, "approved")}
+            >
+              Approved
+            </Button>
+            <Button
+              size="sm"
+              variant="danger"
+              onClick={() => handleResponse(idRequest, "cancelled")}
+            >
+              Cancel
+            </Button>
+          </Card.Header>
+        )}
         <Card.Body>
           <Row>
             <Col md={12}>

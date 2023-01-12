@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, Col, Row } from "react-bootstrap";
+import { Button, Card, Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import avatar from "../../../assets/images/home/user.jpg";
 import "./toggleSwitch.scss";
@@ -11,16 +11,24 @@ import {
 import {
   profileSelector,
   fetchProfile,
+  destroyStaff,
+  lowerLevelStaff,
 } from "../../../features/staff/staffSlice";
 import { ProfileView, ButtonToggleSwitch } from "./topProfile";
 import topProfile from "./topProfile.module.scss";
+import FormInactive from "./FormInactive";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const TopProfile = ({ idProfile }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const role = useSelector(getRoleSelector);
   const profile = useSelector(!role ? getUserSelector : profileSelector);
+  const lowerLevel = useSelector(lowerLevelStaff);
   const [name, setName] = useState("");
   const [active, setActive] = useState(null);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     dispatch(fetchProfile(idProfile));
@@ -34,9 +42,21 @@ const TopProfile = ({ idProfile }) => {
     setActive(status);
   }, [profile]);
 
-  const handleChangeActivation = (status) => {
-    if (status === active) {
-    }
+  useEffect(() => {
+    if (!lowerLevel) return;
+
+    setShow(true);
+  }, [lowerLevel]);
+
+  const handleClose = () => setShow(false);
+
+  const handleInactive = () => {
+    dispatch(destroyStaff(idProfile));
+    setTimeout(() => {
+      if (!lowerLevel) {
+        navigate("/staff_management/staff", { replace: true });
+      }
+    }, 1000);
   };
 
   return (
@@ -59,18 +79,14 @@ const TopProfile = ({ idProfile }) => {
                           <div className="staff-id">
                             Employee ID : {profile?.id}
                           </div>
-
-                          <div className="mt-3">
-                            <ButtonToggleSwitch htmlFor="toggle">
-                              <input
-                                id="toggle"
-                                type="checkbox"
-                                // checked={checked}
-                                onChange={handleChangeActivation}
-                              />
-                              <span className="slider"></span>
-                            </ButtonToggleSwitch>
-                          </div>
+                          <Button
+                            size="sm"
+                            className="mt-3"
+                            variant="danger"
+                            onClick={handleInactive}
+                          >
+                            Inactive
+                          </Button>
                         </div>
                       </div>
                     </div>
@@ -80,6 +96,12 @@ const TopProfile = ({ idProfile }) => {
             </ProfileView>
           </Col>
         </Row>
+        <FormInactive
+          isNew={false}
+          show={show}
+          close={handleClose}
+          idProfile={idProfile}
+        />
       </Card.Body>
     </Card>
   );

@@ -10,7 +10,11 @@ import {
   sortJobTitleAsc,
   sortJobTitleDesc,
 } from "../../features/jobTitle/jobTitleSlice";
-import { TableCell, TableComponent } from "../../global/jsx/common";
+import {
+  TableCell,
+  TableComponent,
+  TableResponsive,
+} from "../../global/jsx/common";
 import Paginate from "../Paginate/Paginate";
 import ActionColumn from "../Table/ActionColumn";
 import TableHead from "../Table/TableHead";
@@ -66,40 +70,42 @@ const JobTitle = () => {
     <>
       <Row>
         <Col md={12}>
-          <TableComponent>
-            <thead>
-              <tr>
-                <TableHead title="STT" />
-                <TableHead
-                  title="Job Title"
-                  isSort={true}
-                  toggle={toggle}
-                  desc={handleSortDesc}
-                  asc={handleSortAsc}
-                />
-                <TableHead title="Action" centerTitle={true} />
-              </tr>
-            </thead>
-            <tbody>
-              {jobTitles?.map((item, index) => {
-                const { id, title } = item.attributes;
+          <TableResponsive>
+            <TableComponent>
+              <thead>
+                <tr>
+                  <TableHead title="STT" />
+                  <TableHead
+                    title="Job Title"
+                    isSort={true}
+                    toggle={toggle}
+                    desc={handleSortDesc}
+                    asc={handleSortAsc}
+                  />
+                  <TableHead title="Action" centerTitle={true} />
+                </tr>
+              </thead>
+              <tbody>
+                {jobTitles?.map((item, index) => {
+                  const { id, title } = item.attributes;
 
-                return (
-                  <tr key={id}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{title}</TableCell>
-                    <TableCell>
-                      <ActionColumn
-                        id={id}
-                        edit={handleShow}
-                        destroy={handleDelete}
-                      />
-                    </TableCell>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </TableComponent>
+                  return (
+                    <tr key={id}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{title}</TableCell>
+                      <TableCell>
+                        <ActionColumn
+                          id={id}
+                          edit={handleShow}
+                          destroy={handleDelete}
+                        />
+                      </TableCell>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </TableComponent>
+          </TableResponsive>
         </Col>
 
         <FormJobTitle isNew={false} show={show} close={handleClose} />

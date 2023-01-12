@@ -16,7 +16,6 @@
 #
 class Property < ApplicationRecord
   enum status: {  available: 0, used: 1 }, _suffix: true
-  before_save :default_status
 
   has_one :provide_property
   belongs_to :group_property
@@ -28,10 +27,4 @@ class Property < ApplicationRecord
   validates :price, presence: true, numericality: { greater_than_or_equal_to: 0 }
   validates :date_buy, presence: true
   validates :number_of_repairs, presence: true, numericality: { greater_than_or_equal_to: 0 }
-
-  private
-
-  def default_status
-    self.status = :available
-  end
 end

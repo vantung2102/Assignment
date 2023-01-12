@@ -6,13 +6,14 @@ import {
   performancesSelector,
   remindPerformance,
 } from "../../features/performance/performanceSlice";
-import { Table } from "../Staff/staff";
+// import { Table } from "../Staff/staff";
 import FormPerformance from "./FormPerformance";
 import staff from "../Staff/staff.module.scss";
 import { TiArrowUnsorted } from "react-icons/ti";
 import { Link } from "react-router-dom";
 import TableHead from "../Table/TableHead";
-import { TableCell } from "../../global/jsx/common";
+import { TableCell, TableComponent } from "../../global/jsx/common";
+import EmptyData from "../Empty/EmptyData";
 
 const AdminPerformance = () => {
   const dispatch = useDispatch();
@@ -31,71 +32,66 @@ const AdminPerformance = () => {
   }, [dispatch]);
 
   if (performances?.length === 0) {
-    return "chua toi ky danh gia";
+    return <EmptyData />;
   } else {
     return (
       <Row>
         <Col md={12}>
-          <Table>
-            <thead>
-              <tr>
-                <TableHead title="STT" />
-                <TableHead title="Name" />
-                <TableHead title="Active" />
-                <TableHead title="Start day" />
-                <TableHead title="End day" />
-                <TableHead title="Status" />
-                <TableHead title="Action" />
-              </tr>
-            </thead>
-            <tbody>
-              {performances?.map((item, index) => {
-                const { id, staff, active, start_date, end_date, status } =
-                  item.attributes;
-                return (
-                  <tr key={id}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>
-                      <Link to={item.id}>{staff?.fullname}</Link>
-                    </TableCell>
-                    <TableCell>
-                      <Button
-                        size="sm"
-                        variant={active ? "outline-success" : "outline-danger"}
-                      >
-                        {active ? "Active" : "Inactive"}
-                      </Button>
-                    </TableCell>
+          <div className="table-responsive">
+            <TableComponent className="table">
+              <thead>
+                <tr>
+                  <TableHead title="STT" />
+                  <TableHead title="Name" />
+                  <TableHead title="Start day" />
+                  <TableHead title="End day" />
+                  <TableHead title="Status" />
+                  <TableHead title="Action" />
+                </tr>
+              </thead>
+              <tbody>
+                {performances?.map((item, index) => {
+                  const { id, staff, active, start_date, end_date, status } =
+                    item.attributes;
+                  return (
+                    <tr key={id}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>
+                        <Link to={`/performance_management/review/${id}`}>
+                          {staff?.fullname}
+                        </Link>
+                      </TableCell>
 
-                    <TableCell>{start_date}</TableCell>
-                    <TableCell>{end_date}</TableCell>
-                    <TableCell>
-                      <Button
-                        size="sm"
-                        variant={
-                          status === "completed"
-                            ? "outline-success"
-                            : "outline-danger"
-                        }
-                      >
-                        {status === "completed" ? "completed" : "in progress"}
-                      </Button>
-                    </TableCell>
+                      <TableCell>{start_date}</TableCell>
+                      <TableCell>{end_date}</TableCell>
+                      <TableCell>
+                        <Button
+                          size="sm"
+                          variant={
+                            status === "completed"
+                              ? "outline-success"
+                              : "outline-danger"
+                          }
+                        >
+                          {status === "completed" ? "completed" : "in progress"}
+                        </Button>
+                      </TableCell>
 
-                    <TableCell>
-                      <Button
-                        variant="warning"
-                        size="sm"
-                        onClick={() => handRemind(item.id)}
-                      >
-                        Remind
-                      </Button>
-                    </TableCell>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </Table>
+                      <TableCell>
+                        <Button
+                          variant="warning"
+                          size="sm"
+                          onClick={() => handRemind(item.id)}
+                        >
+                          Remind
+                        </Button>
+                      </TableCell>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </TableComponent>
+          </div>
         </Col>
 
         <FormPerformance close={handleClose} show={show} />

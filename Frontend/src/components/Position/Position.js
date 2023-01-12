@@ -12,7 +12,11 @@ import {
 } from "../../features/position/positionSlice";
 import TableHead from "../Table/TableHead";
 import FormPosition from "./FormPosition";
-import { TableCell, TableComponent } from "../../global/jsx/common";
+import {
+  TableCell,
+  TableComponent,
+  TableResponsive,
+} from "../../global/jsx/common";
 import ActionColumn from "../Table/ActionColumn";
 import Paginate from "../Paginate/Paginate";
 
@@ -65,40 +69,42 @@ const Position = () => {
     <>
       <Row>
         <Col md={12}>
-          <TableComponent>
-            <thead>
-              <tr>
-                <TableHead title="STT" />
-                <TableHead
-                  title="Position"
-                  isSort={true}
-                  toggle={toggle}
-                  desc={handleSortDesc}
-                  asc={handleSortAsc}
-                />
-                <TableHead title="Action" centerTitle={true} />
-              </tr>
-            </thead>
-            <tbody>
-              {positions?.map((item, index) => {
-                const { id, name } = item.attributes;
+          <TableResponsive>
+            <TableComponent>
+              <thead>
+                <tr>
+                  <TableHead title="STT" />
+                  <TableHead
+                    title="Position"
+                    isSort={true}
+                    toggle={toggle}
+                    desc={handleSortDesc}
+                    asc={handleSortAsc}
+                  />
+                  <TableHead title="Action" centerTitle={true} />
+                </tr>
+              </thead>
+              <tbody>
+                {positions?.map((item, index) => {
+                  const { id, name } = item.attributes;
 
-                return (
-                  <tr key={id}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{name}</TableCell>
-                    <TableCell>
-                      <ActionColumn
-                        id={id}
-                        edit={handleShow}
-                        destroy={handleDelete}
-                      />
-                    </TableCell>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </TableComponent>
+                  return (
+                    <tr key={id}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{name}</TableCell>
+                      <TableCell>
+                        <ActionColumn
+                          id={id}
+                          edit={handleShow}
+                          destroy={handleDelete}
+                        />
+                      </TableCell>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </TableComponent>
+          </TableResponsive>
         </Col>
 
         <FormPosition isNew={false} show={show} close={handleClose} />

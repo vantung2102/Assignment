@@ -11,7 +11,6 @@ import question from "./question";
 const DetailReviewPerformance = ({ idRequest }) => {
   const dispatch = useDispatch();
   const review = useSelector(performanceSelector);
-
   const [bossQuestion1, setBossQuestion1] = useState("");
   const [bossQuestion2, setBossQuestion2] = useState("");
   const [bossQuestion3, setBossQuestion3] = useState("");
@@ -124,6 +123,7 @@ const DetailReviewPerformance = ({ idRequest }) => {
       feedback_staff,
       description_staff,
     } = review.attributes;
+    console.log(review);
 
     return (
       <>
@@ -466,18 +466,20 @@ const DetailReviewPerformance = ({ idRequest }) => {
           </Col>
         </Row>
 
-        <div className="text-end mt-3">
-          <Button variant="info" onClick={handleSavePerformance}>
-            Save
-          </Button>
-          <Button
-            className="ms-5"
-            variant="primary"
-            onClick={handleSubmitPerformance}
-          >
-            Submit
-          </Button>
-        </div>
+        {status === "self_reviewed" ? (
+          <div className="text-end mt-3">
+            <Button variant="info" onClick={handleSavePerformance}>
+              Save
+            </Button>
+            <Button
+              className="ms-5"
+              variant="primary"
+              onClick={handleSubmitPerformance}
+            >
+              Submit
+            </Button>
+          </div>
+        ) : null}
       </>
     );
   } else {

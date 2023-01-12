@@ -1,18 +1,39 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { Button, Form, Modal } from "react-bootstrap";
 import { Controller, useForm } from "react-hook-form";
+import { SubmitSection } from "../../Department/department";
+import Select from "react-select";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  allStaffSelector,
+  destroyAndUpdateStaffBoss,
+  fetchAllStaff,
+} from "../../../features/staff/staffSlice";
+import { optionSelect2 } from "../../../common/hooks/hooks";
 
-const FormInactive = ({ show, close }) => {
+const FormInactive = ({ show, close, idProfile }) => {
+  const dispatch = useDispatch();
+  const managers = useSelector(allStaffSelector);
   const {
-    register,
     control,
-    setValue,
     getValues,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
 
-  const handleInactive = () => {};
+  useEffect(() => {
+    dispatch(fetchAllStaff());
+  }, [dispatch]);
+
+  const handleInactive = () => {
+    dispatch(
+      destroyAndUpdateStaffBoss({
+        id: idProfile,
+        boss_id: watch("manager").value,
+      })
+    );
+  };
 
   return (
     <Modal show={show} onHide={close}>
@@ -22,7 +43,13 @@ const FormInactive = ({ show, close }) => {
       <Modal.Body>
         <Form onSubmit={handleSubmit(handleInactive)}>
           <Form.Group>
-            <Form.Label>Manager</Form.Label>
+            <Form.Label>
+              Manager
+              <span className="text-danger">
+                (please select new manager for staff)
+              </span>
+            </Form.Label>
+
             <Controller
               control={control}
               name="manager"

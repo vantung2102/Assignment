@@ -1,6 +1,6 @@
 class Api::V1::RequestManagement::RequestPropertiesController < Api::V1::BaseController
   def index
-    pagy, request_properties = current_user.has_role?(:Manager) ? paginate(RequestProperty.order(created_at: :desc)) : paginate(RequestProperty.find_by(requester_id: current_user.id))
+    pagy, request_properties = paginate(RequestProperty.order(created_at: :desc))
     render_resource_collection(request_properties.includes(:requester, :approver), pagy: pagy)
   end
 

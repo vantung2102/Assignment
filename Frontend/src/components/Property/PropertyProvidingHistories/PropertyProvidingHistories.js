@@ -13,6 +13,12 @@ import {
 import { Table } from "../../Staff/staff";
 import staff from "../../Staff/staff.module.scss";
 import { Link } from "react-router-dom";
+import {
+  TableCell,
+  TableComponent,
+  TableResponsive,
+} from "../../../global/jsx/common";
+import TableHead from "../../Table/TableHead";
 
 const PropertyProvidingHistories = () => {
   const dispatch = useDispatch();
@@ -37,101 +43,61 @@ const PropertyProvidingHistories = () => {
     dispatch(destroyPropertyProvidingHistory(id));
   };
 
-  const handleShowDetail = () => {};
-
   return (
     <Row>
       <Col md={12}>
-        <div className="table-responsive">
-          <div className="table">
-            <div className="table-content">
-              <Table>
-                <thead>
-                  <tr>
-                    <th className="ant-table-cell">
-                      <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">STT</span>
-                      </div>
-                    </th>
-                    <th className="ant-table-cell">
-                      <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">Provider</span>
-                        <TiArrowUnsorted />
-                      </div>
-                    </th>
-                    <th className="ant-table-cell">
-                      <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">Receiver</span>
-                        <TiArrowUnsorted />
-                      </div>
-                    </th>
-                    <th className="ant-table-cell">
-                      <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">Property</span>
-                        <TiArrowUnsorted />
-                      </div>
-                    </th>
-                    <th className="ant-table-cell">
-                      <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">Status</span>
-                        <TiArrowUnsorted />
-                      </div>
-                    </th>
+        <TableResponsive>
+          <TableComponent>
+            <thead>
+              <tr>
+                <TableHead title="STT" />
+                <TableHead title="Provider" />
+                <TableHead title="Receiver" />
+                <TableHead title="Property" />
+                <TableHead title="Status" />
+                <TableHead title="Action" centerTitle={true} />
+              </tr>
+            </thead>
+            <tbody>
+              {propertyProvidingHistories?.map((item, index) => {
+                const { id, provider, receiver, property, status } =
+                  item.attributes;
+                return (
+                  <tr key={id}>
+                    <TableCell>{index}</TableCell>
+                    <TableCell>{provider?.fullname}</TableCell>
 
-                    <th className="ant-table-cell text-center">Action</th>
+                    <TableCell>{receiver?.fullname}</TableCell>
+                    <TableCell>{property?.name}</TableCell>
+                    <TableCell>
+                      <Button
+                        variant={
+                          status === "recall"
+                            ? "outline-danger"
+                            : "outline-success"
+                        }
+                      >
+                        {status === "recall" ? "recalled" : "provided"}
+                      </Button>
+                    </TableCell>
+
+                    <TableCell>
+                      <div className="d-flex justify-content-evenly">
+                        <Link to={item.id}>
+                          <AiFillInfoCircle />
+                        </Link>
+
+                        <RiDeleteBinLine
+                          onClick={() => handleDelete(item.attributes.id)}
+                        />
+                      </div>
+                    </TableCell>
                   </tr>
-                </thead>
-                <tbody>
-                  {propertyProvidingHistories?.map((item, index) => (
-                    <tr key={item.attributes?.id}>
-                      <td className="ant-table-cell">{index}</td>
-                      <td className="ant-table-cell">
-                        {item.attributes?.provider.fullname}
-                      </td>
-
-                      <td className="ant-table-cell">
-                        {item.attributes?.receiver.fullname}
-                      </td>
-                      <td className="ant-table-cell">
-                        {item.attributes?.property.name}
-                      </td>
-                      <td className="ant-table-cell">
-                        <Button
-                          variant={
-                            item.attributes?.status == "recall"
-                              ? "danger"
-                              : "success"
-                          }
-                        >
-                          {item.attributes?.status}
-                        </Button>
-                      </td>
-
-                      <td className="ant-table-cell">
-                        <div className="d-flex justify-content-evenly">
-                          <Link to={item.id}>
-                            <AiFillInfoCircle
-                              style={{
-                                fontSize: "20px",
-                              }}
-                            />
-                          </Link>
-
-                          <RiDeleteBinLine
-                            style={{
-                              fontSize: "20px",
-                            }}
-                            onClick={() => handleDelete(item.attributes.id)}
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </div>
-          </div>
-        </div>
+                );
+              })}
+            </tbody>
+          </TableComponent>
+        </TableResponsive>
       </Col>
     </Row>
   );

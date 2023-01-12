@@ -56,7 +56,7 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
 
     begin
       ActiveRecord::Base.transaction do
-        Staff.where(id: params[:staffs]['id']).update(staff_id: params[:staffs]['boss_id'])
+        staff.lower_levels.update_all(staff_id: params[:boss_id])
         staff.destroy!
       end
       head :ok
@@ -64,15 +64,21 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
       render json: { status: 'error', detail: e }
     end
   end
-                                                                        
-  def staff_chart
-    staffs = Staff.all
+
+  def get_inactive_staff
+    staffs = Staff.only_deleted
     render_resource_collection(staffs)
   end
 
-  def staff_chart_by_node
-    staffs = staff.lower_levels
-    render_resource_collection(staffs)
+  def recover_staff
+    Staff.only_deleted.find(params[:id]).recover
+    head :no_content
+  end
+
+  def permanent_destroy
+    staff = Staff.only_deleted.where(id: params[:id]).update(staff_id: nil)
+    staff.first.destroy
+    head :no_content
   end
 
   private

@@ -6,14 +6,18 @@ import pageHeader from "../../components/PageHeader/pageHeader.module.scss";
 import { Container, Row } from "react-bootstrap";
 import PageHeader from "../../components/PageHeader/PageHeader";
 import Home from "../../components/Home/Home";
+import { useSelector } from "react-redux";
+import { isOpenSelector } from "../../features/sidebar/sidebarSlice";
 
 const HomePage = () => {
+  const isOpenSidebar = useSelector(isOpenSelector);
+
   return (
     <MainWrapper>
       <Header />
       <Sidebar active="home" />
 
-      <PageWrapper>
+      <PageWrapper isOpen={isOpenSidebar}>
         <Container fluid className="content">
           <div className={pageHeader.PageHeader}>
             <Row className="align-items-center">

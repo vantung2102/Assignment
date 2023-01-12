@@ -6,15 +6,19 @@ import { PageWrapper } from "../../global/jsx/common";
 import { Container } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import TabStaff from "../../components/StaffProfile/TabStaff/TabStaff";
+import { isOpenSelector } from "../../features/sidebar/sidebarSlice";
+import { useSelector } from "react-redux";
 
 const StaffProfile = () => {
   const { id } = useParams();
+  const isOpenSidebar = useSelector(isOpenSelector);
+
   return (
     <div className="main-wrapper">
       <Header />
       <Sidebar active="staff" />
 
-      <PageWrapper>
+      <PageWrapper isOpen={isOpenSidebar}>
         <Container fluid className="content">
           <TopProfile idProfile={id} />
 

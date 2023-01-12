@@ -4,7 +4,7 @@ class RequestPropertyPolicy < ApplicationPolicy
 	end
 
 	def show?
-		authenticate || (record.staff_id == user.id)
+		authenticate || (record.requester_id == user.id)
 	end
 
 	def create?
@@ -12,11 +12,11 @@ class RequestPropertyPolicy < ApplicationPolicy
 	end
 
 	def update?
-		authenticate || (record.staff_id == user.id)
+		authenticate || (record.requester_id == user.id)
 	end
 
 	def destroy?
-		authenticate || (record.staff_id == user.id)
+		authenticate || (record.requester_id == user.id)
 	end
 
 	def response_request?

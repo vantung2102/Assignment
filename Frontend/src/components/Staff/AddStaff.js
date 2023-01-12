@@ -4,6 +4,7 @@ import common from "../../global/module/common.module.scss";
 import { FaPlus } from "react-icons/fa";
 import { Button } from "react-bootstrap";
 import FormStaff from "./FormStaff";
+import { RiDeleteBinLine } from "react-icons/ri";
 
 const AddStaff = () => {
   const [show, setShow] = useState(false);

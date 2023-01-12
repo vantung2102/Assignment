@@ -13,6 +13,13 @@ import FormPropertiesGroup from "./FormPropertiesGroup";
 import staff from "../../Staff/staff.module.scss";
 import { TbEdit } from "react-icons/tb";
 import { RiDeleteBinLine } from "react-icons/ri";
+import {
+  TableCell,
+  TableComponent,
+  TableResponsive,
+} from "../../../global/jsx/common";
+import TableHead from "../../Table/TableHead";
+import ActionColumn from "../../Table/ActionColumn";
 
 const PropertiesGroup = () => {
   const dispatch = useDispatch();
@@ -28,77 +35,44 @@ const PropertiesGroup = () => {
 
   useEffect(() => {
     dispatch(fetchPropertiesGroup());
-  }, []);
+  }, [dispatch]);
 
   const handleDelete = (id) => {
     dispatch(destroyPropertiesGroup(id));
   };
 
-  const handleSortAsc = () => {
-    // setToggle(!toggle);
-    // dispatch(sortAsc());
-  };
-
-  const handleSortDesc = () => {
-    // setToggle(!toggle);
-    // dispatch(sortDesc());
-  };
-
   return (
     <Row>
       <Col md={12}>
-        <div className="table-responsive">
-          <div className="table">
-            <div className="table-content">
-              <Table>
-                <thead>
-                  <tr>
-                    <th className="ant-table-cell">
-                      <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">STT</span>
-                      </div>
-                    </th>
-                    <th className="ant-table-cell">
-                      <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">Title</span>
-                        <TiArrowUnsorted
-                          onClick={toggle ? handleSortAsc : handleSortDesc}
-                        />
-                      </div>
-                    </th>
-
-                    <th className="ant-table-cell text-center">Action</th>
+        <TableResponsive>
+          <TableComponent>
+            <thead>
+              <tr>
+                <TableHead title="STT" />
+                <TableHead title="Name" />
+                <TableHead title="Action" centerTitle={true} />
+              </tr>
+            </thead>
+            <tbody>
+              {propertiesGroup?.map((item, index) => {
+                const { id, name } = item.attributes;
+                return (
+                  <tr key={id}>
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{name}</TableCell>
+                    <TableCell>
+                      <ActionColumn
+                        id={id}
+                        edit={handleShow}
+                        destroy={handleDelete}
+                      />
+                    </TableCell>
                   </tr>
-                </thead>
-                <tbody>
-                  {propertiesGroup?.map((item, index) => (
-                    <tr key={item.attributes.id}>
-                      <td className="ant-table-cell">{index}</td>
-                      <td className="ant-table-cell">{item.attributes.name}</td>
-
-                      <td className="ant-table-cell">
-                        <div className="d-flex justify-content-evenly">
-                          <TbEdit
-                            style={{
-                              fontSize: "20px",
-                            }}
-                            onClick={() => handleShow(item.attributes.id)}
-                          />
-                          <RiDeleteBinLine
-                            style={{
-                              fontSize: "20px",
-                            }}
-                            onClick={() => handleDelete(item.attributes.id)}
-                          />
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </div>
-          </div>
-        </div>
+                );
+              })}
+            </tbody>
+          </TableComponent>
+        </TableResponsive>
       </Col>
 
       <FormPropertiesGroup isNew={false} show={show} close={handleClose} />

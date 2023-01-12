@@ -33,14 +33,14 @@ const FilterStaff = () => {
 
   return (
     <Row className="mb-4">
-      <Col md={3} sm={6}>
+      <Col lg={2} md={6} sm={6} className="mt-2">
         <Form.Control
           placeholder="Employee Name"
           onChange={(e) => setName(e.target.value)}
         />
       </Col>
 
-      <Col md={3} sm={6}>
+      <Col lg={3} md={6} sm={6} className="mt-2">
         <Select
           options={optionSelect2(departments, "name")}
           placeholder="Select Departments"
@@ -48,7 +48,7 @@ const FilterStaff = () => {
         />
       </Col>
 
-      <Col md={3} sm={6}>
+      <Col lg={3} md={6} sm={6} className="mt-2">
         <Select
           options={optionSelect2(positions, "name")}
           placeholder="Select Positions"
@@ -56,7 +56,7 @@ const FilterStaff = () => {
         />
       </Col>
 
-      <Col md={2} sm={6}>
+      <Col lg={3} md={6} sm={6} className="mt-2">
         <Select
           options={optionSelect2(jobTitles, "title")}
           placeholder="Select Job Title"
@@ -64,7 +64,7 @@ const FilterStaff = () => {
         />
       </Col>
 
-      <Col md={1} sm={6}>
+      <Col lg={1} md={6} sm={6} className="mt-2">
         <Button variant="success" onClick={handleFilter}>
           Search
         </Button>

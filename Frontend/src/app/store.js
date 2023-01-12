@@ -12,6 +12,7 @@ import leaveReducer from "../features/leave/leaveSlice";
 import leaveApplicationReducer from "../features/leaveApplication/leaveApplicationSlice";
 import onboardingReducer from "../features/onboarding/onboardingSlice";
 import performanceReducer from "../features/performance/performanceSlice";
+import sidebarReducer from "../features/sidebar/sidebarSlice";
 
 export const store = configureStore({
   reducer: {
@@ -28,5 +29,6 @@ export const store = configureStore({
     leaveApplication: leaveApplicationReducer,
     onboarding: onboardingReducer,
     performance: performanceReducer,
+    sidebar: sidebarReducer,
   },
 });

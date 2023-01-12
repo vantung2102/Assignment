@@ -44,11 +44,11 @@ class Staff < ApplicationRecord
   has_many :person_leave_application, class_name: 'LeaveApplication', :foreign_key => 'staff_id'
   has_many :approved_person_leave_application, class_name: 'LeaveApplication', :foreign_key => 'approver_id'
 
-  has_many :staff_onboardings
-  has_many :onboarding_assigned_person, class_name: 'OnboardingStep', :foreign_key => 'assigned_person_id'
+  has_many :staff_onboardings, dependent: :destroy
+  has_many :onboarding_assigned_person, class_name: 'OnboardingStep', :foreign_key => 'assigned_person_id', dependent: :destroy
 
   has_many :performance_appraisal_form, dependent: :destroy
-  has_many :review_for_staff, class_name: 'PerformanceAppraisalForm', :foreign_key => 'boss_id'
+  has_many :review_for_staff, class_name: 'PerformanceAppraisalForm', :foreign_key => 'boss_id', dependent: :destroy
 
   has_one :leave, dependent: :destroy
   has_one :staff_contract

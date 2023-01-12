@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Col, Row } from "react-bootstrap";
+import { Col, Row, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
   departmentsSelector,
@@ -10,7 +10,11 @@ import {
   sortDepartmentAsc,
   sortDepartmentDesc,
 } from "../../features/department/departmentSlice";
-import { TableCell, TableComponent } from "../../global/jsx/common";
+import {
+  TableCell,
+  TableComponent,
+  TableResponsive,
+} from "../../global/jsx/common";
 import Paginate from "../Paginate/Paginate";
 import ActionColumn from "../Table/ActionColumn";
 import TableHead from "../Table/TableHead";
@@ -66,40 +70,42 @@ const Department = () => {
     <>
       <Row>
         <Col md={12}>
-          <TableComponent>
-            <thead>
-              <tr>
-                <TableHead title="STT" />
-                <TableHead
-                  title="Department"
-                  isSort={true}
-                  toggle={toggle}
-                  desc={handleSortDesc}
-                  asc={handleSortAsc}
-                />
-                <TableHead title="Action" centerTitle={true} />
-              </tr>
-            </thead>
-            <tbody>
-              {departments?.map((item, index) => {
-                const { id, name } = item.attributes;
+          <TableResponsive>
+            <TableComponent>
+              <thead>
+                <tr>
+                  <TableHead title="STT" />
+                  <TableHead
+                    title="Department"
+                    isSort={true}
+                    toggle={toggle}
+                    desc={handleSortDesc}
+                    asc={handleSortAsc}
+                  />
+                  <TableHead title="Action" centerTitle={true} />
+                </tr>
+              </thead>
+              <tbody>
+                {departments?.map((item, index) => {
+                  const { id, name } = item.attributes;
 
-                return (
-                  <tr key={id}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>{name}</TableCell>
-                    <TableCell>
-                      <ActionColumn
-                        id={id}
-                        edit={handleShow}
-                        destroy={handleDelete}
-                      />
-                    </TableCell>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </TableComponent>
+                  return (
+                    <tr key={id}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{name}</TableCell>
+                      <TableCell>
+                        <ActionColumn
+                          id={id}
+                          edit={handleShow}
+                          destroy={handleDelete}
+                        />
+                      </TableCell>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </TableComponent>
+          </TableResponsive>
         </Col>
 
         <FormDepartment isNew={false} show={show} close={handleClose} />

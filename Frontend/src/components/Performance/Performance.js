@@ -282,18 +282,20 @@ const Performance = ({ idRequest }) => {
             </FloatingLabel>
           </Form.Group>
 
-          <div className="text-end mt-3">
-            <Button variant="info" onClick={handleSavePerformance}>
-              Save
-            </Button>
-            <Button
-              className="ms-5"
-              variant="primary"
-              onClick={handleSubmitPerformance}
-            >
-              Submit
-            </Button>
-          </div>
+          {status === "in_progress" ? (
+            <div className="text-end mt-3">
+              <Button variant="info" onClick={handleSavePerformance}>
+                Save
+              </Button>
+              <Button
+                className="ms-5"
+                variant="primary"
+                onClick={handleSubmitPerformance}
+              >
+                Submit
+              </Button>
+            </div>
+          ) : null}
         </Form>
       </Card.Body>
     </Card>

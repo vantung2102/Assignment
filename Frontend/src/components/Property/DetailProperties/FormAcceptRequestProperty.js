@@ -13,18 +13,15 @@ const FormAcceptRequestProperty = ({ show, close, id }) => {
   const receivers = useSelector(staffsSelector);
 
   const {
-    register,
     handleSubmit,
     control,
     watch,
-    setValue,
-    getValues,
     formState: { errors },
   } = useForm();
 
   useEffect(() => {
     dispatch(fetchStaff());
-  }, []);
+  }, [dispatch]);
 
   const handleAccept = () => {
     dispatch(acceptProperty({ id: id, receiver_id: watch("receiver").value }));

@@ -4,7 +4,7 @@ export const MainWrapper = styled.div``;
 
 export const PageWrapper = styled.div`
   left: 0;
-  margin-left: 230px;
+  margin-left: ${({ isOpen }) => (isOpen ? "230px" : "0px")};
   padding-top: 60px;
   position: relative;
   transition: all 0.2s ease-in-out;
@@ -12,6 +12,10 @@ export const PageWrapper = styled.div`
 
   & > .content {
     padding: 30px;
+  }
+
+  @media screen and (max-width: 767px) {
+    margin-left: 0;
   }
 `;
 
@@ -97,4 +101,8 @@ export const TableComponent = styled.table`
 export const TableCell = styled.td`
   background-color: rgba(255, 255, 255, 0.85) !important;
   border-bottom: 2px solid #dee2e6 !important;
+`;
+
+export const TableResponsive = styled.div`
+  overflow-x: auto;
 `;

@@ -16,10 +16,15 @@ import avatar from "../../assets/images/home/user.jpg";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout, getUserSelector } from "../../features/auth/authSlice";
+import {
+  isOpenSelector,
+  openSidebar,
+} from "../../features/sidebar/sidebarSlice";
 
 const Header = () => {
   const dispatch = useDispatch();
   const profile = useSelector(getUserSelector);
+  const isOpenSidebar = useSelector(isOpenSelector);
 
   const [isOpenNotification, setIsOpenNotification] = useState(false);
   const [isOpenSetting, setIsOpenSetting] = useState(false);
@@ -45,8 +50,12 @@ const Header = () => {
     setIsOpenSetting(!isOpenSetting);
   };
 
+  const handleSidebar = () => {
+    dispatch(openSidebar(!isOpenSidebar));
+  };
+
   return (
-    <HeaderContainer>
+    <HeaderContainer isOpen={isOpenSidebar}>
       <div className="header-left">
         <Link className="logo">
           <img src={logo} width="40" height="40" alt="" />
@@ -54,7 +63,7 @@ const Header = () => {
       </div>
 
       <Link className="toggle_btn">
-        <HiBars3CenterLeft />
+        <HiBars3CenterLeft onClick={handleSidebar} />
       </Link>
 
       <div className="page-title-box">

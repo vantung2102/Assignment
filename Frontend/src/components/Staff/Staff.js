@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Col, Image, Row } from "react-bootstrap";
 import staff from "./staff.module.scss";
-import { TableComponent, TableCell } from "../../global/jsx/common.jsx";
+import {
+  TableComponent,
+  TableCell,
+  TableResponsive,
+} from "../../global/jsx/common.jsx";
 import avatar from "../../assets/images/home/user.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -22,8 +26,8 @@ import { fetchAllJobTitle } from "../../features/jobTitle/jobTitleSlice";
 import TableHead from "../Table/TableHead";
 import FilterStaff from "./FilterStaff";
 import FormStaff from "./FormStaff";
-import ActionColumn from "../Table/ActionColumn";
 import { getRoleSelector } from "../../features/auth/authSlice";
+import { TbEdit } from "react-icons/tb";
 
 const StaffTable = () => {
   const dispatch = useDispatch();
@@ -81,81 +85,71 @@ const StaffTable = () => {
 
       <Row>
         <Col md={12}>
-          <TableComponent>
-            <thead>
-              <tr>
-                <TableHead title="STT" />
-                <TableHead
-                  title="Name"
-                  isSort={true}
-                  toggle={toggle}
-                  desc={handleSortDesc}
-                  asc={handleSortAsc}
-                />
-                <TableHead title="Employee ID" />
-                <TableHead title="Email" />
-                <TableHead title="Phone" />
-                <TableHead title="Join Date" />
-                <TableHead
-                  title="Position"
-                  isSort={true}
-                  toggle={toggle}
-                  desc={handleSortDesc}
-                  asc={handleSortAsc}
-                />
+          <TableResponsive>
+            <TableComponent>
+              <thead>
+                <tr>
+                  <TableHead title="STT" />
+                  <TableHead
+                    title="Name"
+                    isSort={true}
+                    toggle={toggle}
+                    desc={handleSortDesc}
+                    asc={handleSortAsc}
+                  />
+                  <TableHead title="Employee ID" />
+                  <TableHead title="Email" />
+                  <TableHead title="Phone" />
+                  <TableHead
+                    title="Position"
+                    isSort={true}
+                    toggle={toggle}
+                    desc={handleSortDesc}
+                    asc={handleSortAsc}
+                  />
 
-                {role && <TableHead title="Action" centerTitle={true} />}
-              </tr>
-            </thead>
-            <tbody>
-              {staffs?.map((item, index) => {
-                const {
-                  id,
-                  fullname,
-                  email,
-                  join_date,
-                  position,
-                  job_title,
-                  phone,
-                } = item.attributes;
+                  {role && <TableHead title="Action" centerTitle={true} />}
+                </tr>
+              </thead>
+              <tbody>
+                {staffs?.map((item, index) => {
+                  const { id, fullname, email, position, job_title, phone } =
+                    item.attributes;
 
-                return (
-                  <tr key={id}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>
-                      <h2 className="table-avatar">
-                        <Link to={item.id} className={staff.avatar}>
-                          <Image alt="Avatar" src={avatar} />
-                        </Link>
-
-                        <Link to={item.id}>
-                          {fullname}
-                          <span>{job_title.title}</span>
-                        </Link>
-                      </h2>
-                    </TableCell>
-
-                    <TableCell>{id}</TableCell>
-                    <TableCell>{email}</TableCell>
-                    <TableCell>{phone}</TableCell>
-                    <TableCell>{join_date}</TableCell>
-                    <TableCell>{position?.name}</TableCell>
-
-                    {role && (
+                  return (
+                    <tr key={id}>
+                      <TableCell>{index + 1}</TableCell>
                       <TableCell>
-                        <ActionColumn
-                          id={id}
-                          edit={handleShow}
-                          role={role}
-                          destroy={handleDelete}
-                        />
+                        <h2 className="table-avatar">
+                          <Link to={item.id} className={staff.avatar}>
+                            <Image alt="Avatar" src={avatar} />
+                          </Link>
+
+                          <Link to={item.id}>
+                            {fullname}
+                            <span>{job_title.title}</span>
+                          </Link>
+                        </h2>
                       </TableCell>
-                    )}
-                  </tr>
-                );
-              })}
-            </tbody>
-          </TableComponent>
+
+                      <TableCell>{id}</TableCell>
+                      <TableCell>{email}</TableCell>
+                      <TableCell>{phone}</TableCell>
+                      <TableCell>{position?.name}</TableCell>
+
+                      {role && (
+                        <TableCell>
+                          <div className="d-flex justify-content-evenly">
+                            <TbEdit onClick={() => handleShow(id)} />
+                          </div>
+                        </TableCell>
+                      )}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </TableComponent>
+          </TableResponsive>
         </Col>
 
         <FormStaff isNew={false} show={show} close={handleClose} />

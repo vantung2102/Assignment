@@ -13,6 +13,7 @@ class Api::V1::PropertyManagement::PropertiesController < Api::V1::BaseControlle
   def create
     authorize Property
     property = Property.new(property_params)
+    property.status = :available
     property.save ? render_resource(property, status: :created) : render_resource_errors(property.errors)
   end
 
@@ -39,7 +40,6 @@ class Api::V1::PropertyManagement::PropertiesController < Api::V1::BaseControlle
           )
           property.update!(status: :used)
         else
-          
           providing_history = PropertyProvidingHistory.find_by(property_id: property.id, status: :provided)
           providing_history.update!(status: :recall)
           property.update!(status: :available)

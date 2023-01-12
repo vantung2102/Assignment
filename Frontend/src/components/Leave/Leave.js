@@ -9,7 +9,11 @@ import {
   showLeave,
 } from "../../features/leave/leaveSlice";
 import { Link } from "react-router-dom";
-import { TableCell, TableComponent } from "../../global/jsx/common";
+import {
+  TableCell,
+  TableComponent,
+  TableResponsive,
+} from "../../global/jsx/common";
 import TableHead from "../Table/TableHead";
 import Paginate from "../Paginate/Paginate";
 
@@ -51,37 +55,39 @@ const Leave = () => {
     <>
       <Row>
         <Col md={12}>
-          <TableComponent>
-            <thead>
-              <tr>
-                <TableHead title="STT" />
-                <TableHead title="Name" />
-                <TableHead title="Allowed days off" />
-                <TableHead title="Total days off" />
-              </tr>
-            </thead>
-            <tbody>
-              {leaves?.map((item, index) => {
-                const { id, allowed_number_of_days_off, staff } =
-                  item.attributes;
-                return (
-                  <tr key={id}>
-                    <TableCell>{index + 1}</TableCell>
-                    <TableCell>
-                      <Link to={item.id}>{staff?.fullname}</Link>
-                    </TableCell>
+          <TableResponsive>
+            <TableComponent>
+              <thead>
+                <tr>
+                  <TableHead title="STT" />
+                  <TableHead title="Name" />
+                  <TableHead title="Allowed days off" />
+                  <TableHead title="Total days off" />
+                </tr>
+              </thead>
+              <tbody>
+                {leaves?.map((item, index) => {
+                  const { id, allowed_number_of_days_off, staff } =
+                    item.attributes;
+                  return (
+                    <tr key={id}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>
+                        <Link to={item.id}>{staff?.fullname}</Link>
+                      </TableCell>
 
-                    <td className="ant-table-cell">
-                      {allowed_number_of_days_off}
-                    </td>
-                    <td className="ant-table-cell">
-                      {TotalDayOff(item.attributes)}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </TableComponent>
+                      <td className="ant-table-cell">
+                        {allowed_number_of_days_off}
+                      </td>
+                      <td className="ant-table-cell">
+                        {TotalDayOff(item.attributes)}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </TableComponent>
+          </TableResponsive>
         </Col>
       </Row>
       {meta && (
