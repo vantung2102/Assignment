@@ -34,13 +34,14 @@ const FormPerformance = ({ show, close }) => {
       : false;
   };
 
-  const handleNewDepartment = () => {
+  const handleNewPerformance = () => {
     dispatch(
       CreateAllPerformance({
         start_date: watch("start_date"),
         end_date: watch("end_date"),
       })
     );
+    close(true);
   };
   return (
     <Modal show={show} onHide={close}>
@@ -48,7 +49,7 @@ const FormPerformance = ({ show, close }) => {
         <Modal.Title>Add Performance</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={handleSubmit(handleNewDepartment)}>
+        <Form onSubmit={handleSubmit(handleNewPerformance)}>
           <Form.Group>
             <Form.Label>Start day</Form.Label>
             <Form.Control

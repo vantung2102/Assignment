@@ -67,7 +67,7 @@ const DetailRequestProperty = ({ idRequest }) => {
   return (
     <>
       <Card className="mb-0">
-        {role && (
+        {status === "pending" && role && (
           <Card.Header>
             <Button
               size="sm"

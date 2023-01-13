@@ -1,8 +1,11 @@
 class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
   def index
+    
+    # binding.pry
+    
     pagy, staffs = paginate(Staff.filter(params.slice(:fullname, :position, :department, :job_title)))
     render_resource_collection(
-      staffs.includes(:position, :department, :job_title, :upper_level, :roles).order(created_at: :desc),
+      staffs.includes(:position, :department, :job_title, :upper_level, :lower_levels, :roles).order(created_at: :desc),
       pagy: pagy
     )
   end
@@ -41,14 +44,8 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
 
   def destroy
     authorize Staff
-    lower_levels = staff.lower_levels
-
-    if lower_levels.present?
-      render_resource_collection(lower_levels)
-    else
-      staff.destroy!
-      head :no_content
-    end
+    staff.destroy!
+    head :no_content
   end
 
   def destroy_and_update_staff_boss
@@ -66,18 +63,35 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
   end
 
   def get_inactive_staff
+    authorize Staff
     staffs = Staff.only_deleted
     render_resource_collection(staffs)
   end
 
   def recover_staff
-    Staff.only_deleted.find(params[:id]).recover
-    head :no_content
+    authorize Staff
+
+    begin
+      ActiveRecord::Base.transaction do
+        staff = Staff.only_deleted.find(params[:id])
+        if staff.recover
+          create, leave = Leaves::CreateLeaveService.call(staff)
+          raise leave unless create
+        else
+          raise I18n.t('error_codes.E207')
+        end
+      end
+      head :ok
+    rescue StandardError => e
+      render json: { status: 'error', detail: e }
+    end
   end
 
   def permanent_destroy
-    staff = Staff.only_deleted.where(id: params[:id]).update(staff_id: nil)
-    staff.first.destroy
+    authorize Staff
+
+    staff = Staff.only_deleted.find(id: params[:id]).update(staff_id: nil)
+    staff.destroy
     head :no_content
   end
 

@@ -61,27 +61,54 @@ const Leave = () => {
                 <tr>
                   <TableHead title="STT" />
                   <TableHead title="Name" />
-                  <TableHead title="Allowed days off" />
-                  <TableHead title="Total days off" />
+                  <TableHead title="Casual (12)" centerTitle={true} />
+                  <TableHead title="Unpaid (15)" centerTitle={true} />
+                  <TableHead title="Marriage (3)" centerTitle={true} />
+                  <TableHead title="Compassionate (3)" centerTitle={true} />
+                  <TableHead title="Paternity (1)" centerTitle={true} />
+                  <TableHead title="Maternity (180)" centerTitle={true} />
+                  <TableHead title="Total (day)" centerTitle={true} />
                 </tr>
               </thead>
               <tbody>
                 {leaves?.map((item, index) => {
-                  const { id, allowed_number_of_days_off, staff } =
-                    item.attributes;
+                  const {
+                    id,
+                    staff,
+                    casual_leave,
+                    marriage_leave,
+                    unpaid_leave,
+                    compassionate_leave,
+                    paternity_leave,
+                    maternity_leave,
+                  } = item.attributes;
                   return (
                     <tr key={id}>
                       <TableCell>{index + 1}</TableCell>
                       <TableCell>
                         <Link to={item.id}>{staff?.fullname}</Link>
                       </TableCell>
-
-                      <td className="ant-table-cell">
-                        {allowed_number_of_days_off}
-                      </td>
-                      <td className="ant-table-cell">
+                      <TableCell className="text-center">
+                        {casual_leave}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {unpaid_leave}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {marriage_leave}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {compassionate_leave}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {paternity_leave}
+                      </TableCell>
+                      <TableCell className="text-center">
+                        {maternity_leave}
+                      </TableCell>
+                      <TableCell className="text-center">
                         {TotalDayOff(item.attributes)}
-                      </td>
+                      </TableCell>
                     </tr>
                   );
                 })}

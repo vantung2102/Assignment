@@ -55,7 +55,7 @@ const DetailProperties = ({ idRequest }) => {
   }, [property]);
 
   const handleRecall = () => {
-    // dispatch(acceptProperty({ id: idRequest, receiver_id: currentUser?.id }));
+    dispatch(acceptProperty({ id: idRequest }));
   };
 
   return (

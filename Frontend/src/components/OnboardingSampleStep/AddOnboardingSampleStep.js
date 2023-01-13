@@ -13,7 +13,7 @@ const AddOnboardingSampleStep = () => {
   return (
     <div className="col-auto float-end ml-auto">
       <Button className={common.AddBtn} onClick={handleShow}>
-        <FaPlus style={{ lineHeight: "38px" }} /> Add Leave
+        <FaPlus style={{ lineHeight: "38px" }} /> Add Onboarding Sample
       </Button>
 
       <FormOnboardingSampleStep isNew={true} show={show} close={handleClose} />

@@ -59,7 +59,7 @@ const FormStaff = ({ isNew, show, close }) => {
 
     setValue("name", fullname);
     setValue("gmail", email);
-    setValue("department", { value: department.id, label: department.name });
+    setValue("department", { value: department?.id, label: department?.name });
     setValue("position", { value: position.id, label: position.name });
     setValue("jobTitle", { value: job_title.id, label: job_title.title });
     setValue("date", date_of_birth);

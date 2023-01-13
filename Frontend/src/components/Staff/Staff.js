@@ -82,7 +82,6 @@ const StaffTable = () => {
   return (
     <>
       <FilterStaff />
-
       <Row>
         <Col md={12}>
           <TableResponsive>
@@ -154,7 +153,6 @@ const StaffTable = () => {
 
         <FormStaff isNew={false} show={show} close={handleClose} />
       </Row>
-
       {meta && (
         <Paginate
           itemsCount={itemsCount}

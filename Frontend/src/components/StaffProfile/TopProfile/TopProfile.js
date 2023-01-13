@@ -3,7 +3,6 @@ import { Button, Card, Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import avatar from "../../../assets/images/home/user.jpg";
 import "./toggleSwitch.scss";
-
 import {
   getRoleSelector,
   getUserSelector,
@@ -13,22 +12,20 @@ import {
   fetchProfile,
   destroyStaff,
   lowerLevelStaff,
+  inActiveStaff,
 } from "../../../features/staff/staffSlice";
-import { ProfileView, ButtonToggleSwitch } from "./topProfile";
+import { ProfileView } from "./topProfile";
 import topProfile from "./topProfile.module.scss";
 import FormInactive from "./FormInactive";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const TopProfile = ({ idProfile }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const role = useSelector(getRoleSelector);
   const profile = useSelector(!role ? getUserSelector : profileSelector);
-  const lowerLevel = useSelector(lowerLevelStaff);
   const [name, setName] = useState("");
-  const [active, setActive] = useState(null);
   const [show, setShow] = useState(false);
+  const inActive = useSelector(inActiveStaff);
 
   useEffect(() => {
     dispatch(fetchProfile(idProfile));
@@ -36,28 +33,17 @@ const TopProfile = ({ idProfile }) => {
 
   useEffect(() => {
     if (!profile) return;
-
-    const { status, fullname } = profile?.attributes;
+    const { fullname } = profile?.attributes;
     setName(fullname);
-    setActive(status);
   }, [profile]);
-
-  useEffect(() => {
-    if (!lowerLevel) return;
-
-    setShow(true);
-  }, [lowerLevel]);
 
   const handleClose = () => setShow(false);
 
   const handleInactive = () => {
-    dispatch(destroyStaff(idProfile));
-    setTimeout(() => {
-      if (!lowerLevel) {
-        navigate("/staff_management/staff", { replace: true });
-      }
-    }, 1000);
+    setShow(true);
   };
+
+  console.log(inActive);
 
   return (
     <Card className="mb-0">
@@ -82,10 +68,10 @@ const TopProfile = ({ idProfile }) => {
                           <Button
                             size="sm"
                             className="mt-3"
-                            variant="danger"
+                            variant={inActive ? "success" : "danger"}
                             onClick={handleInactive}
                           >
-                            Inactive
+                            {inActive ? "Active" : "Inactive"}
                           </Button>
                         </div>
                       </div>
@@ -96,12 +82,7 @@ const TopProfile = ({ idProfile }) => {
             </ProfileView>
           </Col>
         </Row>
-        <FormInactive
-          isNew={false}
-          show={show}
-          close={handleClose}
-          idProfile={idProfile}
-        />
+        <FormInactive show={show} close={handleClose} idProfile={idProfile} />
       </Card.Body>
     </Card>
   );

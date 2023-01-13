@@ -5,8 +5,6 @@ import { AiFillInfoCircle } from "react-icons/ai";
 import avatar from "../../assets/images/home/user.jpg";
 
 const Node = ({ nodeData }) => {
-  const [toggle, setToggle] = useState(false);
-
   return (
     <>
       <TreeNode>
@@ -22,21 +20,21 @@ const Node = ({ nodeData }) => {
           <img className="avatar" src={avatar} />
         </div>
         <div className="content_user">
-          <div className="info_user">
+          <div className="info_user mb-1">
             <h4 className="m-0">Full Name: </h4>
-            <span> {nodeData.name}</span>
+            <span className="ms-2"> {nodeData.name}</span>
           </div>
-          <div className="info_user">
+          <div className="info_user mb-1">
             <h4 className="mb-0">Position: </h4>
-            <span> {nodeData.title}</span>
+            <span className="ms-2"> {nodeData.title}</span>
           </div>
-          <div className="info_user">
+          <div className="info_user mb-1">
             <h4 className="m-0">Department: </h4>
-            <span> {nodeData.department}</span>
+            <span className="ms-2"> {nodeData.department}</span>
           </div>
-          <div className="info_user">
+          <div className="info_user mb-1">
             <h4 className="m-0">Job Title: </h4>
-            <span> {nodeData.jobTitle}</span>
+            <span className="ms-2"> {nodeData.jobTitle}</span>
           </div>
         </div>
       </div>

@@ -1,6 +1,11 @@
+require 'deep_cover/builtin_takeover'
+require 'simplecov'
+SimpleCov.start
+
 require "paperclip/matchers"
 require 'capybara/rspec'
 require "pundit/rspec"
+
 
 RSpec.configure do |config|
   config.include Paperclip::Shoulda::Matchers
@@ -14,4 +19,5 @@ RSpec.configure do |config|
   end
 
   config.shared_context_metadata_behavior = :apply_to_host_groups
+  config.after(:each) { DatabaseCleaner.strategy = :truncation; DatabaseCleaner.clean }
 end

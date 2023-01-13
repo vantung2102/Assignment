@@ -33,5 +33,6 @@ class StaffSerializer < BaseSerializer
               :department,
               :job_title,
               :upper_level,
+              :lower_levels,
               :roles
 end

@@ -23,9 +23,21 @@ class StaffPolicy < ApplicationPolicy
 		authenticate
 	end
 
+  def get_inactive_staff?
+		authenticate
+	end
+
+	def recover_staff?
+		authenticate
+	end
+
+	def permanent_destroy?
+		authenticate
+	end
+
 	private
 
 	def authenticate
-		user.has_role?(:Manager) || user.has_role?(:Hr_Manager) 
+		user.has_role?(:Manager)
 	end
 end

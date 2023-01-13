@@ -14,7 +14,7 @@ const initialState = {
   allStaff: null,
   staffChart: null,
   staffChartByNode: [],
-  lowerLevel: false,
+  inActive: false,
 };
 
 export const fetchStaff = createAsyncThunk("fetchStaff", async (number) => {
@@ -51,15 +51,15 @@ export const fetchInactiveStaff = createAsyncThunk(
 
 export const filterStaff = createAsyncThunk("filterStaff", async (data) => {
   const { fullname, department, position, job_title } = data;
-  let url = "/api/v1/staff_management/staffs";
-  if (fullname) url += `?fullname=${fullname}`;
-  if (department) url += `?department=${department}`;
-  if (position) url += `?position=${position}`;
-  if (job_title) url += `?job_title=${job_title}`;
-
-  const response = await apiClient.get(url, {
+  const response = await apiClient.get("/api/v1/staff_management/staffs", {
     headers: {
       Authorization: Cookies.get("authorization"),
+    },
+    params: {
+      fullname: fullname,
+      department: department,
+      position: position,
+      job_title: job_title,
     },
   });
   return response.data;
@@ -320,6 +320,7 @@ export const staffSlice = createSlice({
       })
       .addCase(fetchProfile.fulfilled, (state, action) => {
         state.profile = action.payload.data;
+        state.inActive = false;
       })
       .addCase(fetchProfile.rejected, (state) => {
         state.loading = false;
@@ -339,13 +340,13 @@ export const staffSlice = createSlice({
     builder
       .addCase(destroyStaff.pending, (state) => {
         state.loading = true;
-        state.lowerLevel = false;
       })
-      .addCase(destroyStaff.fulfilled, (state, action) => {
-        if (action.payload) state.lowerLevel = true;
+      .addCase(destroyStaff.fulfilled, (state) => {
+        state.inActive = true;
       })
       .addCase(destroyStaff.rejected, (state) => {
         state.loading = false;
+        toast.error("Inactive failed");
       });
 
     // ================== Destroy and update boss =================
@@ -355,10 +356,11 @@ export const staffSlice = createSlice({
       })
       .addCase(destroyAndUpdateStaffBoss.fulfilled, (state, action) => {
         state.staffs = useDestroy(state.staffs, action);
-        toast.success("Inactive success!");
+        state.inActive = true;
       })
       .addCase(destroyAndUpdateStaffBoss.rejected, (state) => {
         state.loading = false;
+        toast.error("Inactive failed");
       });
     // ================== Destroy and update boss =================
     builder
@@ -397,6 +399,7 @@ export const staffChartByNodeSelector = (state) => state.staff.staffChartByNode;
 export const allStaffSelector = (state) => state.staff.allStaff;
 export const metaStaffSelector = (state) => state.staff.meta;
 export const lowerLevelStaff = (state) => state.staff.lowerLevel;
+export const inActiveStaff = (state) => state.staff.inActive;
 export const loadingStaff = (state) => state.staff.loading;
 
 export default staffSlice.reducer;

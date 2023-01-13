@@ -38,3 +38,6 @@ en:
     E205: "You can't see this person's info"
     E206: "Recall Error when update property or property providing history"
     E207: "Onboarding step complete failed"
+    E208: "Employee recovery failed"
+    E209: "The number of days exceeds the allowed limit"
+    E210: "Position is not exist"

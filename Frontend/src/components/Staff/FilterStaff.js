@@ -15,7 +15,7 @@ const FilterStaff = () => {
   const departments = useSelector(allDepartmentSelector);
   const jobTitles = useSelector(allJobTitleSelector);
 
-  const [name, setName] = useState("");
+  const [name, setName] = useState(null);
   const [department, setDepartment] = useState(null);
   const [position, setPosition] = useState(null);
   const [jobTitle, setJobTitle] = useState(null);

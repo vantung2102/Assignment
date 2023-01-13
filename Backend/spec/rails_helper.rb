@@ -7,6 +7,11 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 
 require 'rspec/rails'
 require 'shoulda/matchers'
+include ActionDispatch::TestProcess
+include ActionDispatch::TestProcess::FixtureFile
+
+Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+
 
 begin
   ActiveRecord::Migration.maintain_test_schema!
@@ -24,6 +29,9 @@ end
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
     with.test_framework :rspec
+    with.library :active_record
+    with.library :active_model
+    with.library :action_controller
     with.library :rails
   end
 end
