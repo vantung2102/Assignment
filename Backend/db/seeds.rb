@@ -140,3 +140,16 @@
 #     title: Faker::Lorem.sentence,
 #   )
 # end
+
+  Leave.create(
+    staff_id: 34,
+    casual_leave: 0,
+    marriage_leave: 0,
+    compassionate_leave: 0,
+    paternity_leave: 0,
+    maternity_leave: 0,
+    unpaid_leave: 0,
+    allowed_number_of_days_off: 12,
+    description: Faker::Lorem.paragraph
+  )
+

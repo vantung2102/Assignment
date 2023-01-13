@@ -1,5 +1,3 @@
-import React from "react";
-
 const useEdit = (array, action) => {
   return array.map((item) =>
     item.attributes.id === action.payload.data.attributes.id
@@ -9,7 +7,7 @@ const useEdit = (array, action) => {
 };
 
 const useDestroy = (array, action) => {
-  return array.filter((item) => item.attributes.id !== action.payload);
+  return array?.filter((item) => item.attributes.id !== action.payload);
 };
 
 const optionSelect2 = (array, attr) => {

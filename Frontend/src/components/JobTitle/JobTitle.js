@@ -1,23 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { Col, Row } from "react-bootstrap";
-import { RiDeleteBinLine } from "react-icons/ri";
-import { TbEdit } from "react-icons/tb";
-import { TiArrowUnsorted } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
 import {
   destroyJobTitle,
   fetchJobTitle,
   jobTitlesSelector,
+  metaJobTitleSelector,
   showJobTitle,
+  sortJobTitleAsc,
+  sortJobTitleDesc,
 } from "../../features/jobTitle/jobTitleSlice";
-import { Table } from "../Staff/staff";
-import staff from "../Staff/staff.module.scss";
+import {
+  TableCell,
+  TableComponent,
+  TableResponsive,
+} from "../../global/jsx/common";
+import Paginate from "../Paginate/Paginate";
+import ActionColumn from "../Table/ActionColumn";
+import TableHead from "../Table/TableHead";
 import FormJobTitle from "./FormJobTitle";
 
 const JobTitle = () => {
   const dispatch = useDispatch();
+
   const jobTitles = useSelector(jobTitlesSelector);
+  const meta = useSelector(metaJobTitleSelector);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsCount, setItemsCount] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(1);
   const [show, setShow] = useState(false);
+  const [toggle, setToggle] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = (id) => {
@@ -27,73 +40,88 @@ const JobTitle = () => {
 
   useEffect(() => {
     dispatch(fetchJobTitle());
-  }, []);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!meta) return;
+    setItemsCount(meta.total_count);
+    setItemsPerPage(meta.page_size);
+  }, [meta]);
 
   const handleDelete = (id) => {
     dispatch(destroyJobTitle(id));
   };
 
+  const handleSortAsc = () => {
+    dispatch(sortJobTitleAsc());
+    setToggle(!toggle);
+  };
+
+  const handleSortDesc = () => {
+    dispatch(sortJobTitleDesc());
+    setToggle(!toggle);
+  };
+
+  const getCurrentPage = (number) => {
+    dispatch(fetchJobTitle(number));
+  };
+
   return (
-    <Row>
-      <Col md={12}>
-        <div className="table-responsive">
-          <div className="table">
-            <div className="table-content">
-              <Table>
-                <thead>
-                  <tr>
-                    <th className="ant-table-cell">
-                      <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">STT</span>
-                        <TiArrowUnsorted />
-                      </div>
-                    </th>
-                    <th className="ant-table-cell">
-                      <div className={staff.TableColumnSorters}>
-                        <span className="table-column-title">Position</span>
-                        <TiArrowUnsorted />
-                      </div>
-                    </th>
+    <>
+      <Row>
+        <Col md={12}>
+          <TableResponsive>
+            <TableComponent>
+              <thead>
+                <tr>
+                  <TableHead title="STT" />
+                  <TableHead
+                    title="Job Title"
+                    isSort={true}
+                    toggle={toggle}
+                    desc={handleSortDesc}
+                    asc={handleSortAsc}
+                  />
+                  <TableHead title="Action" centerTitle={true} />
+                </tr>
+              </thead>
+              <tbody>
+                {jobTitles?.map((item, index) => {
+                  const { id, title } = item.attributes;
 
-                    <th className="ant-table-cell text-center">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {jobTitles &&
-                    jobTitles.map((item, index) => (
-                      <tr key={item.attributes.id}>
-                        <td className="ant-table-cell">{index}</td>
-                        <td className="ant-table-cell">
-                          {item.attributes.title}
-                        </td>
+                  return (
+                    <tr key={id}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{title}</TableCell>
+                      <TableCell>
+                        <ActionColumn
+                          id={id}
+                          edit={handleShow}
+                          destroy={handleDelete}
+                        />
+                      </TableCell>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </TableComponent>
+          </TableResponsive>
+        </Col>
 
-                        <td className="ant-table-cell">
-                          <div className="d-flex justify-content-evenly">
-                            <TbEdit
-                              style={{
-                                fontSize: "20px",
-                              }}
-                              onClick={() => handleShow(item.attributes.id)}
-                            />
-                            <RiDeleteBinLine
-                              style={{
-                                fontSize: "20px",
-                              }}
-                              onClick={() => handleDelete(item.attributes.id)}
-                            />
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </Table>
-            </div>
-          </div>
-        </div>
-      </Col>
+        <FormJobTitle isNew={false} show={show} close={handleClose} />
+      </Row>
 
-      <FormJobTitle isNew={false} show={show} close={handleClose} />
-    </Row>
+      {meta && (
+        <Paginate
+          itemsCount={itemsCount}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          alwaysShown={false}
+          getCurrentPage={getCurrentPage}
+        />
+      )}
+    </>
   );
 };
 

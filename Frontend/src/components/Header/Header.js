@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { isAuthenticatedSelector, logout } from "../../features/auth/authSlice";
 import { HiBars3CenterLeft } from "react-icons/hi2";
-import { AiOutlineSearch, AiOutlineBell } from "react-icons/ai";
-import { FaRegComment } from "react-icons/fa";
-import { IoIosArrowDown } from "react-icons/io";
-
+import { AiOutlineBell } from "react-icons/ai";
 import {
   HeaderContainer,
   UserMenu,
@@ -15,27 +11,23 @@ import {
   NotificationContent,
 } from "./header";
 import "./header.scss";
-
 import logo from "../../assets/images/logo/logo1.png";
 import avatar from "../../assets/images/home/user.jpg";
-import { Link, Navigate, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { logout, getUserSelector } from "../../features/auth/authSlice";
+import {
+  isOpenSelector,
+  openSidebar,
+} from "../../features/sidebar/sidebarSlice";
 
 const Header = () => {
-  const [isOpenNotification, setIsOpenNotification] = useState(false);
-  const [isOpenMessage, setIsOpenMessage] = useState(false);
-  const [isOpenSetting, setIsOpenSetting] = useState(false);
-
-  const isAuthenticated = useSelector(isAuthenticatedSelector);
-
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  const profile = useSelector(getUserSelector);
+  const isOpenSidebar = useSelector(isOpenSelector);
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      // navigate("/login", { replace: true });
-    }
-  }, [isAuthenticated]);
+  const [isOpenNotification, setIsOpenNotification] = useState(false);
+  const [isOpenSetting, setIsOpenSetting] = useState(false);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -44,25 +36,13 @@ const Header = () => {
   useEffect(() => {
     window.addEventListener("click", () => {
       setIsOpenNotification(false);
-      setIsOpenMessage(false);
       setIsOpenSetting(false);
     });
   });
 
-  // if (!isAuthenticated) {
-  //   return redirect("/login");
-  // }
-
   const handleShowNotification = (e) => {
     e.stopPropagation();
-    setIsOpenMessage(false);
     setIsOpenNotification(!isOpenNotification);
-  };
-
-  const handleShowMessage = (e) => {
-    e.stopPropagation();
-    setIsOpenNotification(false);
-    setIsOpenMessage(!isOpenNotification);
   };
 
   const handleShowSetting = (e) => {
@@ -70,8 +50,12 @@ const Header = () => {
     setIsOpenSetting(!isOpenSetting);
   };
 
+  const handleSidebar = () => {
+    dispatch(openSidebar(!isOpenSidebar));
+  };
+
   return (
-    <HeaderContainer>
+    <HeaderContainer isOpen={isOpenSidebar}>
       <div className="header-left">
         <Link className="logo">
           <img src={logo} width="40" height="40" alt="" />
@@ -79,7 +63,7 @@ const Header = () => {
       </div>
 
       <Link className="toggle_btn">
-        <HiBars3CenterLeft />
+        <HiBars3CenterLeft onClick={handleSidebar} />
       </Link>
 
       <div className="page-title-box">
@@ -87,21 +71,6 @@ const Header = () => {
       </div>
 
       <UserMenu className="nav">
-        <li className="nav-item">
-          <div className="top-nav-search">
-            <form>
-              <input
-                className="form-control"
-                type="text"
-                placeholder="Search here"
-              />
-              <button className="btn" type="submit">
-                <AiOutlineSearch />
-              </button>
-            </form>
-          </div>
-        </li>
-
         <li className="nav-item dropdown" onClick={handleShowNotification}>
           <div className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
             <AiOutlineBell style={{ fontSize: "25px" }} />
@@ -129,6 +98,7 @@ const Header = () => {
                           <img
                             src={avatar}
                             style={{ width: "40px", height: "40px" }}
+                            alt=""
                           />
                         </span>
                         <div className="media-body">
@@ -153,85 +123,7 @@ const Header = () => {
                           <img
                             src={avatar}
                             style={{ width: "40px", height: "40px" }}
-                          />
-                        </span>
-                        <div className="media-body">
-                          <p className="notification-details">
-                            <span className="notification-title">John Doe</span>{" "}
-                            added new task
-                            <span className="notification-title">
-                              Patient appointment booking
-                            </span>
-                          </p>
-                          <p className="notification-time">
-                            <span>4 mins ago</span>
-                          </p>
-                        </div>
-                      </Media>
-                    </Link>
-                  </li>
-                </ul>
-              </NotificationContent>
-
-              <TopNavDropdownFooter className="top-nav-dropdown-footer">
-                <Link>View all Notifications</Link>
-              </TopNavDropdownFooter>
-            </div>
-          </div>
-        </li>
-
-        <li className="nav-item dropdown" onClick={handleShowMessage}>
-          <div className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-            <FaRegComment style={{ fontSize: "22px" }} />
-            <span className="badge badge-pill">3</span>
-
-            <div
-              className={
-                isOpenMessage
-                  ? `show dropdown-menu notifications open`
-                  : "dropdown-menu notifications"
-              }
-            >
-              <TopNavDropdownHeader className="top-nav-dropdown-header">
-                <span className="notification-title">Message</span>
-                <Link href="" className="clear-notification">
-                  Clear All
-                </Link>
-              </TopNavDropdownHeader>
-
-              <NotificationContent>
-                <ul className="notification-list">
-                  <li className="notification-message">
-                    <Link>
-                      <Media className="media">
-                        <span className="avatar">
-                          <img
-                            src={avatar}
-                            style={{ width: "40px", height: "40px" }}
-                          />
-                        </span>
-                        <div className="media-body">
-                          <p className="notification-details">
-                            <span className="notification-title">John Doe</span>{" "}
-                            added new task
-                            <span className="notification-title">
-                              Patient appointment booking
-                            </span>
-                          </p>
-                          <p className="notification-time">
-                            <span>4 mins ago</span>
-                          </p>
-                        </div>
-                      </Media>
-                    </Link>
-                  </li>
-                  <li className="notification-message">
-                    <Link>
-                      <Media className="media">
-                        <span className="avatar">
-                          <img
-                            src={avatar}
-                            style={{ width: "40px", height: "40px" }}
+                            alt=""
                           />
                         </span>
                         <div className="media-body">
@@ -269,13 +161,17 @@ const Header = () => {
               <span className="status online"></span>
             </UserImg>
             <span>Admin</span>
-            <IoIosArrowDown className="ms-1" />
           </Link>
           <div
             className={isOpenSetting ? `show dropdown-menu` : "dropdown-menu"}
             style={{ position: "absolute", right: "20px" }}
           >
-            <Link className="dropdown-item">My Profile</Link>
+            <Link
+              to={`/staff_management/staff/${profile?.id}`}
+              className="dropdown-item"
+            >
+              My Profile
+            </Link>
             <Link className="dropdown-item">Settings</Link>
             <Link className="dropdown-item" onClick={handleLogout}>
               Logout

@@ -1,24 +1,49 @@
-import React, { useEffect } from "react";
-import { Card, Col, Dropdown, Row } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Button, Card, Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-
 import avatar from "../../../assets/images/home/user.jpg";
+import "./toggleSwitch.scss";
 import {
-  ProfileSelector,
+  getRoleSelector,
+  getUserSelector,
+} from "../../../features/auth/authSlice";
+import {
+  profileSelector,
   fetchProfile,
+  destroyStaff,
+  lowerLevelStaff,
+  inActiveStaff,
 } from "../../../features/staff/staffSlice";
 import { ProfileView } from "./topProfile";
-
 import topProfile from "./topProfile.module.scss";
+import FormInactive from "./FormInactive";
+import { useNavigate } from "react-router-dom";
 
-const TopProfile = (prop) => {
-  const profile = useSelector(ProfileSelector);
+const TopProfile = ({ idProfile }) => {
   const dispatch = useDispatch();
+  const role = useSelector(getRoleSelector);
+  const profile = useSelector(!role ? getUserSelector : profileSelector);
+  const [name, setName] = useState("");
+  const [show, setShow] = useState(false);
+  const inActive = useSelector(inActiveStaff);
 
   useEffect(() => {
-    dispatch(fetchProfile(prop.idProfile));
-  }, []);
+    dispatch(fetchProfile(idProfile));
+  }, [dispatch, idProfile]);
+
+  useEffect(() => {
+    if (!profile) return;
+    const { fullname } = profile?.attributes;
+    setName(fullname);
+  }, [profile]);
+
+  const handleClose = () => setShow(false);
+
+  const handleInactive = () => {
+    setShow(true);
+  };
+
+  console.log(inActive);
 
   return (
     <Card className="mb-0">
@@ -35,74 +60,29 @@ const TopProfile = (prop) => {
                     <div className={topProfile.ProfileInfoLeft}>
                       <div className="d-flex align-items-center">
                         <div style={{ flex: 1 }}>
-                          <h3 className="user-name m-t-0 mb-0">
-                            {profile?.attributes.fullname}
-                          </h3>
-                          <div className="staff-id">Employee ID : FT-0001</div>
+                          <h3 className="mb-0">{name}</h3>
 
-                          <h6 className="text-muted">
-                            {profile?.attributes?.department?.name}
-                            {","}
-                            {profile?.attributes?.position?.name}
-                            {","}
-                            {profile?.attributes?.job_title?.title}
-                          </h6>
-                        </div>
-
-                        <div className="justify-content-end">
-                          <Link className="btn btn-active">Active</Link>
+                          <div className="staff-id">
+                            Employee ID : {profile?.id}
+                          </div>
+                          <Button
+                            size="sm"
+                            className="mt-3"
+                            variant={inActive ? "success" : "danger"}
+                            onClick={handleInactive}
+                          >
+                            {inActive ? "Active" : "Inactive"}
+                          </Button>
                         </div>
                       </div>
                     </div>
-                  </Col>
-                  <Col md={7}>
-                    <ul className="personal-info d-flex justify-content-end">
-                      <li>
-                        <Dropdown>
-                          <Dropdown.Toggle id={topProfile.DropdownBasic}>
-                            Job Change
-                          </Dropdown.Toggle>
-
-                          <Dropdown.Menu>
-                            <Dropdown.Item>Action</Dropdown.Item>
-                            <Dropdown.Item>Another action</Dropdown.Item>
-                            <Dropdown.Item>Something else</Dropdown.Item>
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </li>
-                      <li>
-                        <Dropdown>
-                          <Dropdown.Toggle id={topProfile.DropdownBasic}>
-                            Probation
-                          </Dropdown.Toggle>
-
-                          <Dropdown.Menu>
-                            <Dropdown.Item>Action</Dropdown.Item>
-                            <Dropdown.Item>Another action</Dropdown.Item>
-                            <Dropdown.Item>Something else</Dropdown.Item>
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </li>
-                      <li>
-                        <Dropdown>
-                          <Dropdown.Toggle id={topProfile.DropdownBasic}>
-                            More
-                          </Dropdown.Toggle>
-
-                          <Dropdown.Menu>
-                            <Dropdown.Item>Action</Dropdown.Item>
-                            <Dropdown.Item>Another action</Dropdown.Item>
-                            <Dropdown.Item>Something else</Dropdown.Item>
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </li>
-                    </ul>
                   </Col>
                 </Row>
               </div>
             </ProfileView>
           </Col>
         </Row>
+        <FormInactive show={show} close={handleClose} idProfile={idProfile} />
       </Card.Body>
     </Card>
   );

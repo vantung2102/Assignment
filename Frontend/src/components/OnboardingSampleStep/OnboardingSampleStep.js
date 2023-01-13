@@ -1,40 +1,55 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Form, Row } from "react-bootstrap";
-import { RiDeleteBinLine } from "react-icons/ri";
-import { TbEdit } from "react-icons/tb";
-import { TiArrowUnsorted } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
 import { optionSelect2 } from "../../common/hooks/hooks";
 import {
+  destroyOnboarding,
   onboardingSample,
   onboardingSampleSelector,
+  showOnboardingSample,
 } from "../../features/onboarding/onboardingSlice";
 import {
-  fetchPosition,
-  positionsSelector,
+  allPositionSelector,
+  fetchAllPosition,
 } from "../../features/position/positionSlice";
-import { Table } from "../Staff/staff";
-import staff from "../Staff/staff.module.scss";
 import Select from "react-select";
+import {
+  TableCell,
+  TableComponent,
+  TableResponsive,
+} from "../../global/jsx/common";
+import TableHead from "../Table/TableHead";
+import ActionColumn from "../Table/ActionColumn";
+import FormOnboardingSampleStep from "./FormOnboardingSampleStep";
 
 const OnboardingSampleStep = () => {
   const dispatch = useDispatch();
-  const onboardingSampleSteps = useSelector(onboardingSampleSelector);
-  const positions = useSelector(positionsSelector);
+  const onboarding = useSelector(onboardingSampleSelector);
+  const positions = useSelector(allPositionSelector);
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     dispatch(onboardingSample(null));
-    dispatch(fetchPosition());
-  }, []);
+    dispatch(fetchAllPosition());
+  }, [dispatch]);
+
+  const handleClose = () => setShow(false);
+  const handleShow = (id) => {
+    dispatch(showOnboardingSample(id));
+    setShow(true);
+  };
 
   const handleFilter = (val) => {
     dispatch(onboardingSample(val));
   };
 
+  const handleDelete = (id) => {
+    dispatch(destroyOnboarding(id));
+  };
+
   return (
     <>
       {/* ============= Filter =============== */}
-
       <Row className="justify-content-end mb-4">
         <Col md={3} sm={6}>
           <Form.Group>
@@ -50,71 +65,43 @@ const OnboardingSampleStep = () => {
 
       <Row>
         <Col md={12}>
-          <div className="table-responsive">
-            <div className="table">
-              <div className="table-content">
-                <Table>
-                  <thead>
-                    <tr>
-                      <th className="ant-table-cell">
-                        <div className={staff.TableColumnSorters}>
-                          <span className="table-column-title">STT</span>
-                          <TiArrowUnsorted />
-                        </div>
-                      </th>
-                      <th className="ant-table-cell">
-                        <div className={staff.TableColumnSorters}>
-                          <span className="table-column-title">Position</span>
-                          <TiArrowUnsorted />
-                        </div>
-                      </th>
-                      <th className="ant-table-cell">
-                        <div className={staff.TableColumnSorters}>
-                          <span className="table-column-title">Task</span>
-                          <TiArrowUnsorted />
-                        </div>
-                      </th>
-
-                      <th className="ant-table-cell text-center">Action</th>
+          <TableResponsive>
+            <TableComponent>
+              <thead>
+                <tr>
+                  <TableHead title="STT" />
+                  <TableHead title="Position" />
+                  <TableHead title="Task" />
+                  <TableHead title="Action" centerTitle={true} />
+                </tr>
+              </thead>
+              <tbody>
+                {onboarding?.map((item, index) => {
+                  const { id, position, task } = item.attributes;
+                  return (
+                    <tr key={id}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{position?.name}</TableCell>
+                      <TableCell>{task}</TableCell>
+                      <TableCell>
+                        <ActionColumn
+                          id={id}
+                          edit={handleShow}
+                          destroy={handleDelete}
+                        />
+                      </TableCell>
                     </tr>
-                  </thead>
-                  <tbody>
-                    {onboardingSampleSteps?.map((item, index) => (
-                      <tr key={item.attributes.id}>
-                        <td className="ant-table-cell">{index}</td>
-                        <td className="ant-table-cell">
-                          {item.attributes.position.name}
-                        </td>
-                        <td className="ant-table-cell">
-                          {item.attributes.task}
-                        </td>
-
-                        <td className="ant-table-cell">
-                          <div className="d-flex justify-content-evenly">
-                            <TbEdit
-                              style={{
-                                fontSize: "20px",
-                              }}
-                              // onClick={() => handleShow(item.attributes.id)}
-                            />
-                            <RiDeleteBinLine
-                              style={{
-                                fontSize: "20px",
-                              }}
-                              // onClick={() =>
-                              //   handleDeletePosition(item.attributes.id)
-                              // }
-                            />
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </Table>
-              </div>
-            </div>
-          </div>
+                  );
+                })}
+              </tbody>
+            </TableComponent>
+          </TableResponsive>
         </Col>
+        <FormOnboardingSampleStep
+          isNew={false}
+          show={show}
+          close={handleClose}
+        />
       </Row>
     </>
   );

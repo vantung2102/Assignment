@@ -5,6 +5,10 @@ class Api::V1::StaffManagement::DepartmentsController < Api::V1::BaseController
     render_resource_collection(departments, pagy: pagy)
   end
 
+  def get_all_department
+    render_resource_collection(Department.all)
+  end
+
   def show
     authorize Department
     render_resource(department)

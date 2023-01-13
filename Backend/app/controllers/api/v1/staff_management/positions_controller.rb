@@ -5,6 +5,10 @@ class Api::V1::StaffManagement::PositionsController < Api::V1::BaseController
     render_resource_collection(positions, pagy: pagy)
   end
 
+  def get_all_position
+    render_resource_collection(Position.all)
+  end
+
   def show
     authorize Position
     render_resource(position)
@@ -34,6 +38,6 @@ class Api::V1::StaffManagement::PositionsController < Api::V1::BaseController
   end
 
   def position_params
-    params.require(:position).permit(:name, :description, :department_id)
+    params.require(:position).permit(:name, :description)
   end
 end

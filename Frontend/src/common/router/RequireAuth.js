@@ -10,7 +10,7 @@ import {
 const RequireAuth = ({ children }) => {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector(isAuthenticatedSelector);
-  let isAuthenticatedLocal = localStorage.getItem("isAuthenticated") == "true";
+  let isAuthenticatedLocal = localStorage.getItem("isAuthenticated") === "true";
 
   useEffect(() => {
     dispatch(getUser());

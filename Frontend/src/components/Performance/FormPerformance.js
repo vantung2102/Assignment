@@ -29,26 +29,27 @@ const FormPerformance = ({ show, close }) => {
     const number = (date2 - date1) / 3600000 / 24;
 
     return (number + 1).toString() === numberOfDay ||
-      (number + 0.5).toString() == numberOfDay
+      (number + 0.5).toString() === numberOfDay
       ? true
       : false;
   };
 
-  const handleNewDepartment = () => {
+  const handleNewPerformance = () => {
     dispatch(
       CreateAllPerformance({
         start_date: watch("start_date"),
         end_date: watch("end_date"),
       })
     );
+    close(true);
   };
   return (
     <Modal show={show} onHide={close}>
       <Modal.Header closeButton>
-        <Modal.Title>Add Department</Modal.Title>
+        <Modal.Title>Add Performance</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={handleSubmit(handleNewDepartment)}>
+        <Form onSubmit={handleSubmit(handleNewPerformance)}>
           <Form.Group>
             <Form.Label>Start day</Form.Label>
             <Form.Control

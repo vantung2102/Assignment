@@ -1,7 +1,17 @@
 class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
   def index
-    pagy, staffs = paginate(Staff.filter(params.slice(:status, :fullname, :position, :department, :job_title)))
-    render_resource_collection(staffs.order(created_at: :desc), pagy: pagy)
+    
+    # binding.pry
+    
+    pagy, staffs = paginate(Staff.filter(params.slice(:fullname, :position, :department, :job_title)))
+    render_resource_collection(
+      staffs.includes(:position, :department, :job_title, :upper_level, :lower_levels, :roles).order(created_at: :desc),
+      pagy: pagy
+    )
+  end
+
+  def get_all_staff
+    render_resource_collection(Staff.where(status: :active).includesModel)
   end
 
   def show
@@ -23,24 +33,19 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
 
   def update
     authorize staff
-    update = staff.update(staff_params) ? render_resource(staff) : render_resource_errors(staff.errors)
+    staff.update(staff_params) ? render_resource(staff) : render_resource_errors(staff.errors)
   end
 
   def update_staff_activation_status
-    update, staff = Staffs::UpdateStaffActivationStatusService.call(staff, params[:status])
+    staff
+    update, staff = Staffs::UpdateStaffActivationStatusService.call(@staff, params[:status])
     update ? render_resource(staff) : render_resource_errors(detail: staff)
   end
 
   def destroy
     authorize Staff
-    staff_lower_levels = staff.staff_lower_levels
-
-    if staff_lower_levels.present?
-      render_resource_collection(staff_lower_levels)
-    else
-      staff.destroy!
-      head :no_content
-    end
+    staff.destroy!
+    head :no_content
   end
 
   def destroy_and_update_staff_boss
@@ -48,7 +53,7 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
 
     begin
       ActiveRecord::Base.transaction do
-        Staff.where(id: params[:staffs]['id']).update(staff_id: params[:staffs]['boss_id'])
+        staff.lower_levels.update_all(staff_id: params[:boss_id])
         staff.destroy!
       end
       head :ok
@@ -56,17 +61,38 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
       render json: { status: 'error', detail: e }
     end
   end
-                                                                        
-  def staff_chart
-    # chart = Staffs::StaffChartService.call
-    # render json: chart
-    staffs = Staff.all
+
+  def get_inactive_staff
+    authorize Staff
+    staffs = Staff.only_deleted
     render_resource_collection(staffs)
   end
 
-  def staff_chart_by_node
-    staffs = staff.lower_levels
-    render_resource_collection(staffs)
+  def recover_staff
+    authorize Staff
+
+    begin
+      ActiveRecord::Base.transaction do
+        staff = Staff.only_deleted.find(params[:id])
+        if staff.recover
+          create, leave = Leaves::CreateLeaveService.call(staff)
+          raise leave unless create
+        else
+          raise I18n.t('error_codes.E207')
+        end
+      end
+      head :ok
+    rescue StandardError => e
+      render json: { status: 'error', detail: e }
+    end
+  end
+
+  def permanent_destroy
+    authorize Staff
+
+    staff = Staff.only_deleted.find(id: params[:id]).update(staff_id: nil)
+    staff.destroy
+    head :no_content
   end
 
   private
@@ -79,7 +105,10 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
     params.require(:staff).permit(
       :fullname,
       :date_of_birth,
+      :join_date,
       :gender,
+      :phone,
+      :address,
       :email,
       :password,
       :position_id,

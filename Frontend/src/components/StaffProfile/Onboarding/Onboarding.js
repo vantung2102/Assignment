@@ -1,34 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { Button, Col, Form, Row } from "react-bootstrap";
-import { AiFillCheckCircle, AiFillInfoCircle } from "react-icons/ai";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { TbEdit } from "react-icons/tb";
-import { TiArrowUnsorted } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
   completeOnboardingStep,
-  editOnboardingStep,
   fetchOnboardingStep,
-  onboardingStepSelector,
   onboardingStepsSelector,
   showOnboardingStep,
+  destroyOnboardingStep,
 } from "../../../features/onboarding/onboardingSlice";
-import { Table } from "../../Staff/staff";
-import staff from "../../Staff/staff.module.scss";
+import {
+  TableCell,
+  TableComponent,
+  TableResponsive,
+} from "../../../global/jsx/common";
+import TableHead from "../../Table/TableHead";
 import FormOnboarding from "./FormOnboarding";
+import { Popconfirm } from "antd";
 
 const Onboarding = () => {
-  const { id } = useParams();
   const dispatch = useDispatch();
-  const [show, setShow] = useState(false);
-
+  const { id } = useParams();
   const onboarding = useSelector(onboardingStepsSelector);
-  const onboardingStep = useSelector(onboardingStepSelector);
+
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
     dispatch(fetchOnboardingStep(id));
-  }, []);
+  }, [dispatch, id]);
 
   const handleClose = () => setShow(false);
   const handleShow = (id) => {
@@ -39,98 +40,87 @@ const Onboarding = () => {
     dispatch(completeOnboardingStep(id));
   };
 
-  const handleDelete = (id) => {};
+  const handleDelete = (id) => {
+    dispatch(destroyOnboardingStep(id));
+  };
 
   return (
     <Row>
       <Col md={12}>
-        <div className="table-responsive">
-          <div className="table">
-            <div className="table-content">
-              <Table>
-                <thead>
-                  <tr>
-                    <th className="ant-table-cell">STT</th>
-                    <th className="ant-table-cell text-center">Task</th>
-                    <th className="ant-table-cell text-center">Assign To</th>
-                    <th className="ant-table-cell text-center">Start date</th>
-                    <th className="ant-table-cell text-center">Due date</th>
-                    <th className="ant-table-cell text-center">Status</th>
-                    <th className="ant-table-cell text-center">Action</th>
+        <TableResponsive>
+          <TableComponent>
+            <thead>
+              <tr>
+                <TableHead title="STT" centerTitle={true} />
+                <TableHead title="Task" centerTitle={true} />
+                <TableHead title="Assign To" centerTitle={true} />
+                <TableHead title="Start date" centerTitle={true} />
+                <TableHead title="Due date" centerTitle={true} />
+                <TableHead title="Status" centerTitle={true} />
+                <TableHead title="Action" centerTitle={true} />
+              </tr>
+            </thead>
+            <tbody>
+              {onboarding?.map((item, index) => {
+                const {
+                  id,
+                  onboarding_sample_step,
+                  assigned_person,
+                  start_date,
+                  due_date,
+                  status,
+                } = item.attributes;
+                return (
+                  <tr key={id} className="text-center">
+                    <TableCell>{index + 1}</TableCell>
+                    <TableCell>{onboarding_sample_step?.task}</TableCell>
+                    <TableCell>{assigned_person?.fullname}</TableCell>
+                    <TableCell>{start_date}</TableCell>
+                    <TableCell>{due_date}</TableCell>
+                    <TableCell>
+                      <Button
+                        size="sm"
+                        variant={
+                          status === "outstanding"
+                            ? "outline-danger"
+                            : "outline-success"
+                        }
+                      >
+                        {status}
+                      </Button>
+                    </TableCell>
+
+                    <TableCell>
+                      <div className="d-flex justify-content-evenly">
+                        <Form.Check.Input
+                          type="checkbox"
+                          isValid
+                          checked={status === "outstanding" ? false : true}
+                          disabled={status === "outstanding" ? false : true}
+                          onChange={() => handleCompleted(id)}
+                        />
+
+                        {status === "outstanding" ? (
+                          <>
+                            <TbEdit onClick={() => handleShow(id)} />
+                            <Popconfirm
+                              title="Are you sure?"
+                              onConfirm={() => handleDelete(id)}
+                              okText="Yes"
+                              cancelText="No"
+                            >
+                              <RiDeleteBinLine />
+                            </Popconfirm>
+                          </>
+                        ) : null}
+                      </div>
+                    </TableCell>
                   </tr>
-                </thead>
-                <tbody>
-                  {onboarding?.map((item, index) => (
-                    <tr key={item.attributes.id} className="text-center">
-                      <td className="ant-table-cell">{index + 1}</td>
-                      <td className="ant-table-cell">
-                        {item.attributes?.onboarding_sample_step?.task}
-                      </td>
-                      <td className="ant-table-cell">
-                        {item.attributes?.assigned_person?.fullname}
-                      </td>
-                      <td className="ant-table-cell">
-                        {item.attributes.start_date}
-                      </td>
-                      <td className="ant-table-cell">
-                        {item.attributes.due_date}
-                      </td>
-                      <td className="ant-table-cell">
-                        <Button
-                          size="sm"
-                          variant={
-                            item.attributes.status === "outstanding"
-                              ? "outline-danger"
-                              : "outline-success"
-                          }
-                        >
-                          {item.attributes.status}
-                        </Button>
-                      </td>
-                      <td className="ant-table-cell">
-                        <div className="d-flex justify-content-evenly">
-                          <Form.Check.Input
-                            type="checkbox"
-                            isValid
-                            checked={
-                              item.attributes.status === "outstanding"
-                                ? false
-                                : true
-                            }
-                            disabled={
-                              item.attributes.status === "outstanding"
-                                ? false
-                                : true
-                            }
-                            onChange={() => handleCompleted(item.attributes.id)}
-                          />
-
-                          {item.attributes.status === "outstanding" ? (
-                            <>
-                              <TbEdit
-                                style={{
-                                  fontSize: "20px",
-                                }}
-                                onClick={() => handleShow(item.attributes.id)}
-                              />
-
-                              <RiDeleteBinLine
-                                style={{
-                                  fontSize: "20px",
-                                }}
-                                onClick={() => handleDelete(item.attributes.id)}
-                              />
-                            </>
-                          ) : null}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </div>
-          </div>
-        </div>
+                );
+              })}
+            </tbody>
+          </TableComponent>
+        </TableResponsive>
       </Col>
 
       <FormOnboarding show={show} close={handleClose} />

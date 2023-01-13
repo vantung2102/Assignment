@@ -29,6 +29,21 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'pry-rails'
+  # unitest
+  gem 'rspec-rails', '~> 6.0.0'
+  gem 'rspec-mocks', '~> 3.12'
+  gem 'rspec-expectations', '~> 3.12'
+  gem "factory_bot_rails"
+  gem 'shoulda-matchers'
+  gem 'database_cleaner'
+  gem 'capybara', '>= 3.26'
+  gem 'rails-controller-testing'
+  gem 'webdrivers'
+  gem 'pundit-matchers'
+  gem 'selenium-webdriver', '>= 4.0.0.rc1'
+  gem 'simplecov', require: false, group: :test
+  gem 'deep-cover', '~> 0.7', group: :test
+
 end
 
 group :development do
@@ -39,6 +54,8 @@ group :development do
   gem 'rubocop-rails', require: false
   gem "letter_opener"
 end
+
+
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
@@ -54,6 +71,8 @@ gem 'pagy'
 gem 'pg_search'
 
 gem 'jwt'
+
+gem "paperclip"
 
 gem 'bcrypt'
 

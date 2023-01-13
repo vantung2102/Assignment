@@ -1,24 +1,58 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, Col, Form, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { getUserSelector } from "../../../features/auth/authSlice";
 import {
   acceptProperty,
   propertySelector,
   showProperty,
 } from "../../../features/property/propertySlice";
 import { ProfileView } from "../../StaffProfile/TopProfile/topProfile";
+import ColumnProperty from "./ColumnProperty";
 import FormAcceptRequestProperty from "./FormAcceptRequestProperty";
 
 const DetailProperties = ({ idRequest }) => {
   const dispatch = useDispatch();
   const property = useSelector(propertySelector);
   const [show, setShow] = useState(false);
+  const [code, setCode] = useState(null);
+  const [name, setName] = useState(null);
+  const [brand, setBrand] = useState(null);
+  const [numberOfRepairs, setNumberOfRepairs] = useState(null);
+  const [status, setStatus] = useState(null);
+  const [buyDay, setBuyDay] = useState(null);
+  const [price, setPrice] = useState(null);
+  const [groupProperty, setGroupProperty] = useState(null);
 
   const handleClose = () => setShow(false);
 
   useEffect(() => {
     dispatch(showProperty(idRequest));
-  }, []);
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!property) return;
+
+    const {
+      code_seri,
+      name,
+      brand,
+      group_property,
+      price,
+      date_buy,
+      number_of_repairs,
+      status,
+    } = property;
+
+    setCode(code_seri);
+    setName(name);
+    setBrand(brand);
+    setNumberOfRepairs(number_of_repairs);
+    setStatus(status);
+    setPrice(price);
+    setBuyDay(date_buy);
+    setGroupProperty(group_property.name);
+  }, [property]);
 
   const handleRecall = () => {
     dispatch(acceptProperty({ id: idRequest }));
@@ -27,13 +61,13 @@ const DetailProperties = ({ idRequest }) => {
   return (
     <Card className="mb-0">
       <Card.Header>
-        {property?.status == "available" ? (
+        {status === "available" ? (
           <Button
             variant="success"
             className="me-4"
             onClick={() => setShow(true)}
           >
-            Accept
+            Assign
           </Button>
         ) : (
           <Button variant="danger" onClick={handleRecall}>
@@ -53,57 +87,27 @@ const DetailProperties = ({ idRequest }) => {
                   <Col md={10}>
                     <Button
                       variant={
-                        property?.status == "available" ? "success" : "danger"
+                        status === "available"
+                          ? "outline-success"
+                          : "outline-danger"
                       }
                     >
-                      {property?.status}
+                      {status}
                     </Button>
                   </Col>
                 </Form.Group>
-                <Form.Group className="d-flex align-items-center mt-4">
-                  <Col md={2}>
-                    <Form.Label>Name</Form.Label>
-                  </Col>
-                  <Col md={10}>
-                    <Form.Control defaultValue={property?.name} disabled />
-                  </Col>
-                </Form.Group>
-                <Form.Group className="d-flex align-items-center mt-4">
-                  <Col md={2}>
-                    <Form.Label>Code Seri</Form.Label>
-                  </Col>
-                  <Col md={10}>
-                    <Form.Control defaultValue={property?.code_seri} disabled />
-                  </Col>
-                </Form.Group>
 
-                <Form.Group className="d-flex align-items-center mt-4">
-                  <Col md={2}>
-                    <Form.Label>Buy day</Form.Label>
-                  </Col>
-                  <Col md={10}>
-                    <Form.Control defaultValue={property?.date_buy} disabled />
-                  </Col>
-                </Form.Group>
-                <Form.Group className="d-flex align-items-center mt-4">
-                  <Col md={2}>
-                    <Form.Label>Number of repairs</Form.Label>
-                  </Col>
-                  <Col md={10}>
-                    <Form.Control
-                      defaultValue={property?.number_of_repairs}
-                      disabled
-                    />
-                  </Col>
-                </Form.Group>
-                <Form.Group className="d-flex align-items-center mt-4">
-                  <Col md={2}>
-                    <Form.Label>Price</Form.Label>
-                  </Col>
-                  <Col md={10}>
-                    <Form.Control defaultValue={property?.price} disabled />
-                  </Col>
-                </Form.Group>
+                <ColumnProperty title="Name" value={name} />
+                <ColumnProperty title="Code Seri" value={code} />
+                <ColumnProperty title="Brand" value={brand} />
+                <ColumnProperty title="Group Property" value={groupProperty} />
+
+                <ColumnProperty title="Buy day" value={buyDay} />
+                <ColumnProperty
+                  title="Number of repairs"
+                  value={numberOfRepairs}
+                />
+                <ColumnProperty title="Price" value={price} />
               </Row>
             </ProfileView>
           </Col>

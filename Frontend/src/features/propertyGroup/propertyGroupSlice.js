@@ -78,7 +78,7 @@ export const editPropertiesGroup = createAsyncThunk(
 export const destroyPropertiesGroup = createAsyncThunk(
   "destroyPropertiesGroup",
   async (id) => {
-    const response = await apiClient.delete(
+    await apiClient.delete(
       `/api/v1/property_management/group_properties/${id}`,
       {
         headers: {
