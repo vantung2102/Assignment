@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Button, Col, Row } from "react-bootstrap";
+import { Button, Col, Form, Row } from "react-bootstrap";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { TbEdit } from "react-icons/tb";
 import { TiArrowUnsorted } from "react-icons/ti";
@@ -10,6 +10,7 @@ import {
   destroyRequestProperty,
   fetchRequestProperties,
   requestPropertiesSelector,
+  RequestPropertyByStatus,
   searchRequestProperty,
   showRequestProperty,
 } from "../../features/requestProperty/requestPropertySlice";
@@ -44,7 +45,11 @@ const RequestProperty = () => {
 
   const [show, setShow] = useState(false);
   const [idStaff, setIdStaff] = useState(null);
-
+  const statusList = [
+    { label: "Pending", value: 0 },
+    { label: "Approve", value: 1 },
+    { label: "Cancel", value: 2 },
+  ];
   useEffect(() => {
     if (!currentUser) return;
 
@@ -66,25 +71,25 @@ const RequestProperty = () => {
     dispatch(destroyRequestProperty(id));
   };
 
-  const handleSearch = (id) => {
-    dispatch(searchRequestProperty(id));
-    setIdStaff(id);
+  const handleFilter = (val) => {
+    dispatch(RequestPropertyByStatus(val));
   };
 
   return (
     <>
-      <Row className="mb-2 justify-content-end">
-        <Col lg={3} md={6} sm={6}>
-          <Select
-            value={optionSelect2(staffs, "fullname")?.filter(
-              (option) => option.value === idStaff
-            )}
-            options={optionSelect2(staffs, "fullname")}
-            placeholder="Search By Name"
-            onChange={(e) => handleSearch(e.value)}
-          />
-        </Col>
-      </Row>
+      {role && (
+        <Row className="justify-content-end mb-4">
+          <Col lg={3} md={6} sm={6}>
+            <Form.Group>
+              <Select
+                options={statusList}
+                placeholder="Select Status"
+                onChange={(e) => handleFilter(e.value)}
+              />
+            </Form.Group>
+          </Col>
+        </Row>
+      )}
 
       <Row>
         <Col md={12}>

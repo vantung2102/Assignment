@@ -1,4 +1,6 @@
 class Api::V1::OnboardingManagement::OnboardingStepsController < Api::V1::BaseController
+  def index; end
+
   def show
     authorize OnboardingStep
     render_resource(onboarding_step)
@@ -29,15 +31,19 @@ class Api::V1::OnboardingManagement::OnboardingStepsController < Api::V1::BaseCo
   end
 
   def complete_onboarding_step
+    authorize OnboardingStep
     begin
-      raise if onboarding_step.assigned_person_id.nil? || onboarding_step.start_date.nil? || onboarding_step.due_date.nil?
+      if onboarding_step.assigned_person_id.nil? || onboarding_step.start_date.nil? || onboarding_step.due_date.nil?
+        raise I18n.t('errors.E210')
+      end
+
       onboarding_step.update!(status: :completed)
       render_resource(onboarding_step)
-    rescue
-      render_resource_errors(status: "error", detail: I18n.t('errors.E207'))
+    rescue StandardError
+      render_resource_errors(status: 'error', detail: I18n.t('errors.E207'))
     end
   end
-  
+
   private
 
   def onboarding_step
@@ -48,4 +54,3 @@ class Api::V1::OnboardingManagement::OnboardingStepsController < Api::V1::BaseCo
     params.require(:onboarding_step).permit(:status, :assigned_person_id, :start_date, :due_date)
   end
 end
-

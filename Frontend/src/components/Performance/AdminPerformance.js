@@ -3,13 +3,11 @@ import { Button, Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchPerformance,
+  isOpenPerformanceSelector,
   performancesSelector,
   remindPerformance,
 } from "../../features/performance/performanceSlice";
-// import { Table } from "../Staff/staff";
 import FormPerformance from "./FormPerformance";
-import staff from "../Staff/staff.module.scss";
-import { TiArrowUnsorted } from "react-icons/ti";
 import { Link } from "react-router-dom";
 import TableHead from "../Table/TableHead";
 import { TableCell, TableComponent } from "../../global/jsx/common";
@@ -18,6 +16,7 @@ import EmptyData from "../Empty/EmptyData";
 const AdminPerformance = () => {
   const dispatch = useDispatch();
   const performances = useSelector(performancesSelector);
+  const isOpenPerformance = useSelector(isOpenPerformanceSelector);
 
   const [show, setShow] = useState(false);
 
@@ -30,6 +29,16 @@ const AdminPerformance = () => {
   useEffect(() => {
     dispatch(fetchPerformance());
   }, [dispatch]);
+
+  useEffect(() => {
+    if (!isOpenPerformance) return;
+
+    const timer = setInterval(() => {
+      dispatch(fetchPerformance());
+      console.log("123");
+    }, 100);
+    return () => clearInterval(timer);
+  }, [isOpenPerformance]);
 
   if (performances?.length === 0) {
     return <EmptyData />;

@@ -1,6 +1,6 @@
 class PropertyPolicy < ApplicationPolicy
 	def index?
-		true
+		authenticate
 	end
 
 	def show?
@@ -16,6 +16,10 @@ class PropertyPolicy < ApplicationPolicy
 	end
 
 	def destroy?
+		authenticate
+	end
+
+	def response_property_request?
 		authenticate
 	end
 

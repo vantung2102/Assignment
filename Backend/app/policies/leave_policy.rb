@@ -1,6 +1,6 @@
 class LeavePolicy < ApplicationPolicy
 	def index?
-		true
+		authenticate
 	end
 
 	def show?

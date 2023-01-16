@@ -1,6 +1,6 @@
 class DepartmentPolicy < ApplicationPolicy
 	def index?
-		true
+		authenticate
 	end
 
 	def show?

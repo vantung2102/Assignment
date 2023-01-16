@@ -62,7 +62,6 @@ const LeaveApplication = () => {
           <Col lg={3} md={6} sm={6}>
             <Form.Group>
               <Select
-                name="position"
                 options={statusList}
                 placeholder="Select Status"
                 onChange={(e) => handleFilter(e.value)}

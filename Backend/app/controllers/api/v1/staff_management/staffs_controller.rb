@@ -1,11 +1,9 @@
 class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
   def index
-    
-    # binding.pry
-    
     pagy, staffs = paginate(Staff.filter(params.slice(:fullname, :position, :department, :job_title)))
     render_resource_collection(
-      staffs.includes(:position, :department, :job_title, :upper_level, :lower_levels, :roles).order(created_at: :desc),
+      staffs.includes(:position, :department, :job_title, :upper_level, :lower_levels,
+                      :roles).order(created_at: :desc),
       pagy: pagy
     )
   end
@@ -34,12 +32,6 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
   def update
     authorize staff
     staff.update(staff_params) ? render_resource(staff) : render_resource_errors(staff.errors)
-  end
-
-  def update_staff_activation_status
-    staff
-    update, staff = Staffs::UpdateStaffActivationStatusService.call(@staff, params[:status])
-    update ? render_resource(staff) : render_resource_errors(detail: staff)
   end
 
   def destroy
@@ -74,12 +66,10 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
     begin
       ActiveRecord::Base.transaction do
         staff = Staff.only_deleted.find(params[:id])
-        if staff.recover
-          create, leave = Leaves::CreateLeaveService.call(staff)
-          raise leave unless create
-        else
-          raise I18n.t('error_codes.E207')
-        end
+        raise I18n.t('error_codes.E207') unless staff.recover
+
+        create, leave = Leaves::CreateLeaveService.call(staff)
+        raise leave unless create
       end
       head :ok
     rescue StandardError => e

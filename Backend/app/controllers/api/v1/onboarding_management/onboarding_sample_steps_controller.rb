@@ -13,7 +13,12 @@ class Api::V1::OnboardingManagement::OnboardingSampleStepsController < Api::V1::
   def create
     authorize OnboardingSampleStep
     onboarding_sample_step = OnboardingSampleStep.new(onboarding_sample_step_params)
-    onboarding_sample_step.save ? render_resource(onboarding_sample_step, status: :created) : render_resource_errors(onboarding_sample_step.errors)
+    if onboarding_sample_step.save
+      render_resource(onboarding_sample_step,
+                      status: :created)
+    else
+      render_resource_errors(onboarding_sample_step.errors)
+    end
   end
 
   def update
@@ -43,4 +48,3 @@ class Api::V1::OnboardingManagement::OnboardingSampleStepsController < Api::V1::
     params.require(:onboarding_sample_step).permit(:task, :description, :position_id)
   end
 end
-

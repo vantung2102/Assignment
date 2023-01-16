@@ -8,7 +8,7 @@ RSpec.describe PerformanceAppraisalForm, type: :model do
   end
 
   it { should belong_to(:staff) }
-  it { should belong_to(:boss).class_name('Staff').without_validating_presence }
+  it { should belong_to(:boss).class_name(:Staff).without_validating_presence }
   it { is_expected.to validate_presence_of(:status) }
   it { is_expected.to validate_presence_of(:start_date) }
   it { is_expected.to validate_presence_of(:end_date) }

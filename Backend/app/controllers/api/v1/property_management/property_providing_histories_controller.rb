@@ -17,6 +17,7 @@ class Api::V1::PropertyManagement::PropertyProvidingHistoriesController < Api::V
   end
 
   def histories_by_property
+    authorize PropertyProvidingHistory
     property_providing_histories = PropertyProvidingHistory.where(
       property_id: property_providing_history_params[:property_id]).order(created_at: :desc
     )

@@ -12,6 +12,7 @@ const initialState = {
   selfReviews: null,
   selfReview: null,
   performance: null,
+  isOpenPerformance: false,
 };
 
 export const fetchPerformance = createAsyncThunk(
@@ -217,6 +218,7 @@ export const performanceSlice = createSlice({
       .addCase(fetchPerformance.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.performances = action.payload.data;
+        if (action.payload.data.length > 0) state.isOpenPerformance = false;
       })
       .addCase(fetchPerformance.rejected, (state) => {
         state.status = "error";
@@ -228,7 +230,8 @@ export const performanceSlice = createSlice({
       })
       .addCase(CreateAllPerformance.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.performances = action.payload.data;
+        // state.performances = action.payload.data;
+        state.isOpenPerformance = true;
       })
       .addCase(CreateAllPerformance.rejected, (state) => {
         state.status = "error";
@@ -354,5 +357,7 @@ export const reviewForStaffSelector = (state) =>
   state.performance.reviewForStaff;
 export const reviewForStaffsSelector = (state) =>
   state.performance.reviewForStaffs;
+export const isOpenPerformanceSelector = (state) =>
+  state.performance.isOpenPerformance;
 
 export default performanceSlice.reducer;

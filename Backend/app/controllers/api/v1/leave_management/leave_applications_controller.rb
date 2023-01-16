@@ -1,5 +1,6 @@
 class Api::V1::LeaveManagement::LeaveApplicationsController < Api::V1::BaseController
   def index
+    authorize LeaveApplication
     leave_applications = LeaveApplication.where(status: :pending).order(created_at: :desc)
     render_resource_collection(leave_applications.includes(:staff, :approver))
   end
@@ -11,7 +12,12 @@ class Api::V1::LeaveManagement::LeaveApplicationsController < Api::V1::BaseContr
 
   def create
     create, leave_application = Leaves::CreateLeaveApplicationService.call(current_user, leave_application_params)
-    create ? render_resource(leave_application, status: :created) : render_resource_errors(detail: leave_application)
+    if create
+      render_resource(leave_application,
+                      status: :created)
+    else
+      render_resource_errors(detail: leave_application)
+    end
   end
 
   def update
@@ -26,12 +32,9 @@ class Api::V1::LeaveManagement::LeaveApplicationsController < Api::V1::BaseContr
   end
 
   def leave_application_by_user
-    if current_user.has_role?(:Manager) || params[:staff_id] == current_user.id.to_s
-      leave_applications = LeaveApplication.where(staff_id: params[:staff_id]).order(created_at: :desc)
-      render_resource_collection(leave_applications)
-    else
-      render_resource_errors(status: "error", detail: I18n.t('error_codes.E205'))
-    end
+    leave_applications = LeaveApplication.where(staff_id: params[:staff_id]).order(created_at: :desc)
+    authorize leave_applications
+    render_resource_collection(leave_applications)
   end
 
   def leave_application_by_status
@@ -43,7 +46,8 @@ class Api::V1::LeaveManagement::LeaveApplicationsController < Api::V1::BaseContr
   def respond_to_leave_application
     authorize LeaveApplication
     leave_application
-    reponse, leave_application = Leaves::RespondToLeaveApplicationService.call(current_user, @leave_application, leave_application_params[:status])
+    reponse, leave_application = Leaves::RespondToLeaveApplicationService.call(current_user, @leave_application,
+                                                                                leave_application_params[:status])
     reponse ? render_resource(leave_application) : render_resource_errors(detail: leave_application)
   end
 

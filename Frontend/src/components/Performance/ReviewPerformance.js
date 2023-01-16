@@ -51,7 +51,6 @@ const ReviewPerformance = () => {
                   <tr>
                     <TableHead title="STT" />
                     <TableHead title="Name" />
-                    <TableHead title="Active" />
                     <TableHead title="Start day" />
                     <TableHead title="End day" />
                     <TableHead title="Status" />
@@ -66,16 +65,6 @@ const ReviewPerformance = () => {
                         <TableCell>{index + 1}</TableCell>
                         <TableCell>
                           <Link to={item.id}>{staff?.fullname}</Link>
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            size="sm"
-                            variant={
-                              active ? "outline-success" : "outline-danger"
-                            }
-                          >
-                            {active ? "Active" : "Inactive"}
-                          </Button>
                         </TableCell>
                         <TableCell>{start_date}</TableCell>
                         <TableCell>{end_date}</TableCell>
@@ -108,7 +97,6 @@ const ReviewPerformance = () => {
                   <tr>
                     <TableHead title="STT" />
                     <TableHead title="Name" />
-                    <TableHead title="Active" />
                     <TableHead title="Start day" />
                     <TableHead title="End day" />
                     <TableHead title="Status" />
@@ -123,16 +111,6 @@ const ReviewPerformance = () => {
                         <TableCell>{index + 1}</TableCell>
                         <TableCell>
                           <Link to={item.id}>{staff?.fullname}</Link>
-                        </TableCell>
-                        <TableCell>
-                          <Button
-                            size="sm"
-                            variant={
-                              active ? "outline-success" : "outline-danger"
-                            }
-                          >
-                            {active ? "Active" : "Inactive"}
-                          </Button>
                         </TableCell>
                         <TableCell>{start_date}</TableCell>
                         <TableCell>{end_date}</TableCell>

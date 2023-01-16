@@ -6,6 +6,7 @@ import {
   performanceSelector,
   showPerformance,
 } from "../../features/performance/performanceSlice";
+import EmptyData from "../Empty/EmptyData";
 import question from "./question";
 
 const DetailReviewPerformance = ({ idRequest }) => {
@@ -123,7 +124,6 @@ const DetailReviewPerformance = ({ idRequest }) => {
       feedback_staff,
       description_staff,
     } = review.attributes;
-    console.log(review);
 
     return (
       <>
@@ -483,7 +483,7 @@ const DetailReviewPerformance = ({ idRequest }) => {
       </>
     );
   } else {
-    return "chua toi ky review";
+    <EmptyData />;
   }
 };
 

@@ -1,5 +1,6 @@
-class Api::V1::LeaveManagement::LeavesController < Api::V1::BaseController
+class Api::v1::LeaveManagement::LeavesController < Api::V1::BaseController
   def index
+    authorize Leave
     pagy, leaves = paginate(Leave.order(created_at: :desc))
     render_resource_collection(leaves.includes(:staff), pagy: pagy)
   end

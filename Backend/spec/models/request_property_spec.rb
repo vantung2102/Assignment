@@ -12,8 +12,8 @@ RSpec.describe RequestProperty, type: :model do
     backed_by_column_of_type(:integer)
   end
 
-  it { should belong_to(:requester).class_name('Staff') }
-  it { should belong_to(:approver).class_name('Staff').without_validating_presence }
+  it { should belong_to(:requester).class_name(:Staff) }
+  it { should belong_to(:approver).class_name(:Staff).without_validating_presence }
   it { should belong_to(:group_property).without_validating_presence }
   it { should have_many(:comments).dependent(:destroy) }
 end
