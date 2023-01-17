@@ -1,6 +1,6 @@
 class PositionPolicy < ApplicationPolicy
 	def index?
-		true
+		authenticate
 	end
 
 	def show?

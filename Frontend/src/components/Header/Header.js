@@ -1,21 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { HiBars3CenterLeft } from "react-icons/hi2";
-import { AiOutlineBell } from "react-icons/ai";
-import {
-  HeaderContainer,
-  UserMenu,
-  UserImg,
-  TopNavDropdownHeader,
-  TopNavDropdownFooter,
-  Media,
-  NotificationContent,
-} from "./header";
+import { HeaderContainer, UserMenu, UserImg } from "./header";
 import "./header.scss";
 import logo from "../../assets/images/logo/logo1.png";
 import avatar from "../../assets/images/home/user.jpg";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { logout, getUserSelector } from "../../features/auth/authSlice";
+import {
+  logout,
+  getUserSelector,
+  getRoleSelector,
+} from "../../features/auth/authSlice";
 import {
   isOpenSelector,
   openSidebar,
@@ -25,6 +20,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const profile = useSelector(getUserSelector);
   const isOpenSidebar = useSelector(isOpenSelector);
+  const role = useSelector(getRoleSelector);
 
   const [isOpenNotification, setIsOpenNotification] = useState(false);
   const [isOpenSetting, setIsOpenSetting] = useState(false);
@@ -39,11 +35,6 @@ const Header = () => {
       setIsOpenSetting(false);
     });
   });
-
-  const handleShowNotification = (e) => {
-    e.stopPropagation();
-    setIsOpenNotification(!isOpenNotification);
-  };
 
   const handleShowSetting = (e) => {
     e.stopPropagation();
@@ -71,86 +62,6 @@ const Header = () => {
       </div>
 
       <UserMenu className="nav">
-        <li className="nav-item dropdown" onClick={handleShowNotification}>
-          <div className="dropdown-toggle nav-link" data-bs-toggle="dropdown">
-            <AiOutlineBell style={{ fontSize: "25px" }} />
-            <span className="badge badge-pill">3</span>
-
-            <div
-              className={
-                isOpenNotification
-                  ? `show dropdown-menu notifications open`
-                  : "dropdown-menu notifications"
-              }
-              onClick={(e) => e.stopPropagation()}
-            >
-              <TopNavDropdownHeader className="top-nav-dropdown-header">
-                <span className="notification-title">Notifications</span>
-                <Link className="clear-notification">Clear All</Link>
-              </TopNavDropdownHeader>
-
-              <NotificationContent>
-                <ul className="notification-list">
-                  <li className="notification-message">
-                    <Link>
-                      <Media className="media">
-                        <span className="avatar">
-                          <img
-                            src={avatar}
-                            style={{ width: "40px", height: "40px" }}
-                            alt=""
-                          />
-                        </span>
-                        <div className="media-body">
-                          <p className="notification-details">
-                            <span className="notification-title">John Doe</span>{" "}
-                            added new task
-                            <span className="notification-title">
-                              Patient appointment booking
-                            </span>
-                          </p>
-                          <p className="notification-time">
-                            <span>4 mins ago</span>
-                          </p>
-                        </div>
-                      </Media>
-                    </Link>
-                  </li>
-                  <li className="notification-message">
-                    <Link>
-                      <Media className="media">
-                        <span className="avatar">
-                          <img
-                            src={avatar}
-                            style={{ width: "40px", height: "40px" }}
-                            alt=""
-                          />
-                        </span>
-                        <div className="media-body">
-                          <p className="notification-details">
-                            <span className="notification-title">John Doe</span>{" "}
-                            added new task
-                            <span className="notification-title">
-                              Patient appointment booking
-                            </span>
-                          </p>
-                          <p className="notification-time">
-                            <span>4 mins ago</span>
-                          </p>
-                        </div>
-                      </Media>
-                    </Link>
-                  </li>
-                </ul>
-              </NotificationContent>
-
-              <TopNavDropdownFooter className="top-nav-dropdown-footer">
-                <Link>View all Notifications</Link>
-              </TopNavDropdownFooter>
-            </div>
-          </div>
-        </li>
-
         <li
           className="nav-item dropdown has-arrow main-drop"
           onClick={handleShowSetting}
@@ -160,7 +71,7 @@ const Header = () => {
               <img src={avatar} alt="" />
               <span className="status online"></span>
             </UserImg>
-            <span>Admin</span>
+            <span>{role ? "Admin" : profile?.attributes.fullname}</span>
           </Link>
           <div
             className={isOpenSetting ? `show dropdown-menu` : "dropdown-menu"}

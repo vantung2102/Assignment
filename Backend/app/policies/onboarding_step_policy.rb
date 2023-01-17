@@ -1,4 +1,8 @@
 class OnboardingStepPolicy < ApplicationPolicy
+	def index?
+		authenticate
+	end
+
 	def show?
 		authenticate
 	end
@@ -16,6 +20,10 @@ class OnboardingStepPolicy < ApplicationPolicy
 	end
 
   def onboarding_steps_by_staff_onboarding?
+		authenticate
+	end
+
+	def complete_onboarding_step?
 		authenticate
 	end
 

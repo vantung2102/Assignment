@@ -1,6 +1,6 @@
 class RequestPropertyPolicy < ApplicationPolicy
 	def index?
-		true
+		authenticate
 	end
 
 	def show?
@@ -20,6 +20,10 @@ class RequestPropertyPolicy < ApplicationPolicy
 	end
 
 	def response_request?
+		authenticate
+	end
+
+	def requests_by_status?
 		authenticate
 	end
 

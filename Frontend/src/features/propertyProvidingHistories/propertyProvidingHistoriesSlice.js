@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import apiClient from "../../apiClient/apiClient";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
+import { useDestroy } from "../../common/hooks/hooks";
 
 const initialState = {
   loading: true,
@@ -75,7 +76,7 @@ export const destroyPropertyProvidingHistory = createAsyncThunk(
   "destroyPropertyProvidingHistory",
   async (id) => {
     await apiClient.delete(
-      `/api/v1/request_management/request_properties/${id}`,
+      `/api/v1/property_management/property_providing_histories/${id}`,
       {
         headers: {
           Authorization: Cookies.get("authorization"),
@@ -154,8 +155,9 @@ export const propertyProvidingHistoriesSlice = createSlice({
     builder
       .addCase(destroyPropertyProvidingHistory.pending, (state) => {})
       .addCase(destroyPropertyProvidingHistory.fulfilled, (state, action) => {
-        state.requestProperties = state.requestProperties.filter(
-          (item) => item.attributes.id !== action.payload
+        state.propertyProvidingHistories = useDestroy(
+          state.propertyProvidingHistories,
+          action
         );
         toast.success("Destroy Successfully!");
       })

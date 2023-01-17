@@ -1,11 +1,17 @@
-require 'deep_cover/builtin_takeover'
-require 'simplecov'
-SimpleCov.start
-
 require "paperclip/matchers"
 require 'capybara/rspec'
 require "pundit/rspec"
+require 'simplecov'
 
+SimpleCov.start do
+  add_filter "/spec"
+  
+  add_group "Model", "app/models"
+  add_group "Controllers", "app/controllers"
+  add_group "Policies", "app/policies"
+  add_group "Serializers", "app/serializers"
+  add_group "Services", "app/services"
+end
 
 RSpec.configure do |config|
   config.include Paperclip::Shoulda::Matchers

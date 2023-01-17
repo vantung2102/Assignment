@@ -140,6 +140,23 @@ export const searchRequestProperty = createAsyncThunk(
   }
 );
 
+export const RequestPropertyByStatus = createAsyncThunk(
+  "requestPropertyByStatus",
+  async (status) => {
+    const response = await apiClient.post(
+      `/api/v1/request_management/request_properties/requests_by_status`,
+      { status: status },
+      {
+        headers: {
+          Authorization: Cookies.get("authorization"),
+        },
+      }
+    );
+
+    return response.data;
+  }
+);
+
 export const requestPropertySlice = createSlice({
   name: "RequestProperties",
   initialState,
@@ -220,6 +237,13 @@ export const requestPropertySlice = createSlice({
         state.requestProperties = action.payload.data;
       })
       .addCase(searchRequestProperty.rejected, (state) => {});
+    // ================== status filter =================
+    builder
+      .addCase(RequestPropertyByStatus.pending, (state) => {})
+      .addCase(RequestPropertyByStatus.fulfilled, (state, action) => {
+        state.requestProperties = action.payload.data;
+      })
+      .addCase(RequestPropertyByStatus.rejected, (state) => {});
   },
 });
 

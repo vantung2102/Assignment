@@ -36,11 +36,11 @@ class PerformanceAppraisalFormPolicy < ApplicationPolicy
 	end
 
 	def pa_forms_by_current_user?
-		record.map{ |el| el.staff_id == user.id }.include?(false) ? false : true
+		authenticate || !record.any? { |item| item.staff_id != user.id }
 	end
 
 	def pa_forms_by_my_reviewed?
-		record.map{ |el| el.boss_id == user.id }.include?(false) ? false : true
+		authenticate || !record.any? { |item| item.boss_id != user.id }
 	end
 
 	def remind_by_staff?

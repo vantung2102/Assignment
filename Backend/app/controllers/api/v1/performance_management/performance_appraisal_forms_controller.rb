@@ -2,7 +2,7 @@ class Api::V1::PerformanceManagement::PerformanceAppraisalFormsController < Api:
   def index
     authorize PerformanceAppraisalForm
     pa_forms = PerformanceAppraisalForm.where(active: true).order(created_at: :desc)
-    render_resource_collection(pa_forms)
+    render_resource_collection(pa_forms.includes(:staff, :boss))
   end
 
   def show
@@ -25,7 +25,7 @@ class Api::V1::PerformanceManagement::PerformanceAppraisalFormsController < Api:
       staff_id: staff.id,
       boss_id: staff.staff_id,
       start_date: pa_form_params[:start_date],
-      end_date: pa_form_params[:end_date],
+      end_date: pa_form_params[:end_date]
     )
     pa_form.save ? render_resource(pa_form) : render_resource_errors(pa_form.errors)
   end
@@ -38,13 +38,17 @@ class Api::V1::PerformanceManagement::PerformanceAppraisalFormsController < Api:
 
   def update
     authorize pa_form
-    return render json: { status: "error", detail: I18n.t('error_codes.E202') } unless pa_form.active
+    return render json: { status: 'error', detail: I18n.t('error_codes.E202') } unless pa_form.active
 
     if staff?(pa_form)
-      return render json: { status: "error", detail: I18n.t('error_codes.E203') } if pa_form.self_reviewed_status?
+      return render json: { status: 'error', detail: I18n.t('error_codes.E203') } if pa_form.self_reviewed_status?
+
       pa_form.update(staff_pa_form_params) ? render_resource(pa_form) : render_resource_errors(pa_form.errors)
     elsif reviewer?(pa_form)
-      return render json: { status: :error, message: I18n.t('error_codes.E203') } unless pa_form.self_reviewed_status?
+      unless pa_form.self_reviewed_status?
+        return render json: { status: :error,
+                              message: I18n.t('error_codes.E203') }
+      end
 
       pa_form.status = :completed if params[:submit]
       pa_form.update(reviewer_pa_form_params) ? render_resource(pa_form) : render_resource_errors(pa_form.errors)
@@ -66,7 +70,7 @@ class Api::V1::PerformanceManagement::PerformanceAppraisalFormsController < Api:
       end
       head :ok
     rescue StandardError => e
-      render_resource_errors(status: "error", detail: e)
+      render_resource_errors(detail: e)
     end
   end
 
@@ -78,13 +82,13 @@ class Api::V1::PerformanceManagement::PerformanceAppraisalFormsController < Api:
   def pa_forms_by_current_user
     pagy, pa_forms = paginate(PerformanceAppraisalForm.where(staff_id: current_user.id).order(created_at: :desc))
     authorize pa_forms
-    render_resource_collection(pa_forms, pagy: pagy)
+    render_resource_collection(pa_forms.includes(:staff, :boss), pagy: pagy)
   end
 
   def pa_forms_by_my_reviewed
     pagy, pa_forms = paginate(PerformanceAppraisalForm.where(boss_id: current_user.id).order(created_at: :desc))
     authorize pa_forms
-    render_resource_collection(pa_forms, pagy: pagy)
+    render_resource_collection(pa_forms.includes(:staff, :boss), pagy: pagy)
   end
 
   def remind_by_staff
@@ -108,7 +112,7 @@ class Api::V1::PerformanceManagement::PerformanceAppraisalFormsController < Api:
   def pa_form_params
     params.require(:pa_form).permit(:start_date, :end_date)
   end
- 
+
   def staff_pa_form_params
     params.require(:pa_form).permit(
       :goals_set_staff, :achievement_staff, :goals_with_company_staff, :challenging_staff,
@@ -125,12 +129,11 @@ class Api::V1::PerformanceManagement::PerformanceAppraisalFormsController < Api:
     )
   end
 
-  def staff? pa_form
+  def staff?(pa_form)
     pa_form.staff_id == current_user.id
   end
 
-  def reviewer? pa_form
+  def reviewer?(pa_form)
     pa_form.boss_id == current_user.id
   end
 end
-

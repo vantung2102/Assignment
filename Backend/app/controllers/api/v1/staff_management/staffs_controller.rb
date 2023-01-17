@@ -1,11 +1,9 @@
 class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
   def index
-    
-    # binding.pry
-    
     pagy, staffs = paginate(Staff.filter(params.slice(:fullname, :position, :department, :job_title)))
     render_resource_collection(
-      staffs.includes(:position, :department, :job_title, :upper_level, :lower_levels, :roles).order(created_at: :desc),
+      staffs.includes(:position, :department, :job_title, :upper_level, :lower_levels,
+                      :roles).order(created_at: :desc),
       pagy: pagy
     )
   end
@@ -36,12 +34,6 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
     staff.update(staff_params) ? render_resource(staff) : render_resource_errors(staff.errors)
   end
 
-  def update_staff_activation_status
-    staff
-    update, staff = Staffs::UpdateStaffActivationStatusService.call(@staff, params[:status])
-    update ? render_resource(staff) : render_resource_errors(detail: staff)
-  end
-
   def destroy
     authorize Staff
     staff.destroy!
@@ -58,14 +50,14 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
       end
       head :ok
     rescue StandardError => e
-      render json: { status: 'error', detail: e }
+      render_resource_errors(detail: e)
     end
   end
 
   def get_inactive_staff
     authorize Staff
     staffs = Staff.only_deleted
-    render_resource_collection(staffs)
+    render_resource_collection(staffs.includesModel)
   end
 
   def recover_staff
@@ -74,23 +66,21 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
     begin
       ActiveRecord::Base.transaction do
         staff = Staff.only_deleted.find(params[:id])
-        if staff.recover
-          create, leave = Leaves::CreateLeaveService.call(staff)
-          raise leave unless create
-        else
-          raise I18n.t('error_codes.E207')
-        end
+        raise I18n.t('error_codes.E207') unless staff.recover
+
+        create, leave = Leaves::CreateLeaveService.call(staff)
+        raise leave unless create
       end
       head :ok
     rescue StandardError => e
-      render json: { status: 'error', detail: e }
+      render_resource_errors(detail: e)
     end
   end
 
   def permanent_destroy
     authorize Staff
-
-    staff = Staff.only_deleted.find(id: params[:id]).update(staff_id: nil)
+    staff = Staff.only_deleted.find(params[:id])
+    staff.update(staff_id: nil) unless staff.staff_id.nil?
     staff.destroy
     head :no_content
   end

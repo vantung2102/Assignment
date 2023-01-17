@@ -1,5 +1,6 @@
 class Api::V1::RequestManagement::RequestPropertiesController < Api::V1::BaseController
   def index
+    authorize RequestProperty
     pagy, request_properties = paginate(RequestProperty.order(created_at: :desc))
     render_resource_collection(request_properties.includes(:requester, :approver), pagy: pagy)
   end
@@ -35,6 +36,12 @@ class Api::V1::RequestManagement::RequestPropertiesController < Api::V1::BaseCon
   def requests_by_user
     request_properties = RequestProperty.where(requester_id: params[:staff_id]).order(created_at: :desc)
     render_resource_collection(request_properties)
+  end
+
+  def requests_by_status
+    authorize RequestProperty
+    request_properties = RequestProperty.where(status: params[:status]).order(created_at: :desc)
+    render_resource_collection(request_properties.includes(:requester, :approver))
   end
 
   private

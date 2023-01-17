@@ -42,8 +42,7 @@ group :development, :test do
   gem 'pundit-matchers'
   gem 'selenium-webdriver', '>= 4.0.0.rc1'
   gem 'simplecov', require: false, group: :test
-  gem 'deep-cover', '~> 0.7', group: :test
-
+  gem 'rspec_jsonapi_serializer'
 end
 
 group :development do

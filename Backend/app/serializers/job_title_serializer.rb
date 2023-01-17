@@ -9,5 +9,5 @@
 #  updated_at  :datetime         not null
 #
 class JobTitleSerializer < BaseSerializer
-  attributes  :id, :title, :description
+  attributes  :id, :title, :description, :created_at, :updated_at
 end

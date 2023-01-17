@@ -17,7 +17,7 @@ const DetailPerformanceSelfReviewPage = () => {
   return (
     <MainWrapper>
       <Header />
-      <Sidebar active="review" />
+      <Sidebar active="self_review" />
 
       <PageWrapper isOpen={isOpenSidebar}>
         <Container fluid className="content">

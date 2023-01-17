@@ -12,11 +12,6 @@ class Api::V1::OnboardingManagement::StaffOnboardingsController < Api::V1::BaseC
     head :no_content
   end
 
-  def staff_onboarding_by_user
-    staff_onboardings = StaffOnboarding.where(staff_id: params[:staff_id])
-    render_resource_collection(staff_onboardings)
-  end
-
   private
 
   def staff_onboarding

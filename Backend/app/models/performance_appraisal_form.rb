@@ -38,7 +38,7 @@ class PerformanceAppraisalForm < ApplicationRecord
   enum status: { in_progress: 1, self_reviewed: 2, completed: 3 }, _suffix: true
 
   belongs_to :staff
-  belongs_to :boss, class_name: 'Staff', optional: true
+  belongs_to :boss, class_name: :Staff, optional: true
 
   validates :status, presence: true
   validates :start_date, presence: true

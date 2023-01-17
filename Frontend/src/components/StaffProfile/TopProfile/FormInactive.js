@@ -46,7 +46,6 @@ const FormInactive = ({ show, close, idProfile }) => {
     );
     close(true);
   };
-  console.log(profile);
 
   return (
     <Modal show={show} onHide={close}>

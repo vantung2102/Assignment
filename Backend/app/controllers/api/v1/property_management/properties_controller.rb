@@ -29,13 +29,14 @@ class Api::V1::PropertyManagement::PropertiesController < Api::V1::BaseControlle
   end
 
   def response_property_request
+    authorize Property
     begin
       ActiveRecord::Base.transaction do
         if property.available_status?
           PropertyProvidingHistory.create!(
             provider_id: current_user.id,
             receiver_id: params[:receiver_id],
-            property_id:  params[:id],
+            property_id: params[:id],
             status: :provided
           )
           property.update!(status: :used)
@@ -47,16 +48,8 @@ class Api::V1::PropertyManagement::PropertiesController < Api::V1::BaseControlle
         render_resource(property, status: :ok)
       end
     rescue StandardError => e
-      render_resource_errors(status: "error", detail: e)
+      render_resource_errors(detail: e)
     end
-  end
-
-  def property_by_user
-    user = PropertyProvidingHistory.find_by(
-      property_id: property_providing_history_params[:property_id],
-      status: :provided
-    )
-    render_resource(user, serializer: :staff)  
   end
 
   private
@@ -74,8 +67,7 @@ class Api::V1::PropertyManagement::PropertiesController < Api::V1::BaseControlle
       :price,
       :date_buy,
       :number_of_repairs,
-      :status,
+      :status
     )
   end
 end
-

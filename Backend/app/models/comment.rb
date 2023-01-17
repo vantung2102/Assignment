@@ -11,5 +11,7 @@
 #  updated_at       :datetime         not null
 #
 class Comment < ApplicationRecord
-  belongs_to :commentable , :polymorphic => true
+  belongs_to :commentable , :polymorphic => true, :optional => true
+
+  validates :content, presence: true, length: { minimum: 5 }
 end

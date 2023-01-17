@@ -43,8 +43,6 @@ const TopProfile = ({ idProfile }) => {
     setShow(true);
   };
 
-  console.log(inActive);
-
   return (
     <Card className="mb-0">
       <Card.Body>

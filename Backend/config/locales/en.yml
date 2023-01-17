@@ -40,4 +40,4 @@ en:
     E207: "Onboarding step complete failed"
     E208: "Employee recovery failed"
     E209: "The number of days exceeds the allowed limit"
-    E210: "Position is not exist"
+    E210: "Can not complete"

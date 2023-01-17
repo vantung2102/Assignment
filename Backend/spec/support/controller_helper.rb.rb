@@ -1,15 +1,17 @@
 require 'rails_helper'
+require 'jwt'
+include JwtToken
 
 module ControllerHelper
-  def login_admin_user(user)
-    user.add_role :admin
-    user.confirm
-    sign_in(user)
-  end
+  def login email, password
+    staff = Staff.find_by_email(email)
 
-  def login_client_user(client)
-    client.add_role :user
-    client.confirm
-    sign_in(client)
+    if staff&.authenticate(password)
+      payload = { staff_id: staff.id }
+      token = jwt_encode(payload)
+      return token
+    else
+      return false
+    end
   end
 end

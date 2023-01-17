@@ -16,5 +16,5 @@ class OnboardingStep < ApplicationRecord
   enum status: { outstanding: 0, completed: 1 }
   belongs_to :onboarding_sample_step
   belongs_to :staff_onboarding
-  belongs_to :assigned_person, class_name: 'Staff', optional: true
+  belongs_to :assigned_person, class_name: :Staff, optional: true
 end

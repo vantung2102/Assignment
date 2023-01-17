@@ -7,10 +7,6 @@ class PropertyProvidingHistoryPolicy < ApplicationPolicy
 		authenticate
 	end
 
-	def create?
-		authenticate
-	end
-
 	def update?
 		authenticate
 	end
@@ -20,7 +16,11 @@ class PropertyProvidingHistoryPolicy < ApplicationPolicy
 	end
 
 	def property_recall?
-		user.has_role?(:Manager)
+		authenticate
+	end
+
+	def histories_by_property?
+		authenticate
 	end
 
 	private

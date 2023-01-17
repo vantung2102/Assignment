@@ -43,7 +43,7 @@ const DetailPropertyProvidingHistories = ({ idRequest }) => {
     const { status, property, provider, receiver } = history.attributes;
 
     setStatus(status);
-    setProvider(property.fullname);
+    setProvider(property?.name);
     setReceiver(receiver.fullname);
     setCode(property?.code_seri);
     setName(property?.name);

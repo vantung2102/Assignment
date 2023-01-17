@@ -12,6 +12,7 @@ const initialState = {
   selfReviews: null,
   selfReview: null,
   performance: null,
+  isOpenPerformance: false,
 };
 
 export const fetchPerformance = createAsyncThunk(
@@ -217,6 +218,7 @@ export const performanceSlice = createSlice({
       .addCase(fetchPerformance.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.performances = action.payload.data;
+        if (action.payload.data.length > 0) state.isOpenPerformance = false;
       })
       .addCase(fetchPerformance.rejected, (state) => {
         state.status = "error";
@@ -228,7 +230,8 @@ export const performanceSlice = createSlice({
       })
       .addCase(CreateAllPerformance.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.performances = action.payload.data;
+        // state.performances = action.payload.data;
+        state.isOpenPerformance = true;
       })
       .addCase(CreateAllPerformance.rejected, (state) => {
         state.status = "error";
@@ -241,7 +244,7 @@ export const performanceSlice = createSlice({
       })
       .addCase(updateAllActiveOrInactive.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.performances = action.payload.data;
+        state.performances = null;
       })
       .addCase(updateAllActiveOrInactive.rejected, (state) => {
         state.status = "error";
@@ -277,11 +280,9 @@ export const performanceSlice = createSlice({
       })
       .addCase(editReviewForStaff.fulfilled, (state, action) => {
         if (action.payload.status === "error") {
-          // toast.error(action.payload.message);
           toast.error("Failed");
         } else {
           state.performance = action.payload.data;
-
           toast.success("Save Successfully");
         }
       })
@@ -354,5 +355,7 @@ export const reviewForStaffSelector = (state) =>
   state.performance.reviewForStaff;
 export const reviewForStaffsSelector = (state) =>
   state.performance.reviewForStaffs;
+export const isOpenPerformanceSelector = (state) =>
+  state.performance.isOpenPerformance;
 
 export default performanceSlice.reducer;

@@ -1,8 +1,12 @@
 class LeaveApplicationPolicy < ApplicationPolicy
 	def index?
-		true
+		authenticate
 	end
 
+	def create?
+		true
+	end
+	
 	def show?
 		authenticate || record.staff_id == user.id
 	end
@@ -21,6 +25,10 @@ class LeaveApplicationPolicy < ApplicationPolicy
 
 	def leave_application_by_status?
 		authenticate
+	end
+
+	def leave_application_by_user?
+		authenticate || !record.any? { |item| item.staff_id != user.id }
 	end
 
 	private

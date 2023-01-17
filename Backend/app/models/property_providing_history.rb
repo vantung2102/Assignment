@@ -12,8 +12,8 @@
 #
 class PropertyProvidingHistory < ApplicationRecord
   enum status: { provided: 0, recall: 1 }
-  belongs_to :provider, class_name: 'Staff'
-  belongs_to :receiver, class_name: 'Staff'
+  belongs_to :provider, class_name: :Staff
+  belongs_to :receiver, class_name: :Staff
   belongs_to :property
 
   validates :provider_id, presence: true

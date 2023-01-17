@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Schema Information
 #
 # Table name: staffs
@@ -29,7 +31,7 @@ class Staff < ApplicationRecord
 
   after_create :create_onboarding, :create_leave
   before_create :default_status
-  
+
   enum status: { active: 0, inactive: 1 }
 
   belongs_to :upper_level, class_name: :Staff, optional: true, foreign_key: :staff_id
@@ -45,7 +47,8 @@ class Staff < ApplicationRecord
   has_many :approved_person_leave_application, class_name: :LeaveApplication, foreign_key: :approver_id
 
   has_many :staff_onboardings, dependent: :destroy
-  has_many :onboarding_assigned_person, class_name: :OnboardingStep, foreign_key: :assigned_person_id, dependent: :destroy
+  has_many :onboarding_assigned_person, class_name: :OnboardingStep, foreign_key: :assigned_person_id,
+                                        dependent: :destroy
 
   has_many :performance_appraisal_form, dependent: :destroy
   has_many :review_for_staff, class_name: :PerformanceAppraisalForm, foreign_key: :boss_id, dependent: :destroy
@@ -61,9 +64,9 @@ class Staff < ApplicationRecord
   validates :password, presence: true, allow_nil: true
 
   pg_search_scope :filter_by_fullname, against: :fullname
-  scope :filter_by_position, -> (position_id) { where position_id: position_id }
-  scope :filter_by_job_title, -> (job_title_id) { where job_title_id: job_title_id }
-  scope :filter_by_department, -> (department_id) { where department_id: department_id }
+  scope :filter_by_position, ->(position_id) { where position_id: position_id }
+  scope :filter_by_job_title, ->(job_title_id) { where job_title_id: job_title_id }
+  scope :filter_by_department, ->(department_id) { where department_id: department_id }
   scope :includesModel, -> { includes(:position, :department, :job_title, :upper_level, :lower_levels, :roles) }
 
   private
