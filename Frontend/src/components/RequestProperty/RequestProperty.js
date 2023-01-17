@@ -106,7 +106,6 @@ const RequestProperty = () => {
               </thead>
               <tbody>
                 {requestProperties?.map((item, index) => {
-                  console.log(item);
                   const { id, requester, request_type, status } =
                     item.attributes;
                   return (

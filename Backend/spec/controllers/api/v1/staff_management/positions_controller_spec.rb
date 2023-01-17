@@ -36,6 +36,28 @@ RSpec.describe Api::V1::StaffManagement::PositionsController, type: :controller 
     end
   end
 
+  describe 'Get all position action' do
+    let!(:http) { :get }
+    let!(:action) { :get_all_position }
+    let!(:params) {}
+
+    context 'Logged in' do
+      before :each do
+        user.add_role :Manager
+      end
+
+      it 'Get index success' do
+        request.headers['Authorization'] = login(user.email, 'Levantung123@')
+        get :get_all_position
+        expect(response.status).to eq(200)
+      end
+    end
+
+    context 'not logged in' do
+      it_behaves_like 'authenticate'
+    end
+  end
+
   describe 'Show action' do
     let!(:http) { :get }
     let!(:action) { :show }

@@ -40,7 +40,7 @@ class PerformanceAppraisalFormPolicy < ApplicationPolicy
 	end
 
 	def pa_forms_by_my_reviewed?
-		authenticate || !record.any? { |item| item.staff_id != user.id }
+		authenticate || !record.any? { |item| item.boss_id != user.id }
 	end
 
 	def remind_by_staff?

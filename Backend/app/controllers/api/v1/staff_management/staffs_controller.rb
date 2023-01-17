@@ -50,14 +50,14 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
       end
       head :ok
     rescue StandardError => e
-      render json: { status: 'error', detail: e }
+      render_resource_errors(detail: e)
     end
   end
 
   def get_inactive_staff
     authorize Staff
     staffs = Staff.only_deleted
-    render_resource_collection(staffs)
+    render_resource_collection(staffs.includesModel)
   end
 
   def recover_staff
@@ -73,14 +73,14 @@ class Api::V1::StaffManagement::StaffsController < Api::V1::BaseController
       end
       head :ok
     rescue StandardError => e
-      render json: { status: 'error', detail: e }
+      render_resource_errors(detail: e)
     end
   end
 
   def permanent_destroy
     authorize Staff
-
-    staff = Staff.only_deleted.find(id: params[:id]).update(staff_id: nil)
+    staff = Staff.only_deleted.find(params[:id])
+    staff.update(staff_id: nil) unless staff.staff_id.nil?
     staff.destroy
     head :no_content
   end

@@ -1,4 +1,4 @@
-class Api::v1::LeaveManagement::LeavesController < Api::V1::BaseController
+class Api::V1::LeaveManagement::LeavesController < Api::V1::BaseController
   def index
     authorize Leave
     pagy, leaves = paginate(Leave.order(created_at: :desc))

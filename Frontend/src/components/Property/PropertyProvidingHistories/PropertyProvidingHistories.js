@@ -87,9 +87,7 @@ const PropertyProvidingHistories = () => {
                           <AiFillInfoCircle />
                         </Link>
 
-                        <RiDeleteBinLine
-                          onClick={() => handleDelete(item.attributes.id)}
-                        />
+                        <RiDeleteBinLine onClick={() => handleDelete(id)} />
                       </div>
                     </TableCell>
                   </tr>

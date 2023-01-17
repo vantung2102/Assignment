@@ -4,7 +4,7 @@ class StaffPolicy < ApplicationPolicy
 	end
 
 	def show?
-		authenticate
+		authenticate || record.id == user.id
 	end
 
 	def create?

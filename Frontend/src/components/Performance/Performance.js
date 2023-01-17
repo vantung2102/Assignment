@@ -146,7 +146,8 @@ const Performance = ({ idRequest }) => {
               <Form.Control
                 as="textarea"
                 style={{ height: "100px" }}
-                defaultValue={question1}
+                value={question1}
+                onChange={(e) => setQuestion1(e.target.value)}
                 disabled={status === "self_reviewed" ? true : false}
               />
             </FloatingLabel>
@@ -169,13 +170,44 @@ const Performance = ({ idRequest }) => {
         </Row>
 
         <Row className="mb-4">
+          <Form.Label>{question_2}</Form.Label>
+          <Col md={6}>
+            <FloatingLabel controlId="floatingTextarea2">
+              <Form.Control
+                as="textarea"
+                style={{ height: "100px" }}
+                value={question2}
+                onChange={(e) => setQuestion2(e.target.value)}
+                disabled={status === "self_reviewed" ? true : false}
+              />
+            </FloatingLabel>
+          </Col>
+          <Col md={6}>
+            <Card.Body>
+              <Form.Group className="row">
+                <FloatingLabel controlId="floatingTextarea2">
+                  <Form.Control
+                    as="textarea"
+                    placeholder="Enter here..."
+                    style={{ height: "100px" }}
+                    defaultValue={setDefault(achievement_boss)}
+                    disabled
+                  />
+                </FloatingLabel>
+              </Form.Group>
+            </Card.Body>
+          </Col>
+        </Row>
+
+        <Row className="mb-4">
           <Form.Label>{question_3}</Form.Label>
           <Col md={6}>
             <FloatingLabel controlId="floatingTextarea2">
               <Form.Control
                 as="textarea"
                 style={{ height: "100px" }}
-                defaultValue={question3}
+                value={question3}
+                onChange={(e) => setQuestion3(e.target.value)}
                 disabled={status === "self_reviewed" ? true : false}
               />
             </FloatingLabel>
@@ -204,7 +236,8 @@ const Performance = ({ idRequest }) => {
               <Form.Control
                 as="textarea"
                 style={{ height: "100px" }}
-                defaultValue={question4}
+                value={question4}
+                onChange={(e) => setQuestion4(e.target.value)}
                 disabled={status === "self_reviewed" ? true : false}
               />
             </FloatingLabel>
@@ -233,7 +266,8 @@ const Performance = ({ idRequest }) => {
               <Form.Control
                 as="textarea"
                 style={{ height: "100px" }}
-                defaultValue={question5}
+                value={question5}
+                onChange={(e) => setQuestion5(e.target.value)}
                 disabled={status === "self_reviewed" ? true : false}
               />
             </FloatingLabel>
@@ -262,7 +296,8 @@ const Performance = ({ idRequest }) => {
               <Form.Control
                 as="textarea"
                 style={{ height: "100px" }}
-                defaultValue={question6}
+                value={question6}
+                onChange={(e) => setQuestion6(e.target.value)}
                 disabled={status === "self_reviewed" ? true : false}
               />
             </FloatingLabel>
@@ -291,7 +326,8 @@ const Performance = ({ idRequest }) => {
               <Form.Control
                 as="textarea"
                 style={{ height: "100px" }}
-                defaultValue={question7}
+                value={question7}
+                onChange={(e) => setQuestion7(e.target.value)}
                 disabled={status === "self_reviewed" ? true : false}
               />
             </FloatingLabel>
@@ -320,7 +356,8 @@ const Performance = ({ idRequest }) => {
               <Form.Control
                 as="textarea"
                 style={{ height: "100px" }}
-                defaultValue={question8}
+                value={question8}
+                onChange={(e) => setQuestion8(e.target.value)}
                 disabled={status === "self_reviewed" ? true : false}
               />
             </FloatingLabel>
@@ -349,7 +386,8 @@ const Performance = ({ idRequest }) => {
               <Form.Control
                 as="textarea"
                 style={{ height: "100px" }}
-                defaultValue={question9}
+                value={question9}
+                onChange={(e) => setQuestion9(e.target.value)}
                 disabled={status === "self_reviewed" ? true : false}
               />
             </FloatingLabel>
@@ -378,7 +416,8 @@ const Performance = ({ idRequest }) => {
               <Form.Control
                 as="textarea"
                 style={{ height: "100px" }}
-                defaultValue={question10}
+                value={question10}
+                onChange={(e) => setQuestion10(e.target.value)}
                 disabled={status === "self_reviewed" ? true : false}
               />
             </FloatingLabel>
@@ -407,7 +446,8 @@ const Performance = ({ idRequest }) => {
               <Form.Control
                 as="textarea"
                 style={{ height: "100px" }}
-                defaultValue={question11}
+                value={question11}
+                onChange={(e) => setQuestion11(e.target.value)}
                 disabled={status === "self_reviewed" ? true : false}
               />
             </FloatingLabel>
@@ -443,192 +483,6 @@ const Performance = ({ idRequest }) => {
             </Button>
           </div>
         ) : null}
-
-        {/* <Card.Body>
-          <Form>
-            <Form.Group className="mb-3">
-              <Form.Label>{question_1}</Form.Label>
-
-              <FloatingLabel controlId="floatingTextarea2">
-                <Form.Control
-                  as="textarea"
-                  placeholder="Enter here..."
-                  style={{ height: "100px" }}
-                  value={question1}
-                  onChange={(e) => setQuestion1(e.target.value)}
-                  disabled={status === "self_reviewed" ? true : false}
-                />
-              </FloatingLabel>
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>{question_2}</Form.Label>
-
-              <FloatingLabel controlId="floatingTextarea2">
-                <Form.Control
-                  as="textarea"
-                  placeholder="Enter here..."
-                  style={{ height: "100px" }}
-                  value={question2}
-                  onChange={(e) => setQuestion2(e.target.value)}
-                  disabled={status === "self_reviewed" ? true : false}
-                />
-              </FloatingLabel>
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>{question_3}</Form.Label>
-
-              <FloatingLabel controlId="floatingTextarea2">
-                <Form.Control
-                  as="textarea"
-                  placeholder="Enter here..."
-                  style={{ height: "100px" }}
-                  value={question3}
-                  onChange={(e) => setQuestion3(e.target.value)}
-                  disabled={status === "self_reviewed" ? true : false}
-                />
-              </FloatingLabel>
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>{question_4}</Form.Label>
-
-              <FloatingLabel controlId="floatingTextarea2">
-                <Form.Control
-                  as="textarea"
-                  placeholder="Enter here..."
-                  style={{ height: "100px" }}
-                  value={question4}
-                  onChange={(e) => setQuestion4(e.target.value)}
-                  disabled={status === "self_reviewed" ? true : false}
-                />
-              </FloatingLabel>
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>{question_5}</Form.Label>
-
-              <FloatingLabel controlId="floatingTextarea2">
-                <Form.Control
-                  as="textarea"
-                  placeholder="Enter here..."
-                  style={{ height: "100px" }}
-                  value={question5}
-                  onChange={(e) => setQuestion5(e.target.value)}
-                  disabled={status === "self_reviewed" ? true : false}
-                />
-              </FloatingLabel>
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>{question_6}</Form.Label>
-
-              <FloatingLabel controlId="floatingTextarea2">
-                <Form.Control
-                  as="textarea"
-                  placeholder="Enter here..."
-                  style={{ height: "100px" }}
-                  value={question6}
-                  onChange={(e) => setQuestion6(e.target.value)}
-                  disabled={status === "self_reviewed" ? true : false}
-                />
-              </FloatingLabel>
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Col lg={12} className="col-form-label">
-                <Form.Label>{question_7}</Form.Label>
-              </Col>
-              <FloatingLabel controlId="floatingTextarea2">
-                <Form.Control
-                  as="textarea"
-                  placeholder="Enter here..."
-                  style={{ height: "100px" }}
-                  value={question7}
-                  onChange={(e) => setQuestion7(e.target.value)}
-                  disabled={status === "self_reviewed" ? true : false}
-                />
-              </FloatingLabel>
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Col lg={12} className="col-form-label">
-                <Form.Label>{question_8}</Form.Label>
-              </Col>
-              <FloatingLabel controlId="floatingTextarea2">
-                <Form.Control
-                  as="textarea"
-                  placeholder="Enter here..."
-                  style={{ height: "100px" }}
-                  value={question8}
-                  onChange={(e) => setQuestion8(e.target.value)}
-                  disabled={status === "self_reviewed" ? true : false}
-                />
-              </FloatingLabel>
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>{question_9}</Form.Label>
-
-              <FloatingLabel controlId="floatingTextarea2">
-                <Form.Control
-                  as="textarea"
-                  placeholder="Enter here..."
-                  style={{ height: "100px" }}
-                  value={question9}
-                  onChange={(e) => setQuestion9(e.target.value)}
-                  disabled={status === "self_reviewed" ? true : false}
-                />
-              </FloatingLabel>
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>{question_10}</Form.Label>
-
-              <FloatingLabel controlId="floatingTextarea2">
-                <Form.Control
-                  as="textarea"
-                  placeholder="Enter here..."
-                  style={{ height: "100px" }}
-                  value={question10}
-                  onChange={(e) => setQuestion10(e.target.value)}
-                  disabled={status === "self_reviewed" ? true : false}
-                />
-              </FloatingLabel>
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label>Others</Form.Label>
-
-              <FloatingLabel controlId="floatingTextarea2">
-                <Form.Control
-                  as="textarea"
-                  placeholder="Enter here..."
-                  style={{ height: "100px" }}
-                  value={question11}
-                  onChange={(e) => setQuestion11(e.target.value)}
-                  disabled={status === "self_reviewed" ? true : false}
-                />
-              </FloatingLabel>
-            </Form.Group>
-
-            {status === "in_progress" ? (
-              <div className="text-end mt-3">
-                <Button variant="info" onClick={handleSavePerformance}>
-                  Save
-                </Button>
-                <Button
-                  className="ms-5"
-                  variant="primary"
-                  onClick={handleSubmitPerformance}
-                >
-                  Submit
-                </Button>
-              </div>
-            ) : null}
-          </Form>
-        </Card.Body> */}
       </>
     );
   } else {

@@ -16,7 +16,14 @@ RSpec.describe StaffPolicy, type: :Policy do
   end
 
   context 'being a visitor' do
-    it { is_expected.to forbid_all_actions }
+    it { is_expected.to forbid_action(:index) }
+    it { is_expected.to forbid_action(:create) }
+    it { is_expected.to forbid_action(:update) }
+    it { is_expected.to forbid_action(:destroy) }
+    it { is_expected.to forbid_action(:destroy_and_update_staff_boss) }
+    it { is_expected.to forbid_action(:get_inactive_staff) }
+    it { is_expected.to forbid_action(:recover_staff) }
+    it { is_expected.to forbid_action(:permanent_destroy) }
   end
 
   context 'being an administrator' do

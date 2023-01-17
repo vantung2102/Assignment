@@ -10,14 +10,12 @@ Rails.application.routes.draw do
       namespace :staff_management do
         resources :staffs do
           member do
-            get 'staff_chart_by_node', to: "staffs#staff_chart_by_node"
             post 'destroy_and_update_staff_boss', to: "staffs#destroy_and_update_staff_boss"
             get 'recover_staff', to: "staffs#recover_staff"
             get 'permanent_destroy', to: "staffs#permanent_destroy"
           end
           collection do
             get 'get_inactive_staff', to: "staffs#get_inactive_staff"
-            get 'chart', to: "staffs#staff_chart"
             get 'get_all_staff', to: "staffs#get_all_staff"
           end
         end

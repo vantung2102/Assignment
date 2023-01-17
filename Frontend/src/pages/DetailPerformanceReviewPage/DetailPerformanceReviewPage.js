@@ -15,7 +15,6 @@ const DetailPerformanceReviewPage = () => {
   const { id } = useParams();
   const isOpenSidebar = useSelector(isOpenSelector);
   const role = useSelector(getRoleSelector);
-  console.log(role);
   return (
     <MainWrapper>
       <Header />

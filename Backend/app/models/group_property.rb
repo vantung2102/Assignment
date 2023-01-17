@@ -9,8 +9,8 @@
 #  updated_at  :datetime         not null
 #
 class GroupProperty < ApplicationRecord
-  has_many :properties, dependent: :destroy
-  has_many :request_properties, dependent: :destroy
+  has_many :properties
+  has_many :request_properties
   
   validates :name, presence: true
   validates :description, presence: true, length: { minimum: 5 }

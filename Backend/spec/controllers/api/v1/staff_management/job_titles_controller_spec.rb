@@ -37,6 +37,28 @@ RSpec.describe Api::V1::StaffManagement::JobTitlesController, type: :controller 
     end
   end
 
+  describe 'Get all job_title action' do
+    let!(:http) { :get }
+    let!(:action) { :get_all_job_title }
+    let!(:params) {}
+
+    context 'Logged in' do
+      before :each do
+        user.add_role :Manager
+      end
+
+      it 'Get index success' do
+        request.headers['Authorization'] = login(user.email, 'Levantung123@')
+        get :get_all_job_title
+        expect(response.status).to eq(200)
+      end
+    end
+
+    context 'not logged in' do
+      it_behaves_like 'authenticate'
+    end
+  end
+
   describe 'Show action' do
     let!(:http) { :get }
     let!(:action) { :show }

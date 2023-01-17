@@ -2,7 +2,7 @@ class Api::V1::PerformanceManagement::PerformanceAppraisalFormsController < Api:
   def index
     authorize PerformanceAppraisalForm
     pa_forms = PerformanceAppraisalForm.where(active: true).order(created_at: :desc)
-    render_resource_collection(pa_forms)
+    render_resource_collection(pa_forms.includes(:staff, :boss))
   end
 
   def show
@@ -70,7 +70,7 @@ class Api::V1::PerformanceManagement::PerformanceAppraisalFormsController < Api:
       end
       head :ok
     rescue StandardError => e
-      render_resource_errors(status: 'error', detail: e)
+      render_resource_errors(detail: e)
     end
   end
 
@@ -82,13 +82,13 @@ class Api::V1::PerformanceManagement::PerformanceAppraisalFormsController < Api:
   def pa_forms_by_current_user
     pagy, pa_forms = paginate(PerformanceAppraisalForm.where(staff_id: current_user.id).order(created_at: :desc))
     authorize pa_forms
-    render_resource_collection(pa_forms, pagy: pagy)
+    render_resource_collection(pa_forms.includes(:staff, :boss), pagy: pagy)
   end
 
   def pa_forms_by_my_reviewed
     pagy, pa_forms = paginate(PerformanceAppraisalForm.where(boss_id: current_user.id).order(created_at: :desc))
     authorize pa_forms
-    render_resource_collection(pa_forms, pagy: pagy)
+    render_resource_collection(pa_forms.includes(:staff, :boss), pagy: pagy)
   end
 
   def remind_by_staff

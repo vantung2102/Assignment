@@ -17,7 +17,13 @@ RSpec.describe GroupPropertyPolicy, type: :Policy do
   end
 
   context 'being a visitor' do
-    it { is_expected.to forbid_all_actions }
+    it { is_expected.to permit_action(:index) }
+
+    it { is_expected.to forbid_action(:show) }
+    it { is_expected.to forbid_action(:create) }
+    it { is_expected.to forbid_action(:update) }
+    it { is_expected.to forbid_action(:destroy) }
+
   end
 
   context 'being an administrator' do

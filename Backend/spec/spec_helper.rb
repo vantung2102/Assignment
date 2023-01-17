@@ -2,15 +2,15 @@ require "paperclip/matchers"
 require 'capybara/rspec'
 require "pundit/rspec"
 require 'simplecov'
+
 SimpleCov.start do
   add_filter "/spec"
   
   add_group "Model", "app/models"
   add_group "Controllers", "app/controllers"
   add_group "Policies", "app/policies"
-  add_group "Workers", "app/workers"
-  add_group "Mailers", "app/mailers"
   add_group "Serializers", "app/serializers"
+  add_group "Services", "app/services"
 end
 
 RSpec.configure do |config|

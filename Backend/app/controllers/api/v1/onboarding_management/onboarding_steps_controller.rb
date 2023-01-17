@@ -26,7 +26,7 @@ class Api::V1::OnboardingManagement::OnboardingStepsController < Api::V1::BaseCo
       onboarding_step = OnboardingStep.where(staff_onboarding_id: staff_onboardings.id)
       render_resource_collection(onboarding_step)
     rescue StandardError => e
-      render json: { status: 'error', detail: e }
+      render_resource_errors(detail: e)
     end
   end
 
@@ -40,7 +40,7 @@ class Api::V1::OnboardingManagement::OnboardingStepsController < Api::V1::BaseCo
       onboarding_step.update!(status: :completed)
       render_resource(onboarding_step)
     rescue StandardError
-      render_resource_errors(status: 'error', detail: I18n.t('errors.E207'))
+      render_resource_errors(detail: I18n.t('errors.E207'))
     end
   end
 

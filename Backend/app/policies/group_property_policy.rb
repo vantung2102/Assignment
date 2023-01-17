@@ -1,6 +1,6 @@
 class GroupPropertyPolicy < ApplicationPolicy
 	def index?
-		authenticate
+		true
 	end
 
 	def show?

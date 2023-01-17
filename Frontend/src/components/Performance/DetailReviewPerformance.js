@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Card, Col, FloatingLabel, Form, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { getUserSelector } from "../../features/auth/authSlice";
 import {
   editReviewForStaff,
   performanceSelector,
@@ -12,6 +13,7 @@ import question from "./question";
 const DetailReviewPerformance = ({ idRequest }) => {
   const dispatch = useDispatch();
   const review = useSelector(performanceSelector);
+  const currentUser = useSelector(getUserSelector);
   const [bossQuestion1, setBossQuestion1] = useState("");
   const [bossQuestion2, setBossQuestion2] = useState("");
   const [bossQuestion3, setBossQuestion3] = useState("");
@@ -466,7 +468,8 @@ const DetailReviewPerformance = ({ idRequest }) => {
           </Col>
         </Row>
 
-        {status === "self_reviewed" ? (
+        {status === "self_reviewed" &&
+        review?.attributes.boss.id === currentUser?.attributes.id ? (
           <div className="text-end mt-3">
             <Button variant="info" onClick={handleSavePerformance}>
               Save

@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 import apiClient from "../../apiClient/apiClient";
 
 const initialState = {
@@ -58,8 +59,8 @@ const authSlice = createSlice({
         localStorage.setItem("isAuthenticated", "true");
       })
       .addCase(login.rejected, (state) => {
-        state.status = "error";
         localStorage.setItem("isAuthenticated", "false");
+        toast.error("Login Faild");
       });
     //  ==================== get user =================
     builder
@@ -78,7 +79,6 @@ const authSlice = createSlice({
       .addCase(getUser.rejected, (state, action) => {
         state.isAuthenticated = false;
         localStorage.setItem("isAuthenticated", "false");
-        state.status = "error";
       });
   },
 });

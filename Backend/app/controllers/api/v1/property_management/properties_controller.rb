@@ -48,7 +48,7 @@ class Api::V1::PropertyManagement::PropertiesController < Api::V1::BaseControlle
         render_resource(property, status: :ok)
       end
     rescue StandardError => e
-      render_resource_errors(status: 'error', detail: e)
+      render_resource_errors(detail: e)
     end
   end
 

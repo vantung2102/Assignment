@@ -2,7 +2,7 @@ class Api::V1::PropertyManagement::PropertyProvidingHistoriesController < Api::V
   def index
     authorize PropertyProvidingHistory
     pagy, property_providing_histories = paginate(PropertyProvidingHistory.order(created_at: :desc))
-    render_resource_collection(property_providing_histories, pagy: pagy)
+    render_resource_collection(property_providing_histories.includes(:property, :provider, :receiver), pagy: pagy)
   end
 
   def show
@@ -12,7 +12,7 @@ class Api::V1::PropertyManagement::PropertyProvidingHistoriesController < Api::V
 
   def destroy
     authorize PropertyProvidingHistory
-    property_providing_history_params.destroy!
+    property_providing_history.destroy!
     head :no_content
   end
 
@@ -21,7 +21,7 @@ class Api::V1::PropertyManagement::PropertyProvidingHistoriesController < Api::V
     property_providing_histories = PropertyProvidingHistory.where(
       property_id: property_providing_history_params[:property_id]).order(created_at: :desc
     )
-    render_resource_collection(property_providing_histories)
+    render_resource_collection(property_providing_histories.includes(:property, :provider, :receiver))
   end
 
   private

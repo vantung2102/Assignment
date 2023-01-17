@@ -35,12 +35,11 @@ const AdminPerformance = () => {
 
     const timer = setInterval(() => {
       dispatch(fetchPerformance());
-      console.log("123");
-    }, 100);
+    }, 500);
     return () => clearInterval(timer);
   }, [isOpenPerformance]);
 
-  if (performances?.length === 0) {
+  if (performances?.length === 0 || !performances) {
     return <EmptyData />;
   } else {
     return (

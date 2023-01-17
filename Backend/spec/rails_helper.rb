@@ -24,6 +24,7 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = true
   config.infer_spec_type_from_file_location!
   config.filter_rails_from_backtrace!
+  config.include(RSpecJSONAPISerializer::Matchers, type: :serializer)
 end
 
 Shoulda::Matchers.configure do |config|

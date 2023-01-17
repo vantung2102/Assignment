@@ -34,7 +34,7 @@ class Api::V1::LeaveManagement::LeaveApplicationsController < Api::V1::BaseContr
   def leave_application_by_user
     leave_applications = LeaveApplication.where(staff_id: params[:staff_id]).order(created_at: :desc)
     authorize leave_applications
-    render_resource_collection(leave_applications)
+    render_resource_collection(leave_applications.includes(:staff, :approver))
   end
 
   def leave_application_by_status

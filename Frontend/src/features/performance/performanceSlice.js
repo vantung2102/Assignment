@@ -244,7 +244,7 @@ export const performanceSlice = createSlice({
       })
       .addCase(updateAllActiveOrInactive.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.performances = action.payload.data;
+        state.performances = null;
       })
       .addCase(updateAllActiveOrInactive.rejected, (state) => {
         state.status = "error";
@@ -280,11 +280,9 @@ export const performanceSlice = createSlice({
       })
       .addCase(editReviewForStaff.fulfilled, (state, action) => {
         if (action.payload.status === "error") {
-          // toast.error(action.payload.message);
           toast.error("Failed");
         } else {
           state.performance = action.payload.data;
-
           toast.success("Save Successfully");
         }
       })

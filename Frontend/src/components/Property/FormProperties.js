@@ -35,7 +35,6 @@ const FormProperties = ({ isNew, show, close }) => {
 
   useEffect(() => {
     if (isNew || !property) return;
-    console.log(property);
 
     const {
       code_seri,

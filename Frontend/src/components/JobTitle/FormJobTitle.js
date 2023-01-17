@@ -36,6 +36,8 @@ const FormJobTitle = ({ isNew, show, close }) => {
       })
     );
     close(true);
+    setValue("name", "");
+    setValue("description", "");
   };
 
   const handleEditPosition = () => {

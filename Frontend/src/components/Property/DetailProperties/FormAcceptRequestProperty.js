@@ -4,13 +4,16 @@ import { Controller, useForm } from "react-hook-form";
 import { optionSelect2 } from "../../../common/hooks/hooks";
 import { SubmitSection } from "../../Department/department";
 import Select from "react-select";
-import { fetchStaff, staffsSelector } from "../../../features/staff/staffSlice";
+import {
+  allStaffSelector,
+  fetchAllStaff,
+} from "../../../features/staff/staffSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { acceptProperty } from "../../../features/property/propertySlice";
 
 const FormAcceptRequestProperty = ({ show, close, id }) => {
   const dispatch = useDispatch();
-  const receivers = useSelector(staffsSelector);
+  const receivers = useSelector(allStaffSelector);
 
   const {
     handleSubmit,
@@ -20,7 +23,7 @@ const FormAcceptRequestProperty = ({ show, close, id }) => {
   } = useForm();
 
   useEffect(() => {
-    dispatch(fetchStaff());
+    dispatch(fetchAllStaff());
   }, [dispatch]);
 
   const handleAccept = () => {
