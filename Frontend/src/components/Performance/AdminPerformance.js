@@ -30,14 +30,14 @@ const AdminPerformance = () => {
     dispatch(fetchPerformance());
   }, [dispatch]);
 
-  useEffect(() => {
-    if (!isOpenPerformance) return;
+  // useEffect(() => {
+  //   if (!isOpenPerformance) return;
 
-    const timer = setInterval(() => {
-      dispatch(fetchPerformance());
-    }, 500);
-    return () => clearInterval(timer);
-  }, [isOpenPerformance]);
+  //   const timer = setInterval(() => {
+  //     dispatch(fetchPerformance());
+  //   }, 500);
+  //   return () => clearInterval(timer);
+  // }, [isOpenPerformance]);
 
   if (performances?.length === 0 || !performances) {
     return <EmptyData />;

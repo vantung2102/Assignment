@@ -2,7 +2,6 @@
 class CreateAllPerformanceAppraisalFormWorker < BaseWorker
   def perform(params)
     params = JSON.parse(params)
-    p'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
     Staff.all.each do |staff|
       PerformanceAppraisalForm.create!(
         status: :in_progress,

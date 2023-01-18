@@ -230,7 +230,7 @@ export const performanceSlice = createSlice({
       })
       .addCase(CreateAllPerformance.fulfilled, (state, action) => {
         state.status = "succeeded";
-        // state.performances = action.payload.data;
+        state.performances = action.payload.data;
         state.isOpenPerformance = true;
       })
       .addCase(CreateAllPerformance.rejected, (state) => {
