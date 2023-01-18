@@ -7,10 +7,10 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins 'localhost:3001'
+    origins 'http://zaneoffice.s3-website-ap-southeast-1.amazonaws.com'
     resource '*',
       headers: :any,
       methods: [:get, :post, :put, :patch, :delete, :options, :head],
-      credentials: true
+      credentials: false
   end
 end

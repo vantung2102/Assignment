@@ -29,10 +29,10 @@ RSpec.describe Api::V1::LeaveManagement::LeaveApplicationsController, type: :con
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'Get index success' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         get :index
         expect(response.status).to eq(200)
       end
@@ -51,10 +51,10 @@ RSpec.describe Api::V1::LeaveManagement::LeaveApplicationsController, type: :con
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'renders the show template' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         get :show, params: { id: LeaveApplication.first.id }
         expect(response.status).to eq(200)
       end
@@ -71,8 +71,11 @@ RSpec.describe Api::V1::LeaveManagement::LeaveApplicationsController, type: :con
     let!(:params) {}
 
     context 'Logged in' do
+      before :each do
+        login(user.email, 'Levantung123@')
+      end
+
       it 'create correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :create, params: {
           leave_application: {
             leave_type: 0,
@@ -86,7 +89,6 @@ RSpec.describe Api::V1::LeaveManagement::LeaveApplicationsController, type: :con
       end
 
       it 'create incorrect The number of days exceeds the allowed limit' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :create, params: {
           leave_application: {
             leave_type: 0,
@@ -113,8 +115,11 @@ RSpec.describe Api::V1::LeaveManagement::LeaveApplicationsController, type: :con
     let!(:params) { { id: LeaveApplication.first.id } }
 
     context 'Logged in' do
+      before :each do
+        login(user.email, 'Levantung123@')
+      end
+
       it 'destroy correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         delete :destroy, params: { id: LeaveApplication.first.id }
         expect(response.status).to eq(204)
       end
@@ -131,8 +136,11 @@ RSpec.describe Api::V1::LeaveManagement::LeaveApplicationsController, type: :con
     let!(:params) {}
 
     context 'Logged in' do
+      before :each do
+        login(user.email, 'Levantung123@')
+      end
+
       it 'correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :leave_application_by_user, params: { staff_id: user.id }
         expect(response.status).to eq(200)
       end
@@ -151,10 +159,10 @@ RSpec.describe Api::V1::LeaveManagement::LeaveApplicationsController, type: :con
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :respond_to_leave_application, params: { id: LeaveApplication.first.id,
                                                       leave_application: { status: :approved } }
         expect(response.status).to eq(200)
@@ -174,10 +182,10 @@ RSpec.describe Api::V1::LeaveManagement::LeaveApplicationsController, type: :con
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :leave_application_by_status, params: { status: :approved }
         expect(response.status).to eq(200)
       end
@@ -196,10 +204,10 @@ RSpec.describe Api::V1::LeaveManagement::LeaveApplicationsController, type: :con
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         put :update, params: { id: LeaveApplication.first.id,
                                leave_application: { description: Faker::Lorem.sentence } }
         expect(response.status).to eq(200)

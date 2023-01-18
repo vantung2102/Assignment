@@ -23,10 +23,10 @@ RSpec.describe Api::V1::OnboardingManagement::OnboardingSampleStepsController, t
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'Get index success' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         get :index
         expect(response.status).to eq(200)
       end
@@ -45,10 +45,10 @@ RSpec.describe Api::V1::OnboardingManagement::OnboardingSampleStepsController, t
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'renders the show template' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         get :show, params: { id: OnboardingSampleStep.first.id }
         expect(response.status).to eq(200)
       end
@@ -67,10 +67,10 @@ RSpec.describe Api::V1::OnboardingManagement::OnboardingSampleStepsController, t
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'create correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :create, params: {
           onboarding_sample_step: {
             task: Faker::Name.name,
@@ -82,7 +82,6 @@ RSpec.describe Api::V1::OnboardingManagement::OnboardingSampleStepsController, t
       end
 
       it 'create incorrect' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :create, params: {
           onboarding_sample_step: {
             description: Faker::Lorem.paragraph
@@ -106,10 +105,10 @@ RSpec.describe Api::V1::OnboardingManagement::OnboardingSampleStepsController, t
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'destroy correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         delete :destroy, params: { id: OnboardingSampleStep.first.id }
         expect(response.status).to eq(204)
       end
@@ -128,17 +127,16 @@ RSpec.describe Api::V1::OnboardingManagement::OnboardingSampleStepsController, t
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         put :update, params: { id: OnboardingSampleStep.first.id,
                                onboarding_sample_step: { description: Faker::Lorem.sentence } }
         expect(response.status).to eq(200)
       end
 
       it 'incorrect' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         put :update, params: { id: OnboardingSampleStep.first.id,
                                onboarding_sample_step: { description: 'tung' } }
         expect(response.status).to eq(422)
@@ -158,10 +156,10 @@ RSpec.describe Api::V1::OnboardingManagement::OnboardingSampleStepsController, t
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :onboarding_sample_steps_by_position, params: {
           onboarding_sample_step: { position_id: position.id }
         }

@@ -24,8 +24,11 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
     let!(:params) {}
 
     context 'Logged in' do
+      before :each do
+        login(user.email, 'Levantung123@')
+      end
+
       it 'create correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :create, params: {
           comment: {
             content: Faker::Lorem.paragraph,
@@ -38,7 +41,6 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
       end
 
       it 'create incorrect' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :create, params: {
           comment: {
             content: 'tung',
@@ -65,10 +67,10 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'destroy correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         delete :destroy, params: { id: Comment.first.id }
         expect(response.status).to eq(204)
       end
@@ -87,17 +89,16 @@ RSpec.describe Api::V1::CommentsController, type: :controller do
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         put :update, params: { id: Comment.first.id,
                                comment: { content: Faker::Lorem.sentence } }
         expect(response.status).to eq(200)
       end
 
       it 'incorrect' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         put :update, params: { id: Comment.first.id,
                                comment: { content: 'tung' } }
         expect(response.status).to eq(422)
