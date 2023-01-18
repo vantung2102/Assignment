@@ -29,10 +29,10 @@ RSpec.describe Api::V1::RequestManagement::RequestPropertiesController, type: :c
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'Get index success' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         get :index
         expect(response.status).to eq(200)
       end
@@ -51,10 +51,10 @@ RSpec.describe Api::V1::RequestManagement::RequestPropertiesController, type: :c
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'renders the show template' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         get :show, params: { id: RequestProperty.first.id }
         expect(response.status).to eq(200)
       end
@@ -73,10 +73,10 @@ RSpec.describe Api::V1::RequestManagement::RequestPropertiesController, type: :c
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'create correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :create, params: {
           request_property: {
             request_type: :device,
@@ -92,7 +92,6 @@ RSpec.describe Api::V1::RequestManagement::RequestPropertiesController, type: :c
       end
 
       it 'create incorrect' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :create, params: {
           request_property: {
             description: Faker::Lorem.paragraph
@@ -116,10 +115,10 @@ RSpec.describe Api::V1::RequestManagement::RequestPropertiesController, type: :c
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'destroy correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         delete :destroy, params: { id: RequestProperty.first.id }
         expect(response.status).to eq(204)
       end
@@ -138,10 +137,10 @@ RSpec.describe Api::V1::RequestManagement::RequestPropertiesController, type: :c
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         put :response_request, params: { id: RequestProperty.first.id,
                                          request_property: { response_type: :cancelled } }
         expect(response.status).to eq(200)
@@ -159,8 +158,11 @@ RSpec.describe Api::V1::RequestManagement::RequestPropertiesController, type: :c
     let!(:params) {}
 
     context 'Logged in' do
+      before :each do
+        login(user.email, 'Levantung123@')
+      end
+
       it 'correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :requests_by_user, params: { staff_id: 1 }
         expect(response.status).to eq(200)
       end
@@ -179,10 +181,10 @@ RSpec.describe Api::V1::RequestManagement::RequestPropertiesController, type: :c
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :requests_by_status, params: { staff_id: :cancelled }
         expect(response.status).to eq(200)
       end

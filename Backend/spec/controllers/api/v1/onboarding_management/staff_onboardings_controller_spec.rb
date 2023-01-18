@@ -27,10 +27,10 @@ RSpec.describe Api::V1::OnboardingManagement::StaffOnboardingsController, type: 
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         put :update, params: { id: StaffOnboarding.first.id,
                                staff_onboarding: { description: Faker::Lorem.sentence } }
         expect(response.status).to eq(200)
@@ -50,10 +50,10 @@ RSpec.describe Api::V1::OnboardingManagement::StaffOnboardingsController, type: 
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'destroy correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         delete :destroy, params: { id: StaffOnboarding.first.id }
         expect(response.status).to eq(204)
       end

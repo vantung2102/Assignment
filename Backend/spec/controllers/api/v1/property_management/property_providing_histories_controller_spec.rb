@@ -29,10 +29,10 @@ RSpec.describe Api::V1::PropertyManagement::PropertyProvidingHistoriesController
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'Get index success' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         get :index
         expect(response.status).to eq(200)
       end
@@ -51,10 +51,10 @@ RSpec.describe Api::V1::PropertyManagement::PropertyProvidingHistoriesController
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'renders the show template' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         get :show, params: { id: PropertyProvidingHistory.first.id }
         expect(response.status).to eq(200)
       end
@@ -73,10 +73,10 @@ RSpec.describe Api::V1::PropertyManagement::PropertyProvidingHistoriesController
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'destroy correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         delete :destroy, params: { id: PropertyProvidingHistory.first.id }
         expect(response.status).to eq(204)
       end
@@ -95,10 +95,10 @@ RSpec.describe Api::V1::PropertyManagement::PropertyProvidingHistoriesController
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :histories_by_property, params: { property_providing_history: {
           property_id: property.id
         } }

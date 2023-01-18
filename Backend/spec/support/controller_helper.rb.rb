@@ -4,6 +4,10 @@ include JwtToken
 
 module ControllerHelper
   def login email, password
+    request.headers['Authorization'] = token(email, password)
+  end
+
+  def token email, password
     staff = Staff.find_by_email(email)
 
     if staff&.authenticate(password)

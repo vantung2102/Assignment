@@ -25,10 +25,10 @@ RSpec.describe Api::V1::PropertyManagement::GroupPropertiesController, type: :co
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'Get index success' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         get :index
         expect(response.status).to eq(200)
       end
@@ -47,10 +47,10 @@ RSpec.describe Api::V1::PropertyManagement::GroupPropertiesController, type: :co
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'renders the show template' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         get :show, params: { id: GroupProperty.first.id }
         expect(response.status).to eq(200)
       end
@@ -69,10 +69,10 @@ RSpec.describe Api::V1::PropertyManagement::GroupPropertiesController, type: :co
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'create correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :create, params: {
           group_property: {
             name: Faker::Name.name,
@@ -83,7 +83,6 @@ RSpec.describe Api::V1::PropertyManagement::GroupPropertiesController, type: :co
       end
 
       it 'create incorrect' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :create, params: {
           group_property: {
             description: Faker::Lorem.paragraph
@@ -107,10 +106,10 @@ RSpec.describe Api::V1::PropertyManagement::GroupPropertiesController, type: :co
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'destroy correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         delete :destroy, params: { id: GroupProperty.first.id }
         expect(response.status).to eq(204)
       end
@@ -129,17 +128,16 @@ RSpec.describe Api::V1::PropertyManagement::GroupPropertiesController, type: :co
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         put :update, params: { id: GroupProperty.first.id,
                                group_property: { description: Faker::Lorem.sentence } }
         expect(response.status).to eq(200)
       end
 
       it 'incorrect' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         put :update, params: { id: GroupProperty.first.id,
                                group_property: { description: 'tung' } }
         expect(response.status).to eq(422)

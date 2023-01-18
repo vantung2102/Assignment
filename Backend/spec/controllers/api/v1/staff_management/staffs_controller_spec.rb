@@ -37,10 +37,10 @@ RSpec.describe Api::V1::StaffManagement::StaffsController, type: :controller do
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'Get index success' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         get :index
         expect(response.status).to eq(200)
       end
@@ -59,10 +59,10 @@ RSpec.describe Api::V1::StaffManagement::StaffsController, type: :controller do
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'Get index success' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         get :get_all_staff
         expect(response.status).to eq(200)
       end
@@ -79,8 +79,11 @@ RSpec.describe Api::V1::StaffManagement::StaffsController, type: :controller do
     let!(:params) { { id: Staff.first.id } }
 
     context 'Logged in' do
+      before :each do
+        login(user.email, 'Levantung123@')
+      end
+
       it 'renders the show template' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         get :show, params: { id: Staff.first.id }
         expect(response.status).to eq(200)
       end
@@ -99,10 +102,10 @@ RSpec.describe Api::V1::StaffManagement::StaffsController, type: :controller do
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'create correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :create, params: {
           staff: {
             fullname: Faker::Name.name,
@@ -123,7 +126,6 @@ RSpec.describe Api::V1::StaffManagement::StaffsController, type: :controller do
       end
 
       it 'create incorrect' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :create, params: {
           staff: {
             fullname: Faker::Name.name,
@@ -150,10 +152,10 @@ RSpec.describe Api::V1::StaffManagement::StaffsController, type: :controller do
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'destroy correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         delete :destroy, params: { id: Staff.first.id }
         expect(response.status).to eq(204)
       end
@@ -172,17 +174,16 @@ RSpec.describe Api::V1::StaffManagement::StaffsController, type: :controller do
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         put :update, params: { id: Staff.first.id,
                                staff: { email: Faker::Internet.email } }
         expect(response.status).to eq(200)
       end
 
       it 'incorrect' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         put :update, params: { id: Staff.first.id,
                                staff: { position_id: 100 } }
         expect(response.status).to eq(422)
@@ -202,6 +203,7 @@ RSpec.describe Api::V1::StaffManagement::StaffsController, type: :controller do
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       let(:user3) do
@@ -214,7 +216,6 @@ RSpec.describe Api::V1::StaffManagement::StaffsController, type: :controller do
       end
 
       it 'correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :destroy_and_update_staff_boss, params: { id: user2.id,
                                                        boss_id: user.id }
         expect(response.status).to eq(200)
@@ -230,10 +231,10 @@ RSpec.describe Api::V1::StaffManagement::StaffsController, type: :controller do
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :get_inactive_staff
         expect(response.status).to eq(200)
       end
@@ -248,11 +249,11 @@ RSpec.describe Api::V1::StaffManagement::StaffsController, type: :controller do
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
         user4.destroy
       end
 
       it 'correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :recover_staff, params: { id: user4.id }
         expect(response.status).to eq(200)
       end
@@ -271,11 +272,11 @@ RSpec.describe Api::V1::StaffManagement::StaffsController, type: :controller do
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
         user4.destroy
       end
 
       it 'correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :permanent_destroy, params: { id: user4.id }
         expect(response.status).to eq(204)
       end

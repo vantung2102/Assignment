@@ -21,23 +21,20 @@
 #   )
 # end
 
-# 20.times do
-#   Staff.create!(
-#     fullname: Faker::Name.name,
-#     # contract_name: Faker::Lorem.paragraph,
-#     date_of_birth: Date.new,
-#     # start_contract: Date.new,
-#     gender: 'men',
-#     # contract_term: Date.new,
-#     status: 0,
-#     position_id: 10,
-#     job_title_id: nil,
-#     department_id: rand(1..10),
-#     staff_id: rand(16..20),
-#     password: '123456',
-#     email: Faker::Internet.email
-#   )
-# end
+20.times do
+  Staff.create!(
+    fullname: Faker::Name.name,
+    date_of_birth: Date.new,
+    gender: 'men',
+    status: 0,
+    position_id: 10,
+    job_title_id: nil,
+    department_id: rand(1..10),
+    staff_id: rand(16..20),
+    password: '123456',
+    email: Faker::Internet.email
+  )
+end
 
 # 10.times do
 #   GroupProperty.create(

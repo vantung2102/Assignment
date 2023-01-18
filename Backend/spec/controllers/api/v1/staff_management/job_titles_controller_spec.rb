@@ -23,10 +23,10 @@ RSpec.describe Api::V1::StaffManagement::JobTitlesController, type: :controller 
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'Get index success' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         get :index
         expect(response.status).to eq(200)
       end
@@ -45,10 +45,10 @@ RSpec.describe Api::V1::StaffManagement::JobTitlesController, type: :controller 
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'Get index success' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         get :get_all_job_title
         expect(response.status).to eq(200)
       end
@@ -67,10 +67,10 @@ RSpec.describe Api::V1::StaffManagement::JobTitlesController, type: :controller 
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'renders the show template' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         get :show, params: { id: JobTitle.first.id }
         expect(response.status).to eq(200)
       end
@@ -89,10 +89,10 @@ RSpec.describe Api::V1::StaffManagement::JobTitlesController, type: :controller 
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'create correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :create, params: {
           job_title: {
             title: Faker::Name.name,
@@ -103,7 +103,6 @@ RSpec.describe Api::V1::StaffManagement::JobTitlesController, type: :controller 
       end
 
       it 'create incorrect' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :create, params: {
           job_title: {
             description: Faker::Lorem.paragraph
@@ -127,10 +126,10 @@ RSpec.describe Api::V1::StaffManagement::JobTitlesController, type: :controller 
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'destroy correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         delete :destroy, params: { id: JobTitle.first.id }
         expect(response.status).to eq(204)
       end
@@ -149,17 +148,16 @@ RSpec.describe Api::V1::StaffManagement::JobTitlesController, type: :controller 
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         put :update, params: { id: JobTitle.first.id,
                                job_title: { description: Faker::Lorem.sentence } }
         expect(response.status).to eq(200)
       end
 
       it 'incorrect' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         put :update, params: { id: JobTitle.first.id,
                                job_title: { description: 'tung' } }
         expect(response.status).to eq(422)

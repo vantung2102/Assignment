@@ -40,10 +40,10 @@ RSpec.describe Api::V1::OnboardingManagement::OnboardingStepsController, type: :
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'renders the show template' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         get :show, params: { id: OnboardingStep.first.id }
         expect(response.status).to eq(200)
       end
@@ -62,10 +62,10 @@ RSpec.describe Api::V1::OnboardingManagement::OnboardingStepsController, type: :
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'destroy correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         delete :destroy, params: { id: OnboardingStep.first.id }
         expect(response.status).to eq(204)
       end
@@ -84,10 +84,10 @@ RSpec.describe Api::V1::OnboardingManagement::OnboardingStepsController, type: :
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         put :update, params: { id: OnboardingStep.first.id,
                                onboarding_step: { status: :completed } }
         expect(response.status).to eq(200)
@@ -107,10 +107,10 @@ RSpec.describe Api::V1::OnboardingManagement::OnboardingStepsController, type: :
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         post :onboarding_steps_by_staff_onboarding, params: { staff_id: user.id }
         expect(response.status).to eq(200)
       end
@@ -129,16 +129,15 @@ RSpec.describe Api::V1::OnboardingManagement::OnboardingStepsController, type: :
     context 'Logged in' do
       before :each do
         user.add_role :Manager
+        login(user.email, 'Levantung123@')
       end
 
       it 'correct' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         get :complete_onboarding_step, params: { id: OnboardingStep.first.id }
         expect(response.status).to eq(200)
       end
 
       it 'Incorrect' do
-        request.headers['Authorization'] = login(user.email, 'Levantung123@')
         get :complete_onboarding_step, params: { id: OnboardingStep.last.id }
         expect(response.status).to eq(422)
       end
