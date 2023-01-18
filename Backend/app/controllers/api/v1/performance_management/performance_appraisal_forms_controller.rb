@@ -32,8 +32,24 @@ class Api::V1::PerformanceManagement::PerformanceAppraisalFormsController < Api:
 
   def create_all_fa_forms_for_staff
     authorize PerformanceAppraisalForm
-    CreateAllPerformanceAppraisalFormWorker.perform_async(pa_form_params.to_json)
-    head :ok
+    # CreateAllPerformanceAppraisalFormWorker.perform_async(pa_form_params.to_json)
+    begin
+      ActiveRecord::Base.transaction do
+        pa_form = Staff.all.each do |staff|
+          PerformanceAppraisalForm.create!(
+            status: :in_progress,
+            active: true,
+            staff_id: staff.id,
+            boss_id: staff.staff_id,
+            start_date: pa_form_params[:start_date],
+            end_date: pa_form_params[:end_date],
+          )
+        end
+        render_resource_collection(pa_forms.includes(:staff, :boss))
+      end
+    rescue StandardError => e
+      render_resource_errors(detail: e)
+    end
   end
 
   def update
