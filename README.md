@@ -13,6 +13,7 @@
 - install postgres
 - bundle install
 - setup password database for postgres
+- rails db:create
 - rails db:migrate
 
 ## Run Project
