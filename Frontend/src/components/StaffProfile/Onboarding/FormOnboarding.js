@@ -4,7 +4,12 @@ import { Controller, useForm } from "react-hook-form";
 import { SubmitSection } from "../../Department/department";
 import Select from "react-select";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchStaff, staffsSelector } from "../../../features/staff/staffSlice";
+import {
+  allStaffSelector,
+  fetchAllStaff,
+  fetchStaff,
+  staffsSelector,
+} from "../../../features/staff/staffSlice";
 import { optionSelect2 } from "../../../common/hooks/hooks";
 import {
   editOnboardingStep,
@@ -22,11 +27,11 @@ const FormOnboarding = ({ close, show }) => {
     formState: { errors },
   } = useForm();
 
-  const staffs = useSelector(staffsSelector);
+  const staffs = useSelector(allStaffSelector);
   const onboardingStep = useSelector(onboardingStepSelector);
 
   useEffect(() => {
-    dispatch(fetchStaff());
+    dispatch(fetchAllStaff());
   }, [dispatch]);
 
   const compareDate = (start, end) => {

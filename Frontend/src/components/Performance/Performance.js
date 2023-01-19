@@ -64,10 +64,10 @@ const Performance = ({ idRequest }) => {
     setQuestion2(achievement_staff);
     setQuestion3(goals_with_company_staff);
     setQuestion4(challenging_staff);
-    setQuestion8(least_enjoy_staff);
-    setQuestion5(contribute_staff);
-    setQuestion6(current_job_staff);
-    setQuestion7(improvement_staff);
+    setQuestion5(least_enjoy_staff);
+    setQuestion6(contribute_staff);
+    setQuestion7(current_job_staff);
+    setQuestion8(improvement_staff);
     setQuestion9(obstructing_staff);
     setQuestion10(feedback_staff);
     setQuestion11(description_staff);

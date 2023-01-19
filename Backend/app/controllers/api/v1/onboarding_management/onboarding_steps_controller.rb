@@ -34,13 +34,13 @@ class Api::V1::OnboardingManagement::OnboardingStepsController < Api::V1::BaseCo
     authorize OnboardingStep
     begin
       if onboarding_step.assigned_person_id.nil? || onboarding_step.start_date.nil? || onboarding_step.due_date.nil?
-        raise I18n.t('errors.E210')
+        raise I18n.t('error_codes.E210')
       end
 
       onboarding_step.update!(status: :completed)
       render_resource(onboarding_step)
-    rescue StandardError
-      render_resource_errors(detail: I18n.t('errors.E207'))
+    rescue StandardError => e
+      render_resource_errors(detail: e)
     end
   end
 

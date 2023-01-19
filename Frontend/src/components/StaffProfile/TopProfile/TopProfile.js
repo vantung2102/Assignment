@@ -63,14 +63,16 @@ const TopProfile = ({ idProfile }) => {
                           <div className="staff-id">
                             Employee ID : {profile?.id}
                           </div>
-                          <Button
-                            size="sm"
-                            className="mt-3"
-                            variant={inActive ? "success" : "danger"}
-                            onClick={handleInactive}
-                          >
-                            {inActive ? "Active" : "Inactive"}
-                          </Button>
+                          {role === "Manager" ? (
+                            <Button
+                              size="sm"
+                              className="mt-3"
+                              variant={inActive ? "success" : "danger"}
+                              onClick={handleInactive}
+                            >
+                              {inActive ? "Active" : "Inactive"}
+                            </Button>
+                          ) : null}
                         </div>
                       </div>
                     </div>

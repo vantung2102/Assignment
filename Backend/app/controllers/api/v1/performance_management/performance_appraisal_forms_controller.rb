@@ -35,7 +35,7 @@ class Api::V1::PerformanceManagement::PerformanceAppraisalFormsController < Api:
     # CreateAllPerformanceAppraisalFormWorker.perform_async(pa_form_params.to_json)
     begin
       ActiveRecord::Base.transaction do
-        pa_form = Staff.all.each do |staff|
+        Staff.all.each do |staff|
           PerformanceAppraisalForm.create!(
             status: :in_progress,
             active: true,
@@ -45,7 +45,8 @@ class Api::V1::PerformanceManagement::PerformanceAppraisalFormsController < Api:
             end_date: pa_form_params[:end_date],
           )
         end
-        render_resource_collection(pa_forms.includes(:staff, :boss))
+        # render_resource_collection(pa_forms.includes(:staff, :boss))
+        head :ok
       end
     rescue StandardError => e
       render_resource_errors(detail: e)

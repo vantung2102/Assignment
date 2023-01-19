@@ -65,10 +65,10 @@ const DetailReviewPerformance = ({ idRequest }) => {
     setBossQuestion2(achievement_boss);
     setBossQuestion3(goals_with_company_boss);
     setBossQuestion4(challenging_boss);
-    setBossQuestion8(least_enjoy_boss);
-    setBossQuestion5(contribute_boss);
-    setBossQuestion6(current_job_boss);
-    setBossQuestion7(improvement_boss);
+    setBossQuestion5(least_enjoy_boss);
+    setBossQuestion6(contribute_boss);
+    setBossQuestion7(current_job_boss);
+    setBossQuestion8(improvement_boss);
     setBossQuestion9(obstructing_boss);
     setBossQuestion10(feedback_boss);
     setBossQuestion11(description_boss);
