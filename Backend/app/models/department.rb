@@ -9,7 +9,7 @@
 #  updated_at  :datetime         not null
 #
 class Department < ApplicationRecord
-  has_one :staff
+  has_many :staffs
 
   validates :name, presence: true
   validates :description, presence: true, length: { minimum: 5, maximum: 500 }

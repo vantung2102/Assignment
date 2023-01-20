@@ -27,22 +27,41 @@ ActiveRecord::Base.transaction do
     )
   end
 
+  positions = Position.all.group_by(&:id).keys
+  departments = Department.all.group_by(&:id).keys
+  jobTitles = JobTitle.all.group_by(&:id).keys
+
   50.times do
     OnboardingSampleStep.create!(
       task: Faker::Name.name,
-      position_id: rand(1..15),
+      position_id: positions[rand(positions.count)],
       description: Faker::Lorem.paragraph,
     )
   end
+
+  admin = Staff.create!(
+    fullname: Faker::Name.name,
+    date_of_birth: '2001-21-02',
+    gender: 'men',
+    position_id: positions[rand(positions.count)],
+    job_title_id: jobTitles[rand(jobTitles.count)],
+    department_id: departments[rand(departments.count)],
+    staff_id: nil,
+    password: 'Levantung123@',
+    email: 'admin@gmail.com',
+    phone: '0984235062',
+    address: Faker::Address.full_address
+  )
+  admin.add_role :Manager
 
   30.times do
     Staff.create!(
       fullname: Faker::Name.name,
       date_of_birth: '2001-21-02',
       gender: 'men',
-      position_id: rand(1..15),
-      job_title_id: rand(1..15),
-      department_id: rand(1..15),
+      position_id: positions[rand(positions.count)],
+      job_title_id: jobTitles[rand(jobTitles.count)],
+      department_id: departments[rand(departments.count)],
       staff_id: nil,
       password: 'Levantung123@',
       email: Faker::Internet.email,
@@ -50,6 +69,7 @@ ActiveRecord::Base.transaction do
       address: Faker::Address.full_address
     )
   end
+  staffs = Staff.all.group_by(&:id).keys
 
   10.times do
     GroupProperty.create!(
@@ -58,14 +78,16 @@ ActiveRecord::Base.transaction do
     )
   end
 
+  groupProperties = GroupProperty.all.group_by(&:id).keys
+
   20.times do
     Property.create!(
       code_seri: Faker::Code.nric,
       name: Faker::Name.name,
       brand: Faker::Commerce.brand,
-      group_property_id: rand(1..10),
+      group_property_id: groupProperties[rand(groupProperties.count)],
       price: rand(10000..100000000),
-      date_buy: '2001-21-02',
+      date_buy: Date.new,
       number_of_repairs: rand(0..5),
       status: 0
     )
@@ -75,8 +97,8 @@ ActiveRecord::Base.transaction do
     RequestProperty.create!(
       request_type: :device,
       status: :pending,
-      requester_id: rand(1..15),
-      group_property_id: rand(1..10),
+      requester_id: staffs[rand(staffs.count)],
+      group_property_id: groupProperties[rand(groupProperties.count)],
       reason: Faker::Lorem.paragraph,
       description: Faker::Lorem.paragraph
     )
@@ -89,8 +111,8 @@ ActiveRecord::Base.transaction do
       number_of_days_off: 1,
       start_day: '2023-01-15',
       end_day: '2023-01-15',
-      staff_id: rand(1..15),
-      description: Faker::Lorem.paragraph
+      staff_id: staffs[rand(staffs.count)],
+      description: Faker::Lorem.paragraph,
     )
   end
 end

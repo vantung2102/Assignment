@@ -17,6 +17,7 @@
 class Property < ApplicationRecord
   enum status: {  available: 0, used: 1 }, _suffix: true
 
+  has_many :property_providing_history
   belongs_to :group_property
 
   validates :code_seri, presence: true
