@@ -23,32 +23,28 @@
 
 ```mermaid
 erDiagram
-    Employer ||..|{ EmployerLocation : owns
-    Employer ||..|{ EmployerStaff : has
-    EmployerLocation ||..|{ Shift : creates
-    Shift ||..|{ Position : "has many"
-    Position }|..|{ Assignment : has
-    Assignment }|..|{ AssignedSchedule : has
-    AssignedSchedule }|..|{ Timecard : "has one"
-    Timecard }|--|| TimesheetDetail : "belongs to"
-    TimesheetDetail ||--o{ Timesheet : "belongs to"
-    Employer ||--o{ Timesheet : has
-    Assignment ||--o{ JobResponse : "accepts"
-    JobResponse ||--o{ Employee : "applied by"
-    Employee ||--o{ Skill : has
-    Employee ||--|| VacancyApplicant: is
-    VacancyApplicant ||--|{ VacancyApplicantLanguage: uses
-    VacancyApplicant ||--|{ VacancyApplicantDocuments: owns
-    Position ||--|{ Skill : covers
-    Skill ||--|{ SkillType : "belongs to"
-    Employee ||--|| OmniEmployee: is
-    OmniEmployee ||--|{ Timecard : "works for (OmniEmployeeId)"
-    Timesheet ||--|{ Invoice : generates
-    Invoice ||--|{ OmniUser : "created by"
-    Invoice ||--|{ InvoiceLine : has
-    Timesheet ||--o{ Cost : "may has"
-    Employer ||--|{ Cost : spends
-    Supplier }|--|{ Cost : provides
-    Supplier }|--|| SupplierType : "belongs to"
+    Staff ||--|{ PropertyProvidingHistory : "provider"
+    Staff ||--|{ PropertyProvidingHistory : "receiver"
+
+    Staff ||--|{ OnboardingStep : "assigned person"
+    OnboardingStep ||--|{ OnboardingSampleStep : "belongs to"
+    OnboardingStep ||--|{ StaffOnboarding : "belongs to"
+    Position ||--o{ OnboardingSampleStep : "has"
+    Staff ||--o| StaffOnboarding : "has"
+    StaffOnboarding }|--|| Position : "belongs to"
+
+    Position ||--|{ Staff : "has"
+    Department ||--|{ Staff : "has"
+    JobTitle ||--|{ Staff : "has"
+    Leave ||--|| Staff : "belongs to"
+
+    Staff ||--o| LeaveApplication : "requester"
+    Staff ||--o| LeaveApplication : "approver"
+
+    Staff ||--o| RequestProperty : "requester"
+    Staff ||--o| RequestProperty : "approver"
+
+    Property ||--o{ PropertyProvidingHistory : "has many"
+    GroupProperty ||--o{ Property : "has"
 
 ```
