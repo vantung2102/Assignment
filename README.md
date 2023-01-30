@@ -15,11 +15,15 @@
 - setup password database for postgres
 - rails db:create
 - rails db:migrate
+- rails db:seed ( create data )
 
 ## Run Project
 
 - rails s (with port 3000)
 - npm start (with port 3001)
+- account test: 
+    email: admin@gmail.com
+    pass: Levantung123@
 
 ```mermaid
 erDiagram
