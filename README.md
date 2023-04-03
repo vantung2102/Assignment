@@ -1,6 +1,6 @@
 # HRM(Human Resource Management)
 
-## SET UP
+## SET UP FOR WEBSITE
 
 ### Database - Instasll Postgres
 
@@ -107,6 +107,9 @@ nvm install 16
 cd ~/Assignment/Frontend
 npm install 
 ```
+## SET UP FOR APP ANDROID (JAVA)
+- Install Java jdk 11.0.18
+- Install Android Studio 
 
 ## Run Project
 
