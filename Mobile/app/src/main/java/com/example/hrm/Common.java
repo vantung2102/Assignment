@@ -18,6 +18,7 @@ import retrofit2.Response;
 
 public class Common {
     public static final String STATUS_USED = "used";
+    public static final String STATUS_USED2 = "used2";
     public static final String STATUS_AVAILABLE = "available";
     public static final String STATUS_PROVIDED = "provided";
     public static final String STATUS_RECALLED = "recall";
