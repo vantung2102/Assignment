@@ -2,7 +2,12 @@
 
 ## SET UP
 
-### BackEnd(Ruby on Rails) - Ruby & Rails Version
+### Database - Instasll Postgres
+
+    sudo apt update
+    sudo apt install postgresql postgresql-contrib
+
+### BackEnd(Ruby on Rails)
 
 You'll need to install `Ruby 3.0.0` in order to use Investglass within `Rails 6.1.7`
 - `Note` : Recommend ubuntu or macOS system
@@ -39,11 +44,7 @@ When the installation is complete, source the RVM scripts from the directory the
 
 **Step 2 – Installing and Using Specific Ruby or Rails Versions**
 
-If you need to install a specific version of Ruby for your application, rather than just the most recent one, you can do so with RVM. First, check to see which versions of Ruby are available by listing them:
-
-    rvm list known
-
-Then, install the specific version of Ruby that you need through RVM, replacing the highlighted version number with your version of choice, such as ruby-3.0.0 or just 3.0.0:
+Install the specific version of Ruby that you need through RVM, replacing the highlighted version number with your version of choice, such as ruby-3.0.0 or just 3.0.0:
 
     rvm install 3.0.0
 
@@ -55,40 +56,69 @@ Then, install the specific version of Ruby that you need through RVM, replacing 
 
 When this is done you shall achieve to make a successfull `bundle install` :
 
-    cd investglass/
+    cd ~/Assignment/Backend
     rvm use 3.0.0
     bundle install
+    
+**2. Add database config and database setup**
 
+- Add database config in file `config/database.yml`:
+
+    ```
+    devlopment:
+      <<: *default
+      database: <%= ENV['DATABASE'] %>
+      username: <%= ENV['USERNAME_DB'] %>
+      password: <%= ENV['PASSWORD_DB'] %>
+      host: <%= ENV['HOST'] %>
+      port: <%= ENV['PORT'] %>
+    ```
+      
+- Database setup in rails
+
+    Create database:
+    
+        bundle exec rake db:create
+        
+    Create table in database:
+    
+        bundle exec rake db:migrate
+
+    Create fake data in database
+    
+        bundle exec rake db:seed
+        
 ### FrontEnd(ReactJs) - Install NodeJS and npm package
 
 You should consider using the LTS version of NodeJS, but you can be sure it gonna work using `v16.13.2`
-```bash
-# Install NVM 
+
+- Install NVM:
+```    
 wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
-# Install NodeJS 
+```
+        
+- Install NodeJS:
+```
 nvm install 16
-# Install dependencies 
-npm install 
 ```
 
-### Database - Instasll Postgres
-
-- Ruby 3.0.0
-- Rails 6.1.7
-- install postgres
-- bundle install
-- setup password database for postgres
-- rails db:create
-- rails db:migrate
-- rails db:seed ( create data )
+- Install dependencies
+```
+cd ~/Assignment/Frontend
+npm install 
+```
 
 ## Run Project
 
 - rails s (with port 3000)
 - npm start (with port 3001)
-- account test: 
-    email: admin@gmail.com
-    pass: Levantung123@
+- account test:
+```
+email: admin@gmail.com
+pass: Levantung123@
+```
+
+## Database diagram
 
 ```mermaid
 erDiagram
