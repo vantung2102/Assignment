@@ -132,11 +132,9 @@ ActiveRecord::Schema.define(version: 2023_01_07_185350) do
 
   create_table "positions", force: :cascade do |t|
     t.string "name"
-    t.bigint "department_id"
     t.string "description"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-    t.index ["department_id"], name: "index_positions_on_department_id"
   end
 
   create_table "properties", force: :cascade do |t|

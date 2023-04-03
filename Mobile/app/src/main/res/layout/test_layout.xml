@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:background="@drawable/layout_rounded_border"
+        android:paddingBottom="20dp"
+        android:gravity="center_horizontal" >
+
+        <TextView
+            android:id="@+id/label_popup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:gravity="center_horizontal"
+            android:text="asasa"
+            android:textColor="@color/blue"
+            android:padding="5dp"
+            android:textScaleX="1.3"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/edtpin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/label_popup"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:background="@color/danger"
+            android:ems="15"
+            android:gravity="center_horizontal"
+            android:hint="asdadsa"
+            android:inputType="textEmailAddress"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            android:textColor="@color/black"
+            android:textSize="15sp" >
+
+            <requestFocus />
+        </EditText>
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/edtpin"
+            android:layout_alignRight="@+id/edtpin"
+            android:layout_below="@+id/edtpin"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/edit_mini"
+            android:onClick="onLoginButtonClick"
+            android:text="xs"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/cancel_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="@drawable/email" />
+</RelativeLayout>

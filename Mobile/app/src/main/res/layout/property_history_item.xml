@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:orientation="horizontal">
+    <TextView
+        android:layout_width="@dimen/STT"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="@string/STT"
+        android:id="@+id/txt_stt"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/nomarlText"
+       ></TextView>
+
+    <TextView
+        android:id="@+id/txt_provider"
+        android:layout_width="@dimen/Provider"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="@string/Provider"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/nomarlText"
+        ></TextView>
+
+    <TextView
+        android:id="@+id/txt_receiver"
+        android:layout_width="@dimen/Receiver"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="@string/Receiver"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/nomarlText"
+        ></TextView>
+
+    <TextView
+
+        android:id="@+id/txt_property"
+        android:layout_width="@dimen/Property"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="@string/Property"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/nomarlText"
+        ></TextView>
+
+    <TextView
+        android:id="@+id/txt_provide_date"
+        android:layout_width="@dimen/ProvidingDate"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="@string/ProvidingDate"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/nomarlText"
+        ></TextView>
+
+    <Button
+        android:textAllCaps="false"
+        android:background="@drawable/layout_rounded_border"
+        android:id="@+id/txt_type"
+        android:layout_width="@dimen/Type"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:text="@string/Type"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        ></Button>
+    <LinearLayout
+        android:id="@+id/columnAction"
+        android:visibility="gone"
+        android:layout_gravity="center_vertical"
+        android:layout_width="@dimen/Action"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/showBtn"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="10dp"
+                android:layout_width="@dimen/showBtn"
+                android:layout_height="@dimen/showBtn"
+                android:src="@drawable/eye"></ImageView>
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:id="@+id/deleteBtn"
+                android:layout_width="@dimen/showBtn"
+                android:layout_height="@dimen/showBtn"
+                android:src="@drawable/deletetrash"></ImageView>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <data>
+        <import type="android.view.View"></import>
+        <variable
+            name="AddLeaveViewModel"
+            type="com.example.hrm.viewmodel.AddLeaveViewModel" />
+    </data>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    >
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:paddingRight="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:id="@+id/header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:layout_centerVertical="true"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/largeText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Leave"></TextView>
+                <ImageView
+                    android:id="@+id/btn_close"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/close"
+                    android:layout_alignParentRight="true"></ImageView>
+            </RelativeLayout>
+            <View
+                android:background="@color/gray_bold"
+                android:layout_below="@id/header"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"></View>
+            <LinearLayout
+                android:id="@+id/content"
+                android:layout_below="@id/header"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+
+
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/nomarlText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Leave type"></TextView>
+                <AutoCompleteTextView
+                    android:text="@={AddLeaveViewModel.leaveType}"
+                    android:drawableRight="@drawable/down"
+                    android:id="@+id/AutoCompleteTextViewLeaveType"
+                    android:paddingStart="12dp"
+                    android:paddingEnd="12dp"
+                    android:paddingTop="2dp"
+                    android:paddingBottom="2dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:textAlignment="textStart"
+                    android:textColorHint="@color/hintColorGray"
+                    android:hint="Select leave type"
+                    android:textSize="@dimen/miniText"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/custom_edit_text_blue"
+                    android:layout_height="50dp"></AutoCompleteTextView>
+                <TextView
+                    android:id="@+id/txt_mess_leave_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:text="Error"
+                    android:textColor="@color/danger"
+                    android:textSize="@dimen/miniText"
+                    android:visibility="@{AddLeaveViewModel.leaveTypeVi ? View.VISIBLE:View.GONE}"></TextView>
+                <TextView
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/blue"
+                    android:textSize="@dimen/miniText"
+                    android:id="@+id/txt_time_remaining"></TextView>
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/nomarlText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Start date"></TextView>
+                <EditText
+                    android:text="@={AddLeaveViewModel.startDate}"
+                    android:drawableRight="@drawable/calendar"
+                    android:id="@+id/idEdtStartDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="Enter date" />
+                <TextView
+
+                    android:id="@+id/txt_mess_start_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:text="Error"
+                    android:textColor="@color/danger"
+                    android:textSize="@dimen/miniText"
+                    android:visibility="@{AddLeaveViewModel.startDateVi ? View.VISIBLE:View.GONE}"></TextView>
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/nomarlText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="End day"></TextView>
+                <EditText
+                    android:text="@={AddLeaveViewModel.dueDay}"
+                    android:drawableRight="@drawable/calendar"
+                    android:id="@+id/idEdtEndDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="Enter date" />
+                <TextView
+
+                    android:id="@+id/txt_mess_due_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:text="Error"
+                    android:textColor="@color/danger"
+                    android:textSize="@dimen/miniText"
+                    android:visibility="@{AddLeaveViewModel.dueDayVi ? View.VISIBLE:View.GONE}"></TextView>
+
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/nomarlText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Number of days"></TextView>
+                <RadioGroup
+                    android:id="@+id/radiogroup_numdays"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <RadioButton
+                        android:id="@+id/radio1"
+                        android:textSize="@dimen/nomarlText"
+                        android:textColor="@color/black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        ></RadioButton>
+                    <RadioButton
+                        android:id="@+id/radio2"
+                        android:textSize="@dimen/nomarlText"
+                        android:textColor="@color/black"
+                        android:layout_marginLeft="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        ></RadioButton>
+                </RadioGroup>
+                <TextView
+
+                    android:id="@+id/txt_mess_num_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:text="Error"
+                    android:textColor="@color/danger"
+                    android:textSize="@dimen/miniText"
+                    android:visibility="@{AddLeaveViewModel.dueDayVi ? View.VISIBLE:View.GONE}"></TextView>
+                <TextView
+                    android:layout_marginTop="20dp"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/nomarlText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Reason"></TextView>
+                <EditText
+                    android:text="@={AddLeaveViewModel.reason}"
+                    android:id="@+id/EdtReason"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:minLines="3"
+                    android:hint="Enter here..." />
+                <TextView
+
+                    android:id="@+id/txt_mess_reason"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:text="Error"
+                    android:textColor="@color/danger"
+                    android:textSize="@dimen/miniText"
+                    android:visibility="@{AddLeaveViewModel.reasonVi ? View.VISIBLE:View.GONE}"></TextView>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_below="@id/content"
+                android:layout_marginBottom="20dp"
+                android:layout_alignParentBottom="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_centerHorizontal="true"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp"
+                    android:id="@+id/btn_add"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:padding="10dp"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/botron"
+                    >
+                    <TextView
+                        android:id="@+id/txtSubmit"
+                        android:paddingLeft="30dp"
+                        android:paddingRight="30dp"
+                        android:textColor="@color/white"
+                        android:gravity="center_horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="SUBMIT"></TextView>
+                </LinearLayout>
+            </RelativeLayout>
+        </RelativeLayout>
+    </ScrollView>
+
+
+
+</RelativeLayout>
+</layout>
