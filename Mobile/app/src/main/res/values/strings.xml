@@ -1,0 +1,125 @@
+<resources>
+    <string name="app_name">HRM</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="unpaid">15</string>
+    <string name="marriage">3</string>
+    <string name="compassionate">3</string>
+    <string name="paternity">1</string>
+    <string name="maternity">180</string>
+    <string name="outstanding">outstanding</string>
+    <string name="login_title">Hello! let\'s get started</string>
+    <string name="login_sub_title">Sign in to continue.</string>
+    <string name="success_title">Success</string>
+    <string name="failed_title">Failed</string>
+    <string name="DETAIL_STATUS">Status</string>
+    <string name="pending">PENDING</string>
+    <string name="DETAIL_REQUESTER">Requester</string>
+    <string name="DETAIL_APPROVE">Approver</string>
+    <string name="DETAIL_LEAVE_TYPE">Leave type</string>
+    <string name="DETAIL_START_DATE">Start day</string>
+    <string name="DETAIL_END_DAY">End day</string>
+    <string name="DETAIL_NUMBER_OF_DAY">number of days</string>
+    <string name="DETAIL_REASON">Reason</string>
+    <string name="END_PERFORMANCE">End Performance</string>
+    <string name="START_DAY">Start day</string>
+    <string name="END_DAY">End day</string>
+    <string name="Name">Name</string>
+    <string name="Status">Status</string>
+    <string name="REMIND">Remind</string>
+    <string name="AVAIABLE">available</string>
+    <string name="VIEW">View</string>
+    <string name="ASSIGN">Assign</string>
+    <string name="RECALL">Recall</string>
+    <string name="DETAIL_NAME">Name</string>
+    <string name="DETAI_CODE_SERI">Code Seri</string>
+    <string name="DETAI_BRAND">Brand</string>
+    <string name="DETAIL_GROUP_PROPERTY">Group Property</string>
+    <string name="DETAIL_BUYDAY">Buy day</string>
+    <string name="DETAIL_NUMBER_OF_REPAIRS">Number of repairs</string>
+    <string name="DETAIL_PRICE">Price</string>
+    <string name="ACCEPT_PROPERTY_REQUEST">Accept property request</string>
+    <string name="UPDATE_PROPERTY">Update Property</string>
+    <string name="ENTER_HERE">Enter here...</string>
+    <string name="HINT_PROPERTY_GROUP">Select property group</string>
+    <string name="STT">STT</string>
+    <string name="Provider">Provider</string>
+    <string name="Receiver">Receiver</string>
+    <string name="Property">Property</string>
+    <string name="ProvidingDate">Providing Date</string>
+    <string name="Type">Type</string>
+    <string name="Action">Action</string>
+    <string name="DETAIL_PROPERTY">Property</string>
+    <string name="DETAIL_PROVIDER">Provider</string>
+    <string name="DETAIL_RECEIVER">Receiver</string>
+    <string name="DetailProperty">Detail Property</string>
+    <string name="ADD_REQUEST">+ Request</string>
+    <string name="Requester">Requester</string>
+    <string name="DETAIL">Detail</string>
+    <string name="HINT_SELECT_TYPE">Select Type</string>
+    <string name="SUBMIT">Submit</string>
+    <string name="ADD_REQUEST_HEADER">Add Request</string>
+    <string name="END">End</string>
+    <string name="Start">Start</string>
+    <string name="inProgress">In Progress</string>
+    <string name="finished">Finished</string>
+    <string name="self_preview_q1">1. How did you do on the goals set for you during your last performance appraisal ?</string>
+    <string name="reviewer">Reviewer</string>
+    <string name="employee">Employee</string>
+    <string name="self_preview_q2">2. What was your biggest achievement this year ?</string>
+    <string name="self_preview_q3">3. What are your short-and long-term goals with the company, and for your career ?</string>
+    <string name="self_preview_q4">4. What has been the most challenging aspect of your work this past year and why ?</string>
+    <string name="self_preview_q5">5. Which parts of your job do you most / least enjoy ?</string>
+    <string name="self_preview_q6">6. In what ways might you contribute more to the company ?</string>
+    <string name="self_preview_q7">7. Do you feel that your current job and responsibilities are aligned with your future goals ?</string>
+    <string name="self_preview_q8">8. Are you happy with the company’s culture? Do you feel that there is any scope for improvement ?</string>
+    <string name="self_preview_q9">9. Is there anyone or anything that is obstructing your performance in this company ?</string>
+    <string name="self_preview_q10">10. Do you feel that you receive adequate feedback ? How frequent feedback do you prefer ?</string>
+    <string name="self_preview_q_others">Others</string>
+    <string name="jobTitle">Job Title</string>
+    <string name="position">Position</string>
+    <string name="provided">provided</string>
+    <string name="device">device</string>
+    <string name="ADD_PROPERTY">Add Property</string>
+    <string name="nav_open">open</string>
+    <string name="nav_close">close</string>
+    <string name="SelectPosition">Select Position</string>
+    <string name="TaskIsRequired">Task is required</string>
+    <string name="DescriptionIsRequired">Description is required</string>
+    <string name="SelectType">Select Type</string>
+    <string name="ReasonIsRequired">Reason is required</string>
+    <string name="CodeIsRequired">Code is required</string>
+    <string name="NameIsRequired">Name is required</string>
+    <string name="priceIsRequired">price is required</string>
+    <string name="brandIsRequired">brand is required</string>
+    <string name="numberOfRepairsIsRequired">number Of Repairs is required</string>
+    <string name="buyDateIsRequired">buydate  is required</string>
+    <string name="PropertyGroupIsRequired">Property Group is required</string>
+    <string-array name="leaveType">
+        <item>casual leave</item>
+        <item>unpaid leave</item>
+        <item>marriage leave</item>
+        <item>compassionate leave</item>
+        <item>paternity leave</item>
+        <item>maternity leave</item>
+    </string-array>
+    <string-array name="requestType">
+        <item>Device</item>
+        <item>Account</item>
+
+    </string-array>
+    <string-array name="status">
+        <item>Pending</item>
+        <item>Approved</item>
+        <item>Cancled</item>
+    </string-array>
+</resources>
