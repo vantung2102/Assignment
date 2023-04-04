@@ -137,7 +137,7 @@ public class NewEmployeeViewModel extends BaseObservable {
 
     public void setPositionVisible(boolean positionVisible) {
         isPositionVisible = positionVisible;
-        notifyPropertyChanged(BR.position);
+        notifyPropertyChanged(BR.positionVisible);
     }
     @Bindable
     public boolean isJobtitleVisible() {

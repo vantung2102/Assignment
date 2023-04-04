@@ -53,7 +53,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:text="Error"
+                        android:text="@string/NameIsRequired"
                         android:textColor="@color/danger"
                         android:textSize="@dimen/miniText"
                         android:visibility="@{NewEmployeeViewModel.isFullNameVisible ? View.VISIBLE:View.GONE}"></TextView>
@@ -83,7 +83,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:text="Error"
+                        android:text="@string/EmailAddressIsRequired"
                         android:textColor="@color/danger"
                         android:textSize="@dimen/miniText"
                         android:visibility="@{NewEmployeeViewModel.isEmailVisible ? View.VISIBLE:View.GONE}"></TextView>
@@ -113,7 +113,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:text="Error"
+                        android:text="@string/PhoneIsRequired"
                         android:textColor="@color/danger"
                         android:textSize="@dimen/miniText"
                         android:visibility="@{NewEmployeeViewModel.isPhoneVisisble ? View.VISIBLE:View.GONE}"></TextView>
@@ -143,7 +143,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:text="Error"
+                        android:text="@string/PasswordIsRequired"
                         android:textColor="@color/danger"
                         android:textSize="@dimen/miniText"
                         android:visibility="@{NewEmployeeViewModel.isPasswordVisible ? View.VISIBLE:View.GONE}"></TextView>
@@ -173,7 +173,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:text="Error"
+                        android:text="@string/ConfirmPasswordIsRequired"
                         android:textColor="@color/danger"
                         android:textSize="@dimen/miniText"
                         android:visibility="@{NewEmployeeViewModel.isConfirmPasswordVisible ? View.VISIBLE:View.GONE}"></TextView>
@@ -205,7 +205,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:text="Error"
+                        android:text="@string/DateOfBirthIsRequired"
                         android:textColor="@color/danger"
                         android:textSize="@dimen/miniText"
                         android:visibility="@{NewEmployeeViewModel.isDateOfBirthVisible ? View.VISIBLE:View.GONE}"></TextView>
@@ -236,7 +236,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:text="Error"
+                        android:text="@string/JoinDateIsRequired"
                         android:textColor="@color/danger"
                         android:textSize="@dimen/miniText"
                         android:visibility="@{NewEmployeeViewModel.isJoinDateVisible ? View.VISIBLE:View.GONE}"></TextView>
@@ -266,7 +266,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:text="Error"
+                        android:text="@string/GenderIsRequired"
                         android:textColor="@color/danger"
                         android:textSize="@dimen/miniText"
                         android:visibility="@{NewEmployeeViewModel.isGenderVisible ? View.VISIBLE:View.GONE}"></TextView>
@@ -303,7 +303,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:text="Error"
+                        android:text="@string/DepartmentIsRequired"
                         android:textColor="@color/danger"
                         android:textSize="@dimen/miniText"></TextView>
 
@@ -339,7 +339,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:text="Error"
+                        android:text="@string/PositionIsRequired"
                         android:textColor="@color/danger"
                         android:textSize="@dimen/miniText"
                         ></TextView>
@@ -376,7 +376,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:text="Error"
+                        android:text="@string/JobTitleIsRequired"
                         android:textColor="@color/danger"
                         android:textSize="@dimen/miniText"></TextView>
 
@@ -411,7 +411,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:text="Error"
+                        android:text="@string/ManagerIsRequired"
                         android:textColor="@color/danger"
                         android:textSize="@dimen/miniText"
                         android:visibility="@{NewEmployeeViewModel.managerVisible ? View.VISIBLE:View.GONE}"></TextView>
@@ -443,7 +443,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="left"
-                        android:text="Error"
+                        android:text="@string/AddressIsRequired"
                         android:textColor="@color/danger"
                         android:textSize="@dimen/miniText"
                         ></TextView>

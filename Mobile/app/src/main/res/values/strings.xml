@@ -104,6 +104,18 @@
     <string name="numberOfRepairsIsRequired">number Of Repairs is required</string>
     <string name="buyDateIsRequired">buydate  is required</string>
     <string name="PropertyGroupIsRequired">Property Group is required</string>
+    <string name="EmailAddressIsRequired">Email address is required</string>
+    <string name="PhoneIsRequired">Phone is required</string>
+    <string name="PasswordIsRequired">Password is required</string>
+    <string name="ConfirmPasswordIsRequired">Confirm password is required</string>
+    <string name="DateOfBirthIsRequired">Date of Birth is required</string>
+    <string name="JoinDateIsRequired">Join date is required</string>
+    <string name="GenderIsRequired">Gender is required</string>
+    <string name="DepartmentIsRequired">Department is required</string>
+    <string name="PositionIsRequired">Position is required</string>
+    <string name="JobTitleIsRequired">Job Title is required</string>
+    <string name="ManagerIsRequired">Manager is required</string>
+    <string name="AddressIsRequired">Address is required</string>
     <string-array name="leaveType">
         <item>casual leave</item>
         <item>unpaid leave</item>
