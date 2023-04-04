@@ -75,6 +75,7 @@ public class ProvidingHistoryAdapter extends RecyclerView.Adapter<ProvidingHisto
         holder.binding.showBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                activity.addOrRemoveBackButton(true);
                 DetailPropertyProvidingHistoryFragment fragment=new DetailPropertyProvidingHistoryFragment(attributes);
                 Bundle bundle = new Bundle();
                 bundle.putString("TAG",fragment.MY_TAG);

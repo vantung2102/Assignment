@@ -343,6 +343,7 @@ public class StaffFragment extends Fragment implements StaffFragmentView {
     @Override
     public void showFormAddDepartment(StaffAttributes staffAttributes) {
             HomeActivity homeActivity= (HomeActivity) getActivity();
+        homeActivity.addOrRemoveBackButton(true);
             NewEmployeeFragment fragment=new NewEmployeeFragment(staffAttributes);
             final Bundle args = new Bundle();
             if(staffAttributes!=null) args.putString("TAG", "Update Employee"); else args.putString("TAG", NewEmployeeFragment.MY_TAG);

@@ -131,10 +131,16 @@ public class HomeActivity extends AppCompatActivity {
             throw new RuntimeException(e);
         }
         fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @SuppressLint("SuspiciousIndentation")
             @Override
             public void onBackStackChanged() {
-                Log.d("onBackStackChanged","onBackStackChanged");
-                getSupportActionBar().setTitle(fragmentManager.findFragmentById(R.id.flContent).getTag());
+                Log.d("onBackStackChanged", String.valueOf(fragmentManager.getBackStackEntryCount()));
+                if(fragmentManager.getBackStackEntryCount()>=1&&fragmentManager.findFragmentById(R.id.flContent)!=null)
+                {
+                    getSupportActionBar().setTitle(fragmentManager.findFragmentById(R.id.flContent).getTag());
+
+                }
+                if(fragmentManager.getBackStackEntryCount()>=2)  addOrRemoveBackButton(true);
             }
         });
 //
@@ -181,6 +187,7 @@ public class HomeActivity extends AppCompatActivity {
 
         private void setupDrawerContent( ) {
             nvDrawer.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+                @SuppressLint("SuspiciousIndentation")
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                     if(item.getItemId()==R.id.nav_logout){
@@ -193,7 +200,7 @@ public class HomeActivity extends AppCompatActivity {
         }
         public void selectDrawerItem(MenuItem menuItem) {
             // Create a new fragment and specify the fragment to show based on nav item clicked
-
+            Log.d("selectDrawerItem","selectDrawerItem");
             Fragment fragment = null;
 
             Class fragmentClass;
@@ -286,14 +293,22 @@ public class HomeActivity extends AppCompatActivity {
                 e.printStackTrace();
 
             }
+            //.d("onBackStackChanged", "Be:"+String.valueOf(fragmentManager.getBackStackEntryCount()));
+            //fragmentManager.popBackStack(null,FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            int count = fragmentManager.getBackStackEntryCount();
 
-
-
+            for (int i = 0; i < count; i++) { fragmentManager.popBackStack(); }
+            //Log.d("onBackStackChanged", "Af:"+String.valueOf(fragmentManager.getBackStackEntryCount()));
             // Insert the fragment by replacing any existing fragment
-
-
-            Log.d("addtoBack",tag);
+//            if (fragmentManager.findFragmentByTag(tag) != null) {
+//                Log.d("tag","find tag: not null : "+tag);
+//                fragmentManager.popBackStack(tag, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+//            } else {
+//                Log.d("addtoBack",tag);
+//                fragmentManager.beginTransaction().addToBackStack(tag).replace(R.id.flContent, fragment, tag).commit();
+//            }
             fragmentManager.beginTransaction().addToBackStack(tag).replace(R.id.flContent, fragment, tag).commit();
+
             Common.CURRENT_FRAGMENT_TAG=tag;
 
 
@@ -369,7 +384,6 @@ public class HomeActivity extends AppCompatActivity {
         if (currentFragment.getClass() == fragment.getClass()) {
             return;
         }
-
         //If fragment is already on stack, we can pop back stack to prevent stack infinite growth
         if (fragmentManager.findFragmentByTag(tag) != null) {
             Log.d("tag","find tag: not null : "+tag);
