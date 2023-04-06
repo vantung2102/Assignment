@@ -266,6 +266,8 @@ GEM
       rubocop (>= 1.33.0, < 2.0)
     ruby-progressbar (1.11.0)
     rubyzip (2.3.2)
+    seedbank (0.5.0)
+      rake (>= 10.0)
     selenium-webdriver (4.6.1)
       childprocess (>= 0.5, < 5.0)
       rexml (~> 3.2, >= 3.2.5)
@@ -356,6 +358,7 @@ DEPENDENCIES
   rspec-rails (~> 6.0.0)
   rspec_jsonapi_serializer
   rubocop-rails
+  seedbank
   selenium-webdriver (>= 4.0.0.rc1)
   shoulda-matchers
   sidekiq
