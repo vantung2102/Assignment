@@ -13,6 +13,7 @@ ActiveRecord::Base.transaction do
       )
     end
   end
+  ActiveRecord::Base.connection.reset_pk_sequence!('onboarding_sample_steps')
   puts '***** DONE *****'
   puts '-------------------------------------------------'
 rescue StandardError => e

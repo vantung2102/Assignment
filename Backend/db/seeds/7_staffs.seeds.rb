@@ -152,7 +152,7 @@ ActiveRecord::Base.transaction do
   end
 
   Staff.where(id: [1, 2, 3, 4, 77,78]).map {|staff| staff.add_role(:Manager)}
-
+  ActiveRecord::Base.connection.reset_pk_sequence!('staffs')
   puts '***** DONE *****'
   puts '-------------------------------------------------'
 rescue StandardError => e

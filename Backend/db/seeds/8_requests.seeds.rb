@@ -15,6 +15,7 @@ ActiveRecord::Base.transaction do
       description: Faker::Lorem.paragraph
     )
   end
+  ActiveRecord::Base.connection.reset_pk_sequence!('request_properties')
   puts '***** DONE *****'
   puts '-------------------------------------------------'
 rescue StandardError => e

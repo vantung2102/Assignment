@@ -13,6 +13,7 @@ ActiveRecord::Base.transaction do
   resources.each_with_index do |resource, index|
     Role.create!(id: index + 1, name: resource[1])
   end
+  ActiveRecord::Base.connection.reset_pk_sequence!('roles')
   puts '***** DONE *****'
   puts '-------------------------------------------------'
 rescue StandardError => e

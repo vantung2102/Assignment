@@ -24,6 +24,7 @@ ActiveRecord::Base.transaction do
   resources.each_with_index do |resource, index|
     Department.create!(id: index + 1, name: resource[1], description: "description for #{resource[1]} department")
   end
+  ActiveRecord::Base.connection.reset_pk_sequence!('departments')
   puts '***** DONE *****'
   puts '-------------------------------------------------'
 rescue StandardError => e

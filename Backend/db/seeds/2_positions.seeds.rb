@@ -30,6 +30,7 @@ ActiveRecord::Base.transaction do
   resources.each do |resource|
     Position.create!(id: resource[0], name: resource[1], description: "description for #{resource[1]} position")
   end
+  ActiveRecord::Base.connection.reset_pk_sequence!('positions')
   puts '***** DONE *****'
   puts '-------------------------------------------------'
 rescue StandardError => e

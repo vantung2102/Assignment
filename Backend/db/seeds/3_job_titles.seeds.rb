@@ -13,6 +13,7 @@ ActiveRecord::Base.transaction do
   resources.each_with_index do |resource, index|
     JobTitle.create!(id: index + 1, title: resource[1], description: "description for #{resource[1]} job title")
   end
+  ActiveRecord::Base.connection.reset_pk_sequence!('job_titles')
   puts '***** DONE *****'
   puts '-------------------------------------------------'
 rescue StandardError => e

@@ -16,6 +16,7 @@ ActiveRecord::Base.transaction do
   resources.each_with_index do |resource, index|
     GroupProperty.create!(id: index + 1, name: resource[1], description: "description for #{resource[1]} group property")
   end
+  ActiveRecord::Base.connection.reset_pk_sequence!('group_properties')
   puts '***** DONE *****'
   puts '-------------------------------------------------'
   # -------------------------------------------
@@ -84,6 +85,7 @@ ActiveRecord::Base.transaction do
       )
     end
   end
+  ActiveRecord::Base.connection.reset_pk_sequence!('properties')
   puts '***** DONE *****'
   puts '-------------------------------------------------'
 rescue StandardError => e
