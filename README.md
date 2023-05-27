@@ -117,8 +117,8 @@ npm install
 - npm start (with port 3001)
 - account test:
 ```
-email: admin@gmail.com
-pass: Levantung123@
+email: Jenna@gmail.com
+pass: Jenna@123
 ```
 
 ## Database diagram
