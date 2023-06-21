@@ -1,6 +1,6 @@
-class CreatePaForm < ActiveRecord::Migration[6.1]
+class CreatePaForm < ActiveRecord::Migration[7.0]
   def change
-    create_table :performance_appraisal_forms do |t|
+    create_table :performance_appraisal_forms, id: :uuid do |t|
       t.integer :status
       t.integer :staff_id
       t.integer :boss_id

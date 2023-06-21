@@ -1,6 +1,6 @@
-class CreateAsset < ActiveRecord::Migration[6.1]
+class CreateAsset < ActiveRecord::Migration[7.0]
   def change
-    create_table :properties do |t|
+    create_table :properties, id: :uuid do |t|
       t.string :code_seri
       t.string :name
       t.string :brand

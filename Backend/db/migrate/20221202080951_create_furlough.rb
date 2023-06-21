@@ -1,6 +1,6 @@
-class CreateFurlough < ActiveRecord::Migration[6.1]
+class CreateFurlough < ActiveRecord::Migration[7.0]
   def change
-    create_table :leaves do |t|
+    create_table :leaves, id: :uuid do |t|
       t.references :staff
       t.float :casual_leave
       t.float :marriage_leave
