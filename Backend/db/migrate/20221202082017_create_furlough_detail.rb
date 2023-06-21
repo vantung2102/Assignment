@@ -1,6 +1,6 @@
-class CreateFurloughDetail < ActiveRecord::Migration[6.1]
+class CreateFurloughDetail < ActiveRecord::Migration[7.0]
   def change
-    create_table :leave_applications do |t|
+    create_table :leave_applications, id: :uuid do |t|
       t.integer :leave_type
       t.float :number_of_days_off
       t.date :start_day

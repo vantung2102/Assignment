@@ -1,6 +1,6 @@
-class CreateStaffOnboarding < ActiveRecord::Migration[6.1]
+class CreateStaffOnboarding < ActiveRecord::Migration[7.0]
   def change
-    create_table :staff_onboardings do |t|
+    create_table :staff_onboardings, id: :uuid do |t|
       t.references :staff
       t.boolean :active
       t.integer :position_id

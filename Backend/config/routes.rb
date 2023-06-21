@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root 'supports#home'
+
   namespace :api do
     namespace :auth do
       post 'login', to: 'authentication#log_in'
@@ -7,6 +9,21 @@ Rails.application.routes.draw do
     end
 
     namespace :v1 do
+      namespace :auth do
+        post :signup, to: 'registrations#create'
+        post :verify, to: 'registrations#verify'
+
+        post :login, to: 'sessions#create'
+
+        get 'token/refresh', to: 'tokens#refresh'
+
+        resources :profiles, only: %i[show update destroy]
+        get :me, to: 'profiles#me'
+
+        post :forgot_password, to: 'passwords#forgot_password'
+        post :reset_password, to: 'passwords#reset_password'
+      end
+
       namespace :staff_management do
         resources :staffs do
           member do

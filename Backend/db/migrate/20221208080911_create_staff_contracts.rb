@@ -1,6 +1,6 @@
-class CreateStaffContracts < ActiveRecord::Migration[6.1]
+class CreateStaffContracts < ActiveRecord::Migration[7.0]
   def change
-    create_table :staff_contracts do |t|
+    create_table :staff_contracts, id: :uuid do |t|
       t.string :title
       t.references :staff
       t.date :start_date

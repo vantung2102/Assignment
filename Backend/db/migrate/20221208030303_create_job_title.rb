@@ -1,6 +1,6 @@
-class CreateJobTitle < ActiveRecord::Migration[6.1]
+class CreateJobTitle < ActiveRecord::Migration[7.0]
   def change
-    create_table :job_titles do |t|
+    create_table :job_titles, id: :uuid do |t|
       t.string :title
       t.string :description
 
