@@ -1,0 +1,15 @@
+FROM ruby:3.0.0
+
+WORKDIR /app
+
+RUN apt-get update -qq && apt-get install -y postgresql-client
+
+COPY ./Backend/Gemfile /app/
+COPY ./Backend/Gemfile.lock /app/
+RUN bundle install
+
+COPY ./Backend /app
+
+EXPOSE 3000
+
+CMD bundle exec rails s -p 3000 -b 0.0.0.0

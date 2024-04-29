@@ -1,0 +1,58 @@
+version: "3.0"
+
+services:
+  redis:
+    image: redis:latest
+    command: redis-server
+    container_name: redis
+    ports:
+      - 6379:6379
+    volumes:
+      - redis:/data
+
+  sidekiq:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.backend
+    command: bundle exec sidekiq
+    container_name: sidekiq
+    restart: on-failure
+
+  postgres:
+    image: postgres:latest
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    container_name: postgres
+    ports:
+      - 5432:5432
+
+  backend:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.backend
+    container_name: backend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./Backend:/app
+    command: /bin/sh -c "rm -f /app/tmp/pids/server.pid && bundle exec rails s -p 3000 -b 0.0.0.0"
+    depends_on:
+      - redis
+      - sidekiq
+      - postgres
+
+  frontend:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.frontend
+    container_name: frontend
+    volumes:
+      - ./Frontend:/app
+
+volumes:
+  redis:
+  sidekiq:
+  postgres:
